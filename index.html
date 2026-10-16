@@ -152,6 +152,12 @@
 </head>
 <body class="py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
 
+  <!-- 隱藏的雲端同步 Iframe 與表單（100% 穿透 Google 轉址限制） -->
+  <iframe name="hiddenCloudIframe" id="hiddenCloudIframe" style="display:none;"></iframe>
+  <form id="hiddenCloudForm" target="hiddenCloudIframe" method="POST" style="display:none;">
+    <input type="hidden" name="payload" id="hiddenCloudPayload" value="" />
+  </form>
+
   <!-- Top Navigation Bar -->
   <header class="w-full max-w-3xl flex flex-wrap justify-between items-center mb-6 gap-3 text-xs sm:text-sm text-gray-400 border-b border-gray-800 pb-4">
     <div class="flex items-center gap-2">
@@ -237,7 +243,6 @@
 
     <!-- 2. QUIZ SCREEN -->
     <section id="quizScreen" class="hidden card-glass rounded-2xl p-6 sm:p-10">
-      <!-- Progress Header -->
       <div class="flex justify-between items-center mb-3 text-xs sm:text-sm text-gray-400">
         <span id="questionGroupBadge" class="px-2.5 py-1 rounded bg-amber-950/60 border border-amber-700/40 text-amber-300 font-medium">
           第 1 / 7 題
@@ -245,20 +250,16 @@
         <span id="debugActiveHint" class="hidden text-xs text-indigo-300 font-mono">🔧 除錯配分顯示中</span>
       </div>
 
-      <!-- Progress Bar -->
       <div class="w-full h-2 bg-gray-800 rounded-full overflow-hidden mb-7">
         <div id="progressBar" class="h-full bg-gradient-to-r from-red-600 to-amber-400 transition-all duration-300" style="width: 14.28%"></div>
       </div>
 
-      <!-- Question Title -->
       <h2 id="questionText" class="serif text-xl sm:text-2xl font-bold text-gray-100 leading-snug mb-6 min-h-[3.5rem]">
         題目載入中...
       </h2>
 
-      <!-- Options List -->
       <div id="optionsContainer" class="space-y-3.5 mb-8"></div>
 
-      <!-- Navigation Footer -->
       <div class="flex justify-between items-center pt-4 border-t border-gray-800">
         <button type="button" id="prevBtn" onclick="prevQuestion()" class="px-4 py-2 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-800 transition disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
           ← 上一題
@@ -345,7 +346,7 @@
           <div id="ladderContainer" class="space-y-1.5"></div>
         </div>
 
-        <!-- Admin Only: Answer Review Accordion (Default Hidden) -->
+        <!-- Admin Only: Answer Review Accordion -->
         <details id="adminAnswerReviewBox" class="hidden mt-6 bg-gray-900/60 border border-indigo-500/40 rounded-xl p-4">
           <summary class="cursor-pointer text-sm font-medium text-indigo-300 hover:text-amber-400 select-none">
             🔧 [管理員專區] 展開檢視本次作答明細與得分計算
@@ -408,20 +409,24 @@
       <div class="flex flex-wrap gap-2 border-b border-gray-800 pb-3 text-xs font-bold">
         <button type="button" onclick="switchAdminTab('tabStats')" id="btn_tabStats" class="px-4 py-2 rounded-lg bg-indigo-600 text-white cursor-pointer">📈 作答數據統計與雲端匯出</button>
         <button type="button" onclick="switchAdminTab('tabControls')" id="btn_tabControls" class="px-4 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer">🛠️ 測驗設定與除錯工具</button>
-        <button type="button" onclick="switchAdminTab('tabCloud')" id="btn_tabCloud" class="px-4 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer">☁️ 雲端 Google 試算表設定</button>
         <button type="button" onclick="switchAdminTab('tabInspector')" id="btn_tabInspector" class="px-4 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer">📊 題庫配分驗證器</button>
       </div>
 
-      <!-- TAB 1: 作答數據統計與匯出 (Default Tab) -->
+      <!-- TAB 1: 作答數據統計與匯出 -->
       <div id="tabStats" class="space-y-5">
         <div class="flex flex-wrap items-center justify-between gap-2 bg-indigo-950/40 border border-indigo-500/30 p-3.5 rounded-xl text-xs">
           <div class="flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-            <span id="cloudStatusBannerText" class="text-indigo-200 font-medium">已內建綁定 Google 試算表雲端後台，所有受試者作答將自動寫入雲端。</span>
+            <span id="cloudStatusBannerText" class="text-indigo-200 font-medium">所有裝置不需任何設定，測完自動匯入你的 Google 試算表。</span>
           </div>
-          <button type="button" onclick="fetchCloudLogs()" class="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold cursor-pointer transition">
-            🔄 從雲端試算表同步全體數據
-          </button>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="sendTestPingToCloud()" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold cursor-pointer transition">
+              ⚡ 發送 1 筆測試資料到試算表
+            </button>
+            <button type="button" onclick="fetchCloudLogs()" class="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold cursor-pointer transition">
+              🔄 從雲端試算表讀取全體數據
+            </button>
+          </div>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
@@ -520,11 +525,11 @@
         <div class="p-4 rounded-xl bg-indigo-950/30 border border-indigo-500/30 flex flex-wrap items-center justify-between gap-4">
           <div>
             <div class="font-bold text-sm text-indigo-300">🎲 快速隨機作答模擬器</div>
-            <div class="text-xs text-gray-400">不需手動點 7 題，直接用電腦隨機生成作答並寫入統計紀錄</div>
+            <div class="text-xs text-gray-400">不需手動點 7 題，直接用電腦隨機生成作答並同時傳送到雲端試算表</div>
           </div>
           <div class="flex flex-wrap gap-2">
             <button type="button" onclick="simulateRandomQuiz()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold cursor-pointer">
-              模擬 1 次並看結果
+              模擬 1 次並同步至雲端
             </button>
             <button type="button" onclick="simulateBatch(20)" class="px-4 py-2 rounded-lg bg-purple-700 hover:bg-purple-600 text-white text-xs font-bold cursor-pointer">
               ⚡ 批次模擬 20 人作答（本機測試分佈）
@@ -533,24 +538,7 @@
         </div>
       </div>
 
-      <!-- TAB 3: 雲端 Google 試算表後台設定 -->
-      <div id="tabCloud" class="hidden space-y-4 text-xs leading-relaxed">
-        <div class="p-4 rounded-xl bg-gray-900/90 border border-emerald-500/40 space-y-3">
-          <div class="font-bold text-sm text-emerald-400">✓ 已內建綁定你的 Google 試算表雲端網址</div>
-          <p class="text-gray-300">
-            系統目前已直接將你的 Google Apps Script 網址寫死為預設值，上傳至 GitHub Pages 後，任何裝置作答都會直接傳送到此網址：
-          </p>
-          <div>
-            <div class="flex gap-2">
-              <input type="url" id="webhookUrlInput" class="flex-1 bg-gray-950 border border-gray-700 rounded-lg px-3 py-2 text-amber-300 font-mono text-[11px] focus:outline-none focus:border-amber-500" />
-              <button type="button" onclick="saveWebhookUrl()" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold cursor-pointer">更新網址</button>
-            </div>
-            <p id="webhookSaveStatus" class="text-emerald-400 mt-1 hidden">✓ 已更新雲端收集網址！</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAB 4: 題庫配分驗證器 -->
+      <!-- TAB 3: 題庫配分驗證器 -->
       <div id="tabInspector" class="hidden space-y-4">
         <div id="inspectorSummary"></div>
         <div class="overflow-x-auto max-h-80 border border-gray-800 rounded-xl">
@@ -586,18 +574,13 @@
 
   <script>
     // ==========================================
-    // 0. 雲端試算表預設網址與管理員驗證系統
+    // 0. 強制內建 Google 試算表雲端網址（任何裝置皆免設定）
     // ==========================================
-    const DEFAULT_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbz0E75wSIWq2ywS90d2t3lWBX_I1QQhAVd7SiPHafKKD7LVmnbLIc0GNQqpmm_AKL1x6A/exec';
+    constHARDCODED_CLOUD_URL = 'https://script.google.com/macros/s/AKfycbz0E75wSIWq2ywS90d2t3lWBX_I1QQhAVd7SiPHafKKD7LVmnbLIc0GNQqpmm_AKL1x6A/exec';
     const ADMIN_PASSWORD_SECRET = 'INMUKING114514';
     let isAdminUnlocked = false;
-    const STORAGE_KEY_LOGS = 'lambs_quiz_logs_v1';
-    const STORAGE_KEY_WEBHOOK = 'lambs_quiz_webhook_v1';
+    const STORAGE_KEY_LOGS = 'lambs_quiz_logs_v2';
     let currentDisplayedLogs = [];
-
-    function getActiveWebhookUrl() {
-      return localStorage.getItem(STORAGE_KEY_WEBHOOK) || DEFAULT_WEBHOOK_URL;
-    }
 
     // 快捷鍵 Ctrl + Shift + A 開啟管理員登入
     window.addEventListener('keydown', function(e) {
@@ -648,7 +631,6 @@
     function openAdminPanel() {
       const dash = document.getElementById('adminDashboard');
       dash.classList.remove('hidden');
-      document.getElementById('webhookUrlInput').value = getActiveWebhookUrl();
       renderInspectorTable();
       fetchCloudLogs();
       dash.scrollIntoView({ behavior: 'smooth' });
@@ -671,7 +653,7 @@
     }
 
     function switchAdminTab(tabId) {
-      const tabs = ['tabStats', 'tabControls', 'tabCloud', 'tabInspector'];
+      const tabs = ['tabStats', 'tabControls', 'tabInspector'];
       tabs.forEach(t => {
         document.getElementById(t).classList.toggle('hidden', t !== tabId);
         const btn = document.getElementById('btn_' + t);
@@ -1091,7 +1073,6 @@
         recordSubmissionLog(outcome);
       }
 
-      // 渲染梅菲斯特賭約判決橫幅
       const verdictBanner = document.getElementById('dealVerdictBanner');
       const verdictSubtitle = document.getElementById('verdictSubtitle');
       const verdictTitle = document.getElementById('verdictTitle');
@@ -1113,7 +1094,6 @@
         verdictDesc.innerHTML = `你預測自己的罪行為「${SIN_INFO[userPrediction].name}」，但實際測驗得出的最高罪行卻是<strong>「${topSins.map(k => SIN_INFO[k].name).join('、')}」</strong>。梅菲斯特冷笑一聲，將你拖入深淵，從此你將與浮士德一同受永久的苦罰……`;
       }
 
-      // 渲染最高罪行區塊 (含專屬聖經經文)
       document.getElementById('topSinTitle').textContent =
         topSins.map(k => `【${SIN_INFO[k].name} ${SIN_INFO[k].en}】`).join(' ＆ ');
 
@@ -1132,7 +1112,6 @@
         `;
       }).join('');
 
-      // 渲染最低分對應之相對美德
       const mappingMode = document.getElementById('mappingModeSelect').value;
 
       const virtueNames = lowestSins.map(k => {
@@ -1148,16 +1127,11 @@
           return `<div class="mt-2 text-xs sm:text-sm text-emerald-200/90 bg-emerald-950/40 border border-emerald-800/40 rounded-lg p-3"><strong>• ${vObj.name}：</strong>${vObj.desc}</div>`;
         }).join('');
 
-      // 渲染背離指數
       document.getElementById('departureIndexValue').textContent = departureIndex.toFixed(1);
       document.getElementById('departureBar').style.width = `${Math.max(2, Math.min(100, departureIndex))}%`;
 
-      // 渲染十四級階梯直式剖面圖
       renderLadderProfile(totals, topSins, lowestSins, maxScore, mappingMode);
-
-      // 渲染管理員作答明細
       renderAnswerReview();
-
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -1258,7 +1232,7 @@
     }
 
     // ==========================================
-    // 6. 後台紀錄、模擬器與雲端雙向同步功能
+    // 6. 100% 穿透式雲端傳送引擎 (無須任何裝置設定)
     // ==========================================
     function getStoredLogs() {
       try {
@@ -1271,6 +1245,32 @@
 
     function saveStoredLogs(logs) {
       localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(logs));
+    }
+
+    // 雙重保證傳送函式：同時透過 Hidden Form POST 與 Fetch 送往鎖死的 Google 網址
+    function transmitEntryToGoogleSheet(entry) {
+      const jsonStr = JSON.stringify(entry);
+
+      // 通道 1：使用傳統 HTML Form POST 進隱藏 Iframe（完全不受 CORS 與 302 轉址遺失影響）
+      try {
+        const form = document.getElementById('hiddenCloudForm');
+        const input = document.getElementById('hiddenCloudPayload');
+        if (form && input) {
+          form.action = constHARDCODED_CLOUD_URL;
+          input.value = jsonStr;
+          form.submit();
+        }
+      } catch (e) {}
+
+      // 通道 2：備援 Fetch (支援你原本舊版只收 postData.contents 的 Apps Script)
+      try {
+        fetch(constHARDCODED_CLOUD_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: jsonStr
+        }).catch(() => {});
+      } catch (e) {}
     }
 
     function recordSubmissionLog(outcome) {
@@ -1295,35 +1295,53 @@
         answersDetail
       };
 
-      // 存入本機備份
       const logs = getStoredLogs();
       logs.unshift(entry);
       saveStoredLogs(logs);
       currentDisplayedLogs = logs;
 
-      // 自動背景發送至內建的 Google 試算表雲端後台
-      const webhookUrl = getActiveWebhookUrl();
-      if (webhookUrl && webhookUrl.startsWith('https://')) {
-        fetch(webhookUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(entry)
-        }).catch(() => {});
-      }
+      // 強制送往寫死的 Google 試算表網址
+      transmitEntryToGoogleSheet(entry);
     }
 
-    // 從 Google 試算表拉取全體受試者資料 (若 Apps Script 含 doGet)
-    function fetchCloudLogs() {
-      const webhookUrl = getActiveWebhookUrl();
+    function sendTestPingToCloud() {
+      const now = new Date();
+      const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')} (連線測試)`;
+      const testEntry = {
+        timestamp: timeStr,
+        predicted: '傲慢',
+        topSins: '傲慢',
+        wonDeal: '成功逃離',
+        lowestSins: '色慾',
+        departureIndex: 75.0,
+        scores: { lust: 2, gluttony: 4, greed: 6, sloth: 8, wrath: 10, envy: 12, pride: 14 },
+        answersDetail: 'TEST-PING'
+      };
+      transmitEntryToGoogleSheet(testEntry);
       const bannerText = document.getElementById('cloudStatusBannerText');
-      bannerText.textContent = '⏳ 正在從 Google 試算表雲端載入全體作答紀錄...';
+      bannerText.textContent = '⚡ 已發送 1 筆測試資料！請在 3 秒後點擊「🔄 從雲端試算表讀取全體數據」或直接查看你的 Google 試算表。';
+    }
 
-      fetch(webhookUrl)
+    function fetchCloudLogs() {
+      const bannerText = document.getElementById('cloudStatusBannerText');
+      bannerText.textContent = '⏳ 正在從 Google 試算表雲端讀取全體受試者資料...';
+
+      fetch(constHARDCODED_CLOUD_URL + '?action=read&t=' + Date.now())
         .then(res => res.json())
         .then(rows => {
           if (Array.isArray(rows) && rows.length > 1) {
-            const parsedLogs = rows.slice(1).reverse().map(r => {
+            // 過濾掉重複紀錄（因為雙通道保險可能送兩次相同時間戳）
+            const seen = new Set();
+            const uniqueRows = [];
+            rows.slice(1).forEach(r => {
+              const key = `${r[0]}_${r[13]}`;
+              if (!seen.has(key)) {
+                seen.add(key);
+                uniqueRows.push(r);
+              }
+            });
+
+            const parsedLogs = uniqueRows.reverse().map(r => {
               const topSinStr = String(r[2] || '');
               const topKeys = topSinStr.split('、').map(n => NAME_TO_KEY[n.trim()]).filter(Boolean);
               return {
@@ -1351,13 +1369,13 @@
             renderAdminStats(parsedLogs, '☁️ Google 試算表雲端全體數據');
           } else {
             currentDisplayedLogs = getStoredLogs();
-            bannerText.textContent = '☁️ 雲端試算表目前尚無資料（或尚未加入 doGet 讀取函式），目前顯示本機紀錄。';
+            bannerText.textContent = '☁️ 雲端試算表目前尚無資料，請先點右方「⚡ 發送 1 筆測試資料到試算表」測試！';
             renderAdminStats(currentDisplayedLogs, '💻 本機瀏覽器快取紀錄');
           }
         })
         .catch(() => {
           currentDisplayedLogs = getStoredLogs();
-          bannerText.textContent = '💡 提示：測驗結果已設定自動寫入你的 Google 試算表！可隨時直接打開 Google 試算表查看全班數據（下方目前顯示本機快取）。';
+          bannerText.textContent = '⚠️ 無法直接讀取試算表（請確認 Apps Script 已按「管理部署作業 ➔ 編輯 ➔ 新版本」更新），下方暫時顯示本機快取。';
           renderAdminStats(currentDisplayedLogs, '💻 本機瀏覽器快取紀錄');
         });
     }
@@ -1509,14 +1527,6 @@
         currentDisplayedLogs = [];
         renderAdminStats([], '本機快取已清空');
       }
-    }
-
-    function saveWebhookUrl() {
-      const val = document.getElementById('webhookUrlInput').value.trim();
-      localStorage.setItem(STORAGE_KEY_WEBHOOK, val);
-      const st = document.getElementById('webhookSaveStatus');
-      st.classList.remove('hidden');
-      setTimeout(() => st.classList.add('hidden'), 3000);
     }
 
     // ==========================================
