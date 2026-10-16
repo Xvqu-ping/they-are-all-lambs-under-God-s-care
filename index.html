@@ -152,28 +152,19 @@
 </head>
 <body class="py-8 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
 
-  <!-- Top Navigation / Settings Bar -->
-  <header class="w-full max-w-4xl flex flex-wrap justify-between items-center mb-6 gap-3 text-xs sm:text-sm text-gray-400 border-b border-gray-800 pb-4">
+  <!-- Top Navigation Bar -->
+  <header class="w-full max-w-3xl flex flex-wrap justify-between items-center mb-6 gap-3 text-xs sm:text-sm text-gray-400 border-b border-gray-800 pb-4">
     <div class="flex items-center gap-2">
       <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
       <span class="serif font-bold tracking-wider text-red-400 text-base">他們都是神膝下的羔羊</span>
+      <span id="adminUnlockedBadge" onclick="openAdminPanel()" class="hidden cursor-pointer text-[11px] px-2 py-0.5 rounded bg-indigo-900/80 text-indigo-300 border border-indigo-500/50 hover:bg-indigo-800 transition">
+        👑 管理員已解鎖 (點此開後台)
+      </span>
     </div>
-    <div class="flex flex-wrap items-center gap-3">
-      <!-- 黑白背景切換按鈕 -->
-      <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="px-3 py-1.5 rounded-lg bg-gray-900/90 border border-gray-700 hover:border-amber-500/50 text-amber-400 font-medium transition cursor-pointer">
+    <div class="flex flex-wrap items-center gap-2.5">
+      <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="px-3.5 py-1.5 rounded-lg bg-gray-900/90 border border-gray-700 hover:border-amber-500/50 text-amber-400 font-medium transition cursor-pointer">
         ☀️ 切換白底
       </button>
-      <label class="flex items-center gap-1.5 cursor-pointer bg-gray-900/90 px-3 py-1.5 rounded-lg border border-gray-700 hover:border-amber-500/50 transition">
-        <input type="checkbox" id="shuffleToggle" checked class="accent-amber-500 rounded cursor-pointer">
-        <span>隨機打亂題號與選項</span>
-      </label>
-      <label class="flex items-center gap-1.5 bg-gray-900/90 px-3 py-1.5 rounded-lg border border-gray-700">
-        <span>美德對應：</span>
-        <select id="mappingModeSelect" onchange="updateMappingMode()" class="bg-transparent text-amber-400 font-medium focus:outline-none cursor-pointer">
-          <option value="A" class="bg-gray-900 text-gray-200">做法A：傳統相反美德</option>
-          <option value="B" class="bg-gray-900 text-gray-200">做法B：十四級階梯鏡像</option>
-        </select>
-      </label>
     </div>
   </header>
 
@@ -212,7 +203,7 @@
           梅菲斯特的考驗：請先預測你的罪行
         </div>
         <p class="text-xs text-gray-400">
-          在正式開始 7 道題目以前，請先選擇你認為自己會得出的罪行結論，在測試結束後再看看自己覺得跟題目得出的結論是否相同。
+          測試者需要先選擇認為自己的罪行，在測試結束後再看看自己覺得跟題目得出的結論是否相同。
         </p>
         <div>
           <label for="userPredictionSelect" class="block text-xs font-semibold text-gray-300 mb-2">請選擇你預測的罪行：</label>
@@ -251,6 +242,7 @@
         <span id="questionGroupBadge" class="px-2.5 py-1 rounded bg-amber-950/60 border border-amber-700/40 text-amber-300 font-medium">
           第 1 / 7 題
         </span>
+        <span id="debugActiveHint" class="hidden text-xs text-indigo-300 font-mono">🔧 除錯配分顯示中</span>
       </div>
 
       <!-- Progress Bar -->
@@ -280,7 +272,6 @@
 
     <!-- 3. RESULT SCREEN -->
     <section id="resultScreen" class="hidden space-y-6">
-      <!-- Primary Result Card -->
       <div class="card-glass rounded-2xl p-6 sm:p-10 border-t-4 border-t-red-500">
         
         <!-- Deal Outcome Banner (Mephistopheles Verdict) -->
@@ -354,6 +345,14 @@
           <div id="ladderContainer" class="space-y-1.5"></div>
         </div>
 
+        <!-- Admin Only: Answer Review Accordion (Default Hidden) -->
+        <details id="adminAnswerReviewBox" class="hidden mt-6 bg-gray-900/60 border border-indigo-500/40 rounded-xl p-4">
+          <summary class="cursor-pointer text-sm font-medium text-indigo-300 hover:text-amber-400 select-none">
+            🔧 [管理員專區] 展開檢視本次作答明細與得分計算
+          </summary>
+          <div id="answerReviewList" class="mt-4 space-y-3 text-xs text-gray-300 border-t border-gray-800 pt-4"></div>
+        </details>
+
         <!-- Action Buttons -->
         <div class="mt-8 flex flex-wrap justify-center gap-4">
           <button type="button" onclick="restartQuiz()" class="px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold text-sm transition shadow-lg shadow-amber-900/20 cursor-pointer">
@@ -363,16 +362,251 @@
       </div>
     </section>
 
+    <!-- ========================================== -->
+    <!-- 4. ADMIN LOGIN MODAL (Password: INMUKING114514) -->
+    <!-- ========================================== -->
+    <div id="adminLoginModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+      <div class="card-glass rounded-2xl p-6 sm:p-8 w-full max-w-md border border-indigo-500/50 space-y-4">
+        <div class="flex justify-between items-center">
+          <h3 class="serif text-xl font-bold text-indigo-300 flex items-center gap-2">
+            🔒 管理員後台驗證
+          </h3>
+          <button type="button" onclick="closeAdminLogin()" class="text-gray-400 hover:text-white text-sm px-2 py-1">✕</button>
+        </div>
+        <p class="text-xs text-gray-400">請輸入管理員專屬密碼以解鎖後台控制面板、題庫驗證器與雲端數據統計系統。</p>
+        <div>
+          <input type="password" id="adminPasswordInput" placeholder="請輸入管理員密碼..." onkeydown="if(event.key==='Enter') verifyAdminPassword()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500" />
+          <p id="adminLoginError" class="hidden text-xs text-red-400 mt-2">❌ 密碼錯誤，請重新輸入！</p>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeAdminLogin()" class="px-4 py-2 rounded-lg text-xs bg-gray-800 text-gray-300 hover:bg-gray-700">取消</button>
+          <button type="button" onclick="verifyAdminPassword()" class="px-5 py-2 rounded-lg text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white cursor-pointer">解鎖後台</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 5. FULL ADMIN DASHBOARD PANEL -->
+    <!-- ========================================== -->
+    <section id="adminDashboard" class="hidden mt-8 card-glass rounded-2xl p-6 sm:p-8 border-2 border-indigo-500/60 space-y-6">
+      <div class="flex flex-wrap justify-between items-center gap-3 border-b border-gray-800 pb-4">
+        <div>
+          <div class="text-xs font-mono uppercase tracking-widest text-indigo-400">Admin Control Center</div>
+          <h2 class="serif text-2xl font-bold text-white">👑 《他們都是神膝下的羔羊》管理員後台</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="lockAdmin()" class="px-3 py-1.5 rounded-lg text-xs bg-red-950/70 text-red-300 border border-red-700/50 hover:bg-red-900/60 cursor-pointer">
+            🔒 登出鎖定
+          </button>
+          <button type="button" onclick="closeAdminPanel()" class="px-3 py-1.5 rounded-lg text-xs bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer">
+            隱藏面板 ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin Tabs -->
+      <div class="flex flex-wrap gap-2 border-b border-gray-800 pb-3 text-xs font-bold">
+        <button type="button" onclick="switchAdminTab('tabStats')" id="btn_tabStats" class="px-4 py-2 rounded-lg bg-indigo-600 text-white cursor-pointer">📈 作答數據統計與雲端匯出</button>
+        <button type="button" onclick="switchAdminTab('tabControls')" id="btn_tabControls" class="px-4 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer">🛠️ 測驗設定與除錯工具</button>
+        <button type="button" onclick="switchAdminTab('tabCloud')" id="btn_tabCloud" class="px-4 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer">☁️ 雲端 Google 試算表設定</button>
+        <button type="button" onclick="switchAdminTab('tabInspector')" id="btn_tabInspector" class="px-4 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer">📊 題庫配分驗證器</button>
+      </div>
+
+      <!-- TAB 1: 作答數據統計與匯出 (Default Tab) -->
+      <div id="tabStats" class="space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 bg-indigo-950/40 border border-indigo-500/30 p-3.5 rounded-xl text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span id="cloudStatusBannerText" class="text-indigo-200 font-medium">已內建綁定 Google 試算表雲端後台，所有受試者作答將自動寫入雲端。</span>
+          </div>
+          <button type="button" onclick="fetchCloudLogs()" class="px-3.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold cursor-pointer transition">
+            🔄 從雲端試算表同步全體數據
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+          <div class="p-4 rounded-xl bg-gray-900/80 border border-gray-800">
+            <div class="text-xs text-gray-400">累計作答人次</div>
+            <div id="statTotalCount" class="serif text-2xl font-black text-white mt-1">0</div>
+          </div>
+          <div class="p-4 rounded-xl bg-gray-900/80 border border-gray-800">
+            <div class="text-xs text-gray-400">賭約逃離成功率</div>
+            <div id="statWinRate" class="serif text-2xl font-black text-emerald-400 mt-1">0%</div>
+          </div>
+          <div class="p-4 rounded-xl bg-gray-900/80 border border-gray-800">
+            <div class="text-xs text-gray-400">平均背離指數</div>
+            <div id="statAvgDeparture" class="serif text-2xl font-black text-amber-400 mt-1">0.0</div>
+          </div>
+          <div class="p-4 rounded-xl bg-gray-900/80 border border-gray-800">
+            <div class="text-xs text-gray-400">最常出現最高罪</div>
+            <div id="statMostCommonSin" class="serif text-xl font-black text-red-400 mt-1">-</div>
+          </div>
+        </div>
+
+        <!-- Sin Distribution Bars -->
+        <div class="p-4 rounded-xl bg-gray-900/80 border border-gray-800 space-y-2">
+          <div class="text-xs font-bold text-gray-300 mb-2">📊 各罪成為「最高分結果」次數分佈</div>
+          <div id="statSinDistribution" class="space-y-1.5 text-xs"></div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="flex flex-wrap justify-between items-center gap-2">
+          <div id="dataSourceLabel" class="text-xs text-gray-400">目前顯示資料來源：載入中...</div>
+          <div class="flex gap-2">
+            <button type="button" onclick="exportLogsToCSV()" class="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold cursor-pointer">
+              📥 匯出 CSV (Excel) 報表
+            </button>
+            <button type="button" onclick="clearAllLogs()" class="px-3 py-2 rounded-lg bg-red-950 hover:bg-red-900 text-red-300 border border-red-800 text-xs cursor-pointer">
+              🗑️ 清空本機快取
+            </button>
+          </div>
+        </div>
+
+        <!-- Logs Table -->
+        <div class="overflow-x-auto max-h-72 border border-gray-800 rounded-xl">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-gray-900 text-gray-400 border-b border-gray-800 sticky top-0">
+                <th class="p-2.5">#</th>
+                <th class="p-2.5">時間</th>
+                <th class="p-2.5">預測罪行</th>
+                <th class="p-2.5">實際最高罪行</th>
+                <th class="p-2.5">賭約結果</th>
+                <th class="p-2.5">背離指數</th>
+                <th class="p-2.5">七罪得分 (色/暴/貪/怠/憤/嫉/傲)</th>
+              </tr>
+            </thead>
+            <tbody id="adminLogsTableBody" class="divide-y divide-gray-800/70"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 2: 測驗設定與除錯工具 -->
+      <div id="tabControls" class="hidden space-y-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <label class="flex items-center justify-between p-4 rounded-xl bg-gray-900/80 border border-gray-800 cursor-pointer">
+            <div>
+              <div class="font-bold text-sm text-gray-200">隨機打亂題號與選項</div>
+              <div class="text-xs text-gray-400">正式施測建議開啟，除錯對答案時可關閉</div>
+            </div>
+            <input type="checkbox" id="shuffleToggle" checked class="accent-indigo-500 w-5 h-5 cursor-pointer">
+          </label>
+
+          <label class="flex items-center justify-between p-4 rounded-xl bg-gray-900/80 border border-gray-800 cursor-pointer">
+            <div>
+              <div class="font-bold text-sm text-gray-200">作答時顯示選項後台配分</div>
+              <div class="text-xs text-gray-400">開啟後會在 ABCD 選項下方直接顯示各罪加分</div>
+            </div>
+            <input type="checkbox" id="debugScoreToggle" onchange="if(!document.getElementById('quizScreen').classList.contains('hidden')) renderCurrentQuestion();" class="accent-indigo-500 w-5 h-5 cursor-pointer">
+          </label>
+
+          <label class="flex items-center justify-between p-4 rounded-xl bg-gray-900/80 border border-gray-800 cursor-pointer">
+            <div>
+              <div class="font-bold text-sm text-gray-200">結果頁顯示「得分計算明細」</div>
+              <div class="text-xs text-gray-400">開啟後可在結果頁底部展開檢視每一題的選答與加總</div>
+            </div>
+            <input type="checkbox" id="showReviewToggle" onchange="toggleReviewVisibility()" class="accent-indigo-500 w-5 h-5 cursor-pointer">
+          </label>
+
+          <div class="flex flex-col justify-between p-4 rounded-xl bg-gray-900/80 border border-gray-800">
+            <div class="font-bold text-sm text-gray-200 mb-1">美德對應模式切換</div>
+            <select id="mappingModeSelect" onchange="updateMappingMode()" class="bg-gray-950 border border-gray-700 rounded-lg px-3 py-2 text-xs text-amber-400 font-medium focus:outline-none cursor-pointer">
+              <option value="A">做法A：傳統相反美德（謙遜、仁慈、耐心等）</option>
+              <option value="B">做法B：十四級階梯鏡像（愛、望、信等）</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-indigo-950/30 border border-indigo-500/30 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="font-bold text-sm text-indigo-300">🎲 快速隨機作答模擬器</div>
+            <div class="text-xs text-gray-400">不需手動點 7 題，直接用電腦隨機生成作答並寫入統計紀錄</div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="simulateRandomQuiz()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold cursor-pointer">
+              模擬 1 次並看結果
+            </button>
+            <button type="button" onclick="simulateBatch(20)" class="px-4 py-2 rounded-lg bg-purple-700 hover:bg-purple-600 text-white text-xs font-bold cursor-pointer">
+              ⚡ 批次模擬 20 人作答（本機測試分佈）
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: 雲端 Google 試算表後台設定 -->
+      <div id="tabCloud" class="hidden space-y-4 text-xs leading-relaxed">
+        <div class="p-4 rounded-xl bg-gray-900/90 border border-emerald-500/40 space-y-3">
+          <div class="font-bold text-sm text-emerald-400">✓ 已內建綁定你的 Google 試算表雲端網址</div>
+          <p class="text-gray-300">
+            系統目前已直接將你的 Google Apps Script 網址寫死為預設值，上傳至 GitHub Pages 後，任何裝置作答都會直接傳送到此網址：
+          </p>
+          <div>
+            <div class="flex gap-2">
+              <input type="url" id="webhookUrlInput" class="flex-1 bg-gray-950 border border-gray-700 rounded-lg px-3 py-2 text-amber-300 font-mono text-[11px] focus:outline-none focus:border-amber-500" />
+              <button type="button" onclick="saveWebhookUrl()" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-gray-950 font-bold cursor-pointer">更新網址</button>
+            </div>
+            <p id="webhookSaveStatus" class="text-emerald-400 mt-1 hidden">✓ 已更新雲端收集網址！</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: 題庫配分驗證器 -->
+      <div id="tabInspector" class="hidden space-y-4">
+        <div id="inspectorSummary"></div>
+        <div class="overflow-x-auto max-h-80 border border-gray-800 rounded-xl">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-gray-700 text-gray-400 bg-gray-900 sticky top-0">
+                <th class="p-2">組-題-選項</th>
+                <th class="p-2">選項內容摘要</th>
+                <th class="p-2 text-center">色慾</th>
+                <th class="p-2 text-center">暴食</th>
+                <th class="p-2 text-center">貪婪</th>
+                <th class="p-2 text-center">怠惰</th>
+                <th class="p-2 text-center">憤怒</th>
+                <th class="p-2 text-center">嫉妒</th>
+                <th class="p-2 text-center">傲慢</th>
+                <th class="p-2 text-center font-bold text-amber-400">總分(T)</th>
+              </tr>
+            </thead>
+            <tbody id="inspectorTableBody" class="divide-y divide-gray-800/70"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <footer class="mt-10 text-center text-xs text-gray-500 pb-6">
-    他們都是神膝下的羔羊 • 七大罪與七美德心理測驗
+  <!-- Footer with Hidden Admin Entry -->
+  <footer class="mt-10 text-center text-xs text-gray-500 pb-6 flex items-center justify-center gap-2">
+    <span onclick="openAdminLogin()" class="cursor-pointer hover:text-gray-400 transition select-none" title="管理員入口">
+      他們都是神膝下的羔羊 • 七大罪與七美德心理測驗 🔒
+    </span>
   </footer>
 
   <script>
     // ==========================================
-    // 0. 主題切換（黑底 / 白底）
+    // 0. 雲端試算表預設網址與管理員驗證系統
     // ==========================================
+    const DEFAULT_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbz0E75wSIWq2ywS90d2t3lWBX_I1QQhAVd7SiPHafKKD7LVmnbLIc0GNQqpmm_AKL1x6A/exec';
+    const ADMIN_PASSWORD_SECRET = 'INMUKING114514';
+    let isAdminUnlocked = false;
+    const STORAGE_KEY_LOGS = 'lambs_quiz_logs_v1';
+    const STORAGE_KEY_WEBHOOK = 'lambs_quiz_webhook_v1';
+    let currentDisplayedLogs = [];
+
+    function getActiveWebhookUrl() {
+      return localStorage.getItem(STORAGE_KEY_WEBHOOK) || DEFAULT_WEBHOOK_URL;
+    }
+
+    // 快捷鍵 Ctrl + Shift + A 開啟管理員登入
+    window.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        openAdminLogin();
+      }
+    });
+
     function toggleTheme() {
       const body = document.body;
       const btn = document.getElementById('themeToggleBtn');
@@ -384,10 +618,91 @@
       }
     }
 
+    function openAdminLogin() {
+      if (isAdminUnlocked) {
+        openAdminPanel();
+        return;
+      }
+      document.getElementById('adminPasswordInput').value = '';
+      document.getElementById('adminLoginError').classList.add('hidden');
+      document.getElementById('adminLoginModal').classList.remove('hidden');
+      setTimeout(() => document.getElementById('adminPasswordInput').focus(), 80);
+    }
+
+    function closeAdminLogin() {
+      document.getElementById('adminLoginModal').classList.add('hidden');
+    }
+
+    function verifyAdminPassword() {
+      const val = document.getElementById('adminPasswordInput').value.trim();
+      if (val === ADMIN_PASSWORD_SECRET) {
+        isAdminUnlocked = true;
+        closeAdminLogin();
+        document.getElementById('adminUnlockedBadge').classList.remove('hidden');
+        openAdminPanel();
+      } else {
+        document.getElementById('adminLoginError').classList.remove('hidden');
+      }
+    }
+
+    function openAdminPanel() {
+      const dash = document.getElementById('adminDashboard');
+      dash.classList.remove('hidden');
+      document.getElementById('webhookUrlInput').value = getActiveWebhookUrl();
+      renderInspectorTable();
+      fetchCloudLogs();
+      dash.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeAdminPanel() {
+      document.getElementById('adminDashboard').classList.add('hidden');
+    }
+
+    function lockAdmin() {
+      isAdminUnlocked = false;
+      document.getElementById('adminUnlockedBadge').classList.add('hidden');
+      document.getElementById('adminDashboard').classList.add('hidden');
+      document.getElementById('debugScoreToggle').checked = false;
+      document.getElementById('showReviewToggle').checked = false;
+      toggleReviewVisibility();
+      if (!document.getElementById('quizScreen').classList.contains('hidden')) {
+        renderCurrentQuestion();
+      }
+    }
+
+    function switchAdminTab(tabId) {
+      const tabs = ['tabStats', 'tabControls', 'tabCloud', 'tabInspector'];
+      tabs.forEach(t => {
+        document.getElementById(t).classList.toggle('hidden', t !== tabId);
+        const btn = document.getElementById('btn_' + t);
+        if (t === tabId) {
+          btn.className = 'px-4 py-2 rounded-lg bg-indigo-600 text-white cursor-pointer';
+        } else {
+          btn.className = 'px-4 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 cursor-pointer';
+        }
+      });
+      if (tabId === 'tabStats') renderAdminStats(currentDisplayedLogs, '目前顯示紀錄');
+      if (tabId === 'tabInspector') renderInspectorTable();
+    }
+
+    function toggleReviewVisibility() {
+      const show = document.getElementById('showReviewToggle').checked;
+      document.getElementById('adminAnswerReviewBox').classList.toggle('hidden', !show);
+    }
+
     // ==========================================
     // 1. 基本定義與題庫資料 (組別 1：7 題，T = 8)
     // ==========================================
     const SIN_KEYS = ['lust', 'gluttony', 'greed', 'sloth', 'wrath', 'envy', 'pride'];
+    const NAME_TO_KEY = {
+      '色慾': 'lust',
+      '暴食': 'gluttony',
+      '貪婪': 'greed',
+      '怠惰': 'sloth',
+      '憤怒': 'wrath',
+      '嫉妒': 'envy',
+      '傲慢': 'pride'
+    };
 
     const SIN_INFO = {
       lust: {
@@ -476,7 +791,6 @@
       }
     };
 
-    // 十四級階梯完整定義
     const LADDER_STEPS = [
       { rank: 1, name: '愛', category: '神學美德', type: 'virtue', mirrorSin: 'pride' },
       { rank: 2, name: '望', category: '神學美德', type: 'virtue', mirrorSin: 'envy' },
@@ -494,7 +808,6 @@
       { rank: 14, name: '傲慢', category: '七罪（最重，諸罪之根）', type: 'sin', sinKey: 'pride' }
     ];
 
-    // 題庫資料：組別 1（共 7 題，每題 4 選項，每選項總分 T=8，全組各罪總分皆為 32）
     const QUESTION_BANK = [
       {
         group: 1,
@@ -637,8 +950,12 @@
     function renderCurrentQuestion() {
       const q = activeQuestions[currentIndex];
       const total = activeQuestions.length;
+      const showDebug = document.getElementById('debugScoreToggle').checked;
 
-      document.getElementById('questionGroupBadge').textContent = `第 ${currentIndex + 1} / ${total} 題`;
+      document.getElementById('debugActiveHint').classList.toggle('hidden', !showDebug);
+      document.getElementById('questionGroupBadge').textContent = showDebug
+        ? `第 ${currentIndex + 1} / ${total} 題（原題號：${q.group}-${q.qNum}）`
+        : `第 ${currentIndex + 1} / ${total} 題`;
       document.getElementById('progressBar').style.width = `${((currentIndex + 1) / total) * 100}%`;
       document.getElementById('questionText').textContent = q.question;
 
@@ -654,6 +971,17 @@
         btn.className = `option-btn w-full text-left p-4 sm:p-5 rounded-xl flex flex-col gap-2 cursor-pointer ${isSelected ? 'selected' : 'bg-gray-900/60'}`;
         btn.onclick = () => selectOption(idx);
 
+        let scoreTagsHtml = '';
+        if (showDebug) {
+          const tags = SIN_KEYS
+            .filter(k => opt.scores[k] > 0)
+            .map(k => `<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px]">${SIN_INFO[k].name} +${opt.scores[k]}</span>`)
+            .join('');
+          scoreTagsHtml = `<div class="flex flex-wrap gap-1.5 pt-1 border-t border-gray-800 text-xs text-gray-400">
+            <span class="text-gray-500">[原選項 ${opt.code}] 配分：</span>${tags}
+          </div>`;
+        }
+
         btn.innerHTML = `
           <div class="flex items-start gap-3.5">
             <span class="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center font-bold text-sm ${isSelected ? 'bg-amber-500 text-gray-950' : 'bg-gray-800 text-amber-400'}">
@@ -661,6 +989,7 @@
             </span>
             <span class="text-gray-100 text-sm sm:text-base leading-relaxed">${opt.text}</span>
           </div>
+          ${scoreTagsHtml}
         `;
         container.appendChild(btn);
       });
@@ -680,7 +1009,7 @@
           currentIndex++;
           renderCurrentQuestion();
         } else {
-          showResults();
+          showResults(true);
         }
       }, 240);
     }
@@ -698,29 +1027,26 @@
         currentIndex++;
         renderCurrentQuestion();
       } else {
-        showResults();
+        showResults(true);
       }
     }
 
     function updateMappingMode() {
       if (!document.getElementById('resultScreen').classList.contains('hidden')) {
-        showResults();
+        showResults(false);
       }
     }
 
     // ==========================================
-    // 5. 計分與結果判定引擎（賭約判定 + 經文彩蛋）
+    // 5. 計分、結果判定與後台雲端紀錄引擎
     // ==========================================
-    function showResults() {
-      document.getElementById('quizScreen').classList.add('hidden');
-      document.getElementById('resultScreen').classList.remove('hidden');
-
-      const N = activeQuestions.length;
+    function computeQuizOutcome(questions, answers, predictedSin) {
+      const N = questions.length;
       const totalPossibleSum = N * T_VALUE;
-
       const totals = { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 0 };
-      activeQuestions.forEach((q, qIdx) => {
-        const chosenOpt = q.options[userAnswers[qIdx]];
+
+      questions.forEach((q, qIdx) => {
+        const chosenOpt = q.options[answers[qIdx]];
         SIN_KEYS.forEach(k => {
           totals[k] += chosenOpt.scores[k];
         });
@@ -732,8 +1058,38 @@
       const minScore = Math.min(...SIN_KEYS.map(k => totals[k]));
       const lowestSins = SIN_KEYS.filter(k => totals[k] === minScore);
 
-      // 賭約判定：若使用者預測的罪行包含在 topSins 中，即為預測成功！
-      const isPredictionCorrect = topSins.includes(userPrediction);
+      const isPredictionCorrect = topSins.includes(predictedSin);
+
+      let weightedSum = 0;
+      SIN_KEYS.forEach(k => {
+        weightedSum += SIN_INFO[k].weight * totals[k];
+      });
+      const departureIndex = ((weightedSum - totalPossibleSum) / (6 * totalPossibleSum)) * 100;
+
+      return {
+        N,
+        totalPossibleSum,
+        totals,
+        maxScore,
+        topSins,
+        minScore,
+        lowestSins,
+        isPredictionCorrect,
+        departureIndex
+      };
+    }
+
+    function showResults(shouldRecordLog) {
+      document.getElementById('startScreen').classList.add('hidden');
+      document.getElementById('quizScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.remove('hidden');
+
+      const outcome = computeQuizOutcome(activeQuestions, userAnswers, userPrediction);
+      const { totals, maxScore, topSins, lowestSins, isPredictionCorrect, departureIndex } = outcome;
+
+      if (shouldRecordLog) {
+        recordSubmissionLog(outcome);
+      }
 
       // 渲染梅菲斯特賭約判決橫幅
       const verdictBanner = document.getElementById('dealVerdictBanner');
@@ -756,13 +1112,6 @@
         verdictTitle.textContent = "🔥 預測失準！你被拉入地獄了！ 🔥";
         verdictDesc.innerHTML = `你預測自己的罪行為「${SIN_INFO[userPrediction].name}」，但實際測驗得出的最高罪行卻是<strong>「${topSins.map(k => SIN_INFO[k].name).join('、')}」</strong>。梅菲斯特冷笑一聲，將你拖入深淵，從此你將與浮士德一同受永久的苦罰……`;
       }
-
-      // 計算背離指數
-      let weightedSum = 0;
-      SIN_KEYS.forEach(k => {
-        weightedSum += SIN_INFO[k].weight * totals[k];
-      });
-      const departureIndex = ((weightedSum - totalPossibleSum) / (6 * totalPossibleSum)) * 100;
 
       // 渲染最高罪行區塊 (含專屬聖經經文)
       document.getElementById('topSinTitle').textContent =
@@ -805,6 +1154,9 @@
 
       // 渲染十四級階梯直式剖面圖
       renderLadderProfile(totals, topSins, lowestSins, maxScore, mappingMode);
+
+      // 渲染管理員作答明細
+      renderAnswerReview();
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -885,6 +1237,353 @@
           container.appendChild(row);
         }
       });
+    }
+
+    function renderAnswerReview() {
+      const container = document.getElementById('answerReviewList');
+      container.innerHTML = activeQuestions.map((q, idx) => {
+        const chosen = q.options[userAnswers[idx]];
+        const scoreText = SIN_KEYS
+          .filter(k => chosen.scores[k] > 0)
+          .map(k => `${SIN_INFO[k].name} +${chosen.scores[k]}`)
+          .join('、');
+        return `
+          <div class="p-3 rounded-lg bg-gray-950/60 border border-gray-800/80">
+            <div class="font-semibold text-amber-400 mb-1">Q${idx + 1}（原題號 ${q.group}-${q.qNum}）：${q.question}</div>
+            <div class="text-gray-300 mb-1">選擇（原選項 ${chosen.code}）：${chosen.text}</div>
+            <div class="text-gray-500 font-mono">計分明細：${scoreText}（合計 ${T_VALUE} 分）</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ==========================================
+    // 6. 後台紀錄、模擬器與雲端雙向同步功能
+    // ==========================================
+    function getStoredLogs() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_LOGS);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveStoredLogs(logs) {
+      localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(logs));
+    }
+
+    function recordSubmissionLog(outcome) {
+      const now = new Date();
+      const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+
+      const answersDetail = activeQuestions.map((q, idx) => {
+        const chosen = q.options[userAnswers[idx]];
+        return `${q.group}-${q.qNum}:${chosen.code}`;
+      }).join('; ');
+
+      const entry = {
+        timestamp: timeStr,
+        predictedKey: userPrediction,
+        predicted: SIN_INFO[userPrediction].name,
+        topSinKeys: outcome.topSins,
+        topSins: outcome.topSins.map(k => SIN_INFO[k].name).join('、'),
+        wonDeal: outcome.isPredictionCorrect ? '成功逃離' : '墜入地獄',
+        lowestSins: outcome.lowestSins.map(k => SIN_INFO[k].name).join('、'),
+        departureIndex: Number(outcome.departureIndex.toFixed(1)),
+        scores: outcome.totals,
+        answersDetail
+      };
+
+      // 存入本機備份
+      const logs = getStoredLogs();
+      logs.unshift(entry);
+      saveStoredLogs(logs);
+      currentDisplayedLogs = logs;
+
+      // 自動背景發送至內建的 Google 試算表雲端後台
+      const webhookUrl = getActiveWebhookUrl();
+      if (webhookUrl && webhookUrl.startsWith('https://')) {
+        fetch(webhookUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(entry)
+        }).catch(() => {});
+      }
+    }
+
+    // 從 Google 試算表拉取全體受試者資料 (若 Apps Script 含 doGet)
+    function fetchCloudLogs() {
+      const webhookUrl = getActiveWebhookUrl();
+      const bannerText = document.getElementById('cloudStatusBannerText');
+      bannerText.textContent = '⏳ 正在從 Google 試算表雲端載入全體作答紀錄...';
+
+      fetch(webhookUrl)
+        .then(res => res.json())
+        .then(rows => {
+          if (Array.isArray(rows) && rows.length > 1) {
+            const parsedLogs = rows.slice(1).reverse().map(r => {
+              const topSinStr = String(r[2] || '');
+              const topKeys = topSinStr.split('、').map(n => NAME_TO_KEY[n.trim()]).filter(Boolean);
+              return {
+                timestamp: String(r[0] || ''),
+                predicted: String(r[1] || ''),
+                topSins: topSinStr,
+                topSinKeys: topKeys,
+                wonDeal: String(r[3] || ''),
+                lowestSins: String(r[4] || ''),
+                departureIndex: Number(r[5] || 0),
+                scores: {
+                  lust: Number(r[6] || 0),
+                  gluttony: Number(r[7] || 0),
+                  greed: Number(r[8] || 0),
+                  sloth: Number(r[9] || 0),
+                  wrath: Number(r[10] || 0),
+                  envy: Number(r[11] || 0),
+                  pride: Number(r[12] || 0)
+                },
+                answersDetail: String(r[13] || '')
+              };
+            });
+            currentDisplayedLogs = parsedLogs;
+            bannerText.textContent = `✓ 已成功從 Google 試算表雲端同步共 ${parsedLogs.length} 筆跨裝置作答紀錄！`;
+            renderAdminStats(parsedLogs, '☁️ Google 試算表雲端全體數據');
+          } else {
+            currentDisplayedLogs = getStoredLogs();
+            bannerText.textContent = '☁️ 雲端試算表目前尚無資料（或尚未加入 doGet 讀取函式），目前顯示本機紀錄。';
+            renderAdminStats(currentDisplayedLogs, '💻 本機瀏覽器快取紀錄');
+          }
+        })
+        .catch(() => {
+          currentDisplayedLogs = getStoredLogs();
+          bannerText.textContent = '💡 提示：測驗結果已設定自動寫入你的 Google 試算表！可隨時直接打開 Google 試算表查看全班數據（下方目前顯示本機快取）。';
+          renderAdminStats(currentDisplayedLogs, '💻 本機瀏覽器快取紀錄');
+        });
+    }
+
+    function simulateRandomQuiz() {
+      userPrediction = SIN_KEYS[Math.floor(Math.random() * SIN_KEYS.length)];
+      document.getElementById('userPredictionSelect').value = userPrediction;
+      activeQuestions = prepareQuizQuestions();
+      userAnswers = activeQuestions.map(q => Math.floor(Math.random() * q.options.length));
+      showResults(true);
+    }
+
+    function simulateBatch(count) {
+      const logs = getStoredLogs();
+      for (let i = 0; i < count; i++) {
+        const pred = SIN_KEYS[Math.floor(Math.random() * SIN_KEYS.length)];
+        const qs = prepareQuizQuestions();
+        const ans = qs.map(q => Math.floor(Math.random() * q.options.length));
+        const outcome = computeQuizOutcome(qs, ans, pred);
+        const now = new Date();
+        const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')} (模擬#${i+1})`;
+        const answersDetail = qs.map((q, idx) => `${q.group}-${q.qNum}:${q.options[ans[idx]].code}`).join('; ');
+
+        logs.unshift({
+          timestamp: timeStr,
+          predictedKey: pred,
+          predicted: SIN_INFO[pred].name,
+          topSinKeys: outcome.topSins,
+          topSins: outcome.topSins.map(k => SIN_INFO[k].name).join('、'),
+          wonDeal: outcome.isPredictionCorrect ? '成功逃離' : '墜入地獄',
+          lowestSins: outcome.lowestSins.map(k => SIN_INFO[k].name).join('、'),
+          departureIndex: Number(outcome.departureIndex.toFixed(1)),
+          scores: outcome.totals,
+          answersDetail
+        });
+      }
+      saveStoredLogs(logs);
+      currentDisplayedLogs = logs;
+      switchAdminTab('tabStats');
+      renderAdminStats(logs, '💻 本機模擬快取紀錄');
+    }
+
+    function renderAdminStats(logsToRender, sourceTitle) {
+      const logs = logsToRender || getStoredLogs();
+      currentDisplayedLogs = logs;
+      const total = logs.length;
+      document.getElementById('statTotalCount').textContent = total;
+      document.getElementById('dataSourceLabel').textContent = `資料來源：${sourceTitle || '最新紀錄'}（共 ${total} 筆）`;
+
+      if (total === 0) {
+        document.getElementById('statWinRate').textContent = '0%';
+        document.getElementById('statAvgDeparture').textContent = '0.0';
+        document.getElementById('statMostCommonSin').textContent = '-';
+        document.getElementById('statSinDistribution').innerHTML = '<div class="text-gray-500">尚無作答資料。</div>';
+        document.getElementById('adminLogsTableBody').innerHTML = '<tr><td colspan="7" class="p-4 text-center text-gray-500">目前尚無作答紀錄</td></tr>';
+        return;
+      }
+
+      const wins = logs.filter(l => l.wonDeal === '成功逃離').length;
+      const avgDep = logs.reduce((acc, l) => acc + Number(l.departureIndex || 0), 0) / total;
+
+      const sinCounts = { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 0 };
+      logs.forEach(l => {
+        const keys = l.topSinKeys && l.topSinKeys.length
+          ? l.topSinKeys
+          : String(l.topSins || '').split('、').map(n => NAME_TO_KEY[n.trim()]).filter(Boolean);
+        keys.forEach(k => {
+          if (sinCounts[k] !== undefined) sinCounts[k]++;
+        });
+      });
+
+      const maxSinCount = Math.max(...SIN_KEYS.map(k => sinCounts[k]));
+      const mostCommon = maxSinCount > 0
+        ? SIN_KEYS.filter(k => sinCounts[k] === maxSinCount).map(k => SIN_INFO[k].name).join('、')
+        : '-';
+
+      document.getElementById('statWinRate').textContent = `${((wins / total) * 100).toFixed(1)}%`;
+      document.getElementById('statAvgDeparture').textContent = avgDep.toFixed(1);
+      document.getElementById('statMostCommonSin').textContent = mostCommon;
+
+      const distContainer = document.getElementById('statSinDistribution');
+      distContainer.innerHTML = SIN_KEYS.map(k => {
+        const c = sinCounts[k];
+        const pct = total > 0 ? ((c / total) * 100).toFixed(1) : 0;
+        return `
+          <div class="flex items-center gap-3">
+            <span class="w-12 font-bold text-gray-300">${SIN_INFO[k].name}</span>
+            <div class="flex-1 h-2.5 bg-gray-800 rounded-full overflow-hidden">
+              <div class="h-full bg-indigo-500 rounded-full" style="width: ${pct}%"></div>
+            </div>
+            <span class="w-24 text-right font-mono text-gray-400">${c} 次 (${pct}%)</span>
+          </div>
+        `;
+      }).join('');
+
+      const tbody = document.getElementById('adminLogsTableBody');
+      tbody.innerHTML = logs.slice(0, 100).map((l, i) => {
+        const s = l.scores || {};
+        return `
+          <tr class="hover:bg-gray-900/50">
+            <td class="p-2 font-mono text-gray-500">${total - i}</td>
+            <td class="p-2 font-mono text-gray-400">${l.timestamp}</td>
+            <td class="p-2 text-amber-300">${l.predicted}</td>
+            <td class="p-2 font-bold text-red-400">${l.topSins}</td>
+            <td class="p-2 ${l.wonDeal === '成功逃離' ? 'text-emerald-400' : 'text-gray-400'}">${l.wonDeal}</td>
+            <td class="p-2 font-mono text-amber-400">${l.departureIndex}</td>
+            <td class="p-2 font-mono text-gray-300">${s.lust}/${s.gluttony}/${s.greed}/${s.sloth}/${s.wrath}/${s.envy}/${s.pride}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function exportLogsToCSV() {
+      const logs = currentDisplayedLogs.length ? currentDisplayedLogs : getStoredLogs();
+      if (logs.length === 0) {
+        alert('目前尚無作答紀錄可供匯出！');
+        return;
+      }
+      const headers = ['序號', '測驗時間', '預測罪行', '實際最高罪行', '賭約結果', '最低傾向(相對美德)', '背離指數', '色慾得分', '暴食得分', '貪婪得分', '怠惰得分', '憤怒得分', '嫉妒得分', '傲慢得分', '各題選答明細'];
+      const rows = logs.map((l, idx) => {
+        const s = l.scores || {};
+        return [
+          logs.length - idx,
+          `"${l.timestamp}"`,
+          `"${l.predicted}"`,
+          `"${l.topSins}"`,
+          `"${l.wonDeal}"`,
+          `"${l.lowestSins}"`,
+          l.departureIndex,
+          s.lust, s.gluttony, s.greed, s.sloth, s.wrath, s.envy, s.pride,
+          `"${l.answersDetail || ''}"`
+        ].join(',');
+      });
+
+      const csvContent = '\uFEFF' + headers.join(',') + '\r\n' + rows.join('\r\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `他們都是神膝下的羔羊_作答數據報表_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function clearAllLogs() {
+      if (confirm('確定要清空這台裝置上的本機快取紀錄嗎？（Google 試算表上的雲端資料不會受影響）')) {
+        localStorage.removeItem(STORAGE_KEY_LOGS);
+        currentDisplayedLogs = [];
+        renderAdminStats([], '本機快取已清空');
+      }
+    }
+
+    function saveWebhookUrl() {
+      const val = document.getElementById('webhookUrlInput').value.trim();
+      localStorage.setItem(STORAGE_KEY_WEBHOOK, val);
+      const st = document.getElementById('webhookSaveStatus');
+      st.classList.remove('hidden');
+      setTimeout(() => st.classList.add('hidden'), 3000);
+    }
+
+    // ==========================================
+    // 7. 題庫驗證器 (Inspector)
+    // ==========================================
+    function renderInspectorTable() {
+      const tbody = document.getElementById('inspectorTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const colTotals = { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 0 };
+      let allOptionsValidT = true;
+
+      QUESTION_BANK.forEach(q => {
+        q.options.forEach(opt => {
+          let rowSum = 0;
+          SIN_KEYS.forEach(k => {
+            rowSum += opt.scores[k];
+            colTotals[k] += opt.scores[k];
+          });
+          if (rowSum !== T_VALUE) allOptionsValidT = false;
+
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-gray-900/50';
+          tr.innerHTML = `
+            <td class="p-2 font-mono text-amber-400">${q.group}-${q.qNum}-${opt.code}</td>
+            <td class="p-2 text-gray-300 max-w-xs truncate" title="${opt.text}">${opt.text}</td>
+            <td class="p-2 text-center font-mono">${opt.scores.lust}</td>
+            <td class="p-2 text-center font-mono">${opt.scores.gluttony}</td>
+            <td class="p-2 text-center font-mono">${opt.scores.greed}</td>
+            <td class="p-2 text-center font-mono">${opt.scores.sloth}</td>
+            <td class="p-2 text-center font-mono">${opt.scores.wrath}</td>
+            <td class="p-2 text-center font-mono">${opt.scores.envy}</td>
+            <td class="p-2 text-center font-mono">${opt.scores.pride}</td>
+            <td class="p-2 text-center font-mono font-bold ${rowSum === T_VALUE ? 'text-emerald-400' : 'text-red-400'}">${rowSum}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+
+      const allColsEqual32 = SIN_KEYS.every(k => colTotals[k] === 32);
+      const summaryTr = document.createElement('tr');
+      summaryTr.className = 'bg-amber-950/40 font-bold text-amber-300 border-t-2 border-amber-600/50';
+      summaryTr.innerHTML = `
+        <td class="p-2" colspan="2">組1小計（28 個選項各罪加總，應皆為 32）</td>
+        <td class="p-2 text-center font-mono">${colTotals.lust}</td>
+        <td class="p-2 text-center font-mono">${colTotals.gluttony}</td>
+        <td class="p-2 text-center font-mono">${colTotals.greed}</td>
+        <td class="p-2 text-center font-mono">${colTotals.sloth}</td>
+        <td class="p-2 text-center font-mono">${colTotals.wrath}</td>
+        <td class="p-2 text-center font-mono">${colTotals.envy}</td>
+        <td class="p-2 text-center font-mono">${colTotals.pride}</td>
+        <td class="p-2 text-center font-mono text-emerald-400">${32 * 7}</td>
+      `;
+      tbody.appendChild(summaryTr);
+
+      const summaryBox = document.getElementById('inspectorSummary');
+      summaryBox.innerHTML = `
+        <div class="flex flex-wrap gap-3 text-xs">
+          <span class="px-3 py-1.5 rounded-lg ${allOptionsValidT ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-red-950 text-red-300 border border-red-700'}">
+            ✓ 選項固定總分檢查：${allOptionsValidT ? '28 個選項總分皆為 T = 8（通過）' : '有選項總分不為 8！'}
+          </span>
+          <span class="px-3 py-1.5 rounded-lg ${allColsEqual32 ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-red-950 text-red-300 border border-red-700'}">
+            ✓ 七罪題庫總分平衡檢查：${allColsEqual32 ? '七種罪總分皆為 32 分（完全平衡）' : '七罪總分不相等！'}
+          </span>
+        </div>
+      `;
     }
   </script>
 </body>
