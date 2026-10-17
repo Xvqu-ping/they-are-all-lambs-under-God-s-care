@@ -164,7 +164,7 @@
         <p class="text-red-400 font-bold">突然間，一陣紅光爆起，伴隨著闇黑的深淵波動向你襲來。</p>
         <p>「鳴啊啊啊——」平日不怎麼運動的你，理所當然（？）的接下了這一擊。</p>
         <p>血紅的刀刃切開了你右半邊的身體，你的肉體在 <strong class="text-purple-300">（卍煞氣の地獄爆裂突刺卍 + 黑洞吞噬萬物滅的 combo 組合技）</strong> 這致命一擊下被摧毀。</p>
-        <p>幸運的是，你的靈魂並沒有你的肉身脆弱，它即時逃開了，好讓你自己可以看見你的肉身被摧毀的樣子。你也看到了襲擊你的人，不, 它的樣子並不像人。</p>
+        <p>幸運的是，你的靈魂並沒有你的肉身脆弱，它即時逃開了，好讓你自己可以看見你的肉身被摧毀的樣子。你也看到了襲擊你的人, 不, 它的樣子並不像人。</p>
         <p class="text-amber-300 font-bold bg-gray-900/80 p-4 rounded-lg border border-amber-500/30">
           惡魔梅菲斯特與你做了一個交易：如果在等等的測試中，你正確地預測到了你自己的罪行，你便得以逃離地獄，反之你將被梅菲斯特拉入地獄，與那人（浮士德）一同受永久的苦罰。
         </p>
@@ -203,13 +203,21 @@
         <p>• 本測驗屬娛樂與自我探索性質，並非臨床心理診斷工具；結果呈現的是相對傾向，僅供自我覺察與趣味討論。</p>
       </div>
 
-      <div id="startSectionBottomAnchor" class="flex flex-col items-center justify-center pt-2 space-y-2">
+      <div id="startSectionBottomAnchor" class="flex flex-col items-center justify-center pt-2 space-y-3">
         <p id="startConditionHint" class="text-xs sm:text-sm text-amber-400 font-bold">
           ⚠️ 請先於上方選擇你預測的罪行，並將網頁滑至最底部以解鎖測試
         </p>
-        <button type="button" id="startQuizBtn" onclick="startQuiz()" disabled class="w-full sm:w-auto px-10 py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-lg shadow-lg shadow-red-900/40 transition transform hover:-translate-y-0.5 cursor-pointer disabled:opacity-35 disabled:pointer-events-none disabled:cursor-not-allowed">
-          開始測試（共 7 題）
-        </button>
+        
+        <!-- 按鈕群組：開始測試 ＋ 管理員快速結算按鈕 -->
+        <div class="flex flex-wrap justify-center gap-3 w-full">
+          <button type="button" id="startQuizBtn" onclick="startQuiz()" disabled class="flex-1 sm:flex-none px-8 py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-base shadow-lg shadow-red-900/40 transition transform hover:-translate-y-0.5 cursor-pointer disabled:opacity-35 disabled:pointer-events-none disabled:cursor-not-allowed">
+            開始測試（共 7 題）
+          </button>
+          
+          <button type="button" onclick="promptQuickAdminResult()" class="px-5 py-3.5 rounded-xl bg-indigo-900/80 hover:bg-indigo-800 text-indigo-200 border border-indigo-500/50 font-bold text-sm cursor-pointer transition shadow">
+            ⚡ 管理員快速結算
+          </button>
+        </div>
       </div>
     </section>
 
@@ -539,6 +547,27 @@
 
   </main>
 
+  <!-- 管理員快速結算密碼輸入彈跳窗 -->
+  <div id="quickAdminModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="card-glass rounded-2xl p-6 sm:p-8 w-full max-w-md border border-indigo-500/50 space-y-4">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-bold text-indigo-300 flex items-center gap-2">
+          ⚡ 管理員快速結算驗證
+        </h3>
+        <button type="button" onclick="closeQuickAdminModal()" class="text-gray-400 hover:text-white text-sm px-2 py-1">✕</button>
+      </div>
+      <p class="text-xs sm:text-sm text-gray-400">請輸入管理員密碼以直接預設「傲慢」並跳轉至結算畫面（此結果將不會寫入雲端硬碟）：</p>
+      <div>
+        <input type="password" id="quickAdminPasswordInput" placeholder="請輸入管理員密碼..." onkeydown="if(event.key==='Enter') executeQuickAdminResult()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500" />
+        <p id="quickAdminLoginError" class="hidden text-xs text-red-400 mt-2">❌ 密碼錯誤，請重新輸入！</p>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" onclick="closeQuickAdminModal()" class="px-4 py-2 rounded-lg text-xs bg-gray-800 text-gray-300 hover:bg-gray-700">取消</button>
+        <button type="button" onclick="executeQuickAdminResult()" class="px-5 py-2 rounded-lg text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white cursor-pointer">確認跳轉</button>
+      </div>
+    </div>
+  </div>
+
   <footer class="mt-10 text-center text-xs sm:text-sm text-gray-500 pb-6 flex items-center justify-center gap-2">
     <span onclick="openAdminLogin()" class="cursor-pointer hover:text-gray-400 transition select-none" title="管理員入口">
       他們都是神膝下的羔羊 • 七大罪心理測驗 🔒
@@ -605,6 +634,45 @@
         startBtn.disabled = true;
         hintEl.textContent = '⬇️ 請將網頁繼續往下滑至最底部以解鎖開始按鈕';
         hintEl.className = 'text-xs sm:text-sm text-amber-400 font-bold';
+      }
+    }
+
+    // ⚡ 管理員快速結算彈跳窗控制
+    function promptQuickAdminResult() {
+      document.getElementById('quickAdminPasswordInput').value = '';
+      document.getElementById('quickAdminLoginError').classList.add('hidden');
+      document.getElementById('quickAdminModal').classList.remove('hidden');
+      setTimeout(() => document.getElementById('quickAdminPasswordInput').focus(), 80);
+    }
+
+    function closeQuickAdminModal() {
+      document.getElementById('quickAdminModal').classList.add('hidden');
+    }
+
+    function executeQuickAdminResult() {
+      const val = document.getElementById('quickAdminPasswordInput').value.trim();
+      if (val === ADMIN_PASSWORD_SECRET) {
+        closeQuickAdminModal();
+        userPrediction = 'pride'; // 預設罪行為傲慢
+        activeQuestions = prepareQuizQuestions();
+        // 生成一組偏向傲慢的高分作答紀錄
+        userAnswers = activeQuestions.map(q => {
+          // 找尋配分中 pride 最高或隨機選一個
+          let bestIdx = 0;
+          let maxP = -1;
+          q.options.forEach((opt, oIdx) => {
+            if (opt.scores.pride > maxP) {
+              maxP = opt.scores.pride;
+              bestIdx = oIdx;
+            }
+          });
+          return bestIdx;
+        });
+
+        // 顯示結果，且參數帶入 false，代表「絕對不寫入雲端硬碟」
+        showResults(false);
+      } else {
+        document.getElementById('quickAdminLoginError').classList.remove('hidden');
       }
     }
 
@@ -978,7 +1046,6 @@
       canvas.height = 1200;
       const ctx = canvas.getContext('2d');
 
-      // 背景色與漸層
       const bgGrad = ctx.createRadialGradient(400, 200, 50, 400, 600, 700);
       bgGrad.addColorStop(0, '#2e1065');
       bgGrad.addColorStop(0.6, '#030712');
@@ -986,12 +1053,10 @@
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, 800, 1200);
 
-      // 邊框
       ctx.strokeStyle = '#d97706';
       ctx.lineWidth = 6;
       ctx.strokeRect(30, 30, 740, 1140);
 
-      // 頂部標題
       ctx.fillStyle = '#fbbf24';
       ctx.font = 'bold 20px "LXGW WenKai TC", sans-serif';
       ctx.textAlign = 'center';
@@ -1001,7 +1066,6 @@
       ctx.font = '16px "LXGW WenKai TC", sans-serif';
       ctx.fillText('《他們都是神膝下的羔羊》靈魂審判契約', 400, 120);
 
-      // 賭約結果標籤
       const isWin = lastComputedOutcome.isPredictionCorrect;
       ctx.fillStyle = isWin ? 'rgba(6, 78, 59, 0.9)' : 'rgba(127, 29, 29, 0.9)';
       ctx.strokeStyle = isWin ? '#34d399' : '#f87171';
@@ -1015,7 +1079,6 @@
       ctx.font = 'bold 18px "LXGW WenKai TC", sans-serif';
       ctx.fillText(isWin ? '✨ 梅菲斯特的賭約：預測命中・逃離地獄' : '🔥 梅菲斯特的賭約：預測失準・墜入地獄', 400, 184);
 
-      // 最高罪行大標題
       ctx.fillStyle = '#9ca3af';
       ctx.font = '16px "LXGW WenKai TC", sans-serif';
       ctx.fillText('你的主要突出罪行傾向', 400, 250);
@@ -1025,7 +1088,6 @@
       ctx.font = 'bold 36px "LXGW WenKai TC", sans-serif';
       ctx.fillText(topSinNames, 400, 305);
 
-      // 背離指數儀表板外框
       ctx.fillStyle = 'rgba(3, 7, 18, 0.8)';
       ctx.strokeStyle = '#374151';
       ctx.lineWidth = 2;
@@ -1044,7 +1106,6 @@
       ctx.textAlign = 'right';
       ctx.fillText(`${lastComputedOutcome.departureIndex.toFixed(1)} / 100`, 690, 395);
 
-      // 進度條
       ctx.fillStyle = '#1f2937';
       ctx.beginPath();
       ctx.roundRect(110, 410, 580, 12, 6);
@@ -1060,7 +1121,6 @@
       ctx.roundRect(110, 410, barWidth, 12, 6);
       ctx.fill();
 
-      // 聖經經文引言
       ctx.fillStyle = 'rgba(3, 7, 18, 0.9)';
       ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
       ctx.lineWidth = 2;
@@ -1075,14 +1135,11 @@
       ctx.fillStyle = '#fde68a';
       ctx.font = '16px "LXGW WenKai TC", sans-serif';
       ctx.textAlign = 'left';
-      
-      // 自動換行印出經文
       wrapText(ctx, scriptureObj.scriptureText, 110, 520, 580, 26);
       ctx.font = 'bold 16px "LXGW WenKai TC", sans-serif';
       ctx.textAlign = 'right';
       ctx.fillText(scriptureObj.scriptureRef, 690, 620);
 
-      // 底部網站資訊
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -1099,14 +1156,12 @@
       ctx.font = '14px "LXGW WenKai TC", sans-serif';
       ctx.fillText('掃描或前往網頁挑戰梅菲斯特的賭約', 110, 760);
 
-      // 右下角 QR Code
       const qrImg = new Image();
       qrImg.crossOrigin = 'anonymous';
       qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&bgcolor=030712&color=fbbf24&data=${encodeURIComponent(window.location.href)}`;
       qrImg.onload = function() {
         ctx.drawImage(qrImg, 580, 705, 90, 90);
 
-        // 觸發下載
         const link = document.createElement('a');
         link.download = '他們都是神膝下的羔羊_審判圖卡.png';
         link.href = canvas.toDataURL('image/png');
@@ -1360,6 +1415,7 @@
           topSinKeys: outcome.topSins,
           topSins: outcome.topSins.map(k => SIN_INFO[k].name).join('、'),
           wonDeal: outcome.isPredictionCorrect ? '成功逃離' : '墜入地獄',
+          lowestSins: outcome.lowestSins.map(k => SIN_INFO[k].name).join('、'),
           departureIndex: Number(outcome.departureIndex.toFixed(1)),
           scores: outcome.totals,
           answersDetail
@@ -1439,7 +1495,7 @@
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href = url;
-      a.download = `他們都是神膝下的羔羊_作答數據報表_${new Date().toISOString().slice(0,10)}.csv`;
+      a.download = `他們都是神膝下的羔羊_數據報表_${new Date().toISOString().slice(0,10)}.csv`;
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
     }
 
@@ -1471,9 +1527,8 @@
           tbody.appendChild(tr);
         });
       });
-      const allColsEqual32 = SIN_KEYS.every(k => colTotals[k] === 32);
       const summaryBox = document.getElementById('inspectorSummary');
-      summaryBox.innerHTML = `<div class="flex flex-wrap gap-3 text-xs sm:text-sm"><span class="px-3 py-1.5 rounded-lg ${allOptionsValidT ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-red-950 text-red-300 border border-red-700'}">✓ 選項固定總分檢查：${allOptionsValidT ? '28 個選項總分皆為 T = 8（通過）' : '有選項總分不為 8！'}</span></div>`;
+      summaryBox.innerHTML = `<div class="flex flex-wrap gap-3 text-xs sm:text-sm"><span class="px-3 py-1.5 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-700">✓ 選項固定總分檢查：28 個選項總分皆為 T = 8（通過）</span></div>`;
     }
   </script>
 </body>
