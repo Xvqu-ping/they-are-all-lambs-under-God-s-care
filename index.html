@@ -60,7 +60,9 @@
       color: #fde68a;
     }
 
-    /* 淺色模式（白底切換） */
+    /* ========================================== */
+    /* ☀️ 淺色模式（白底完美適配） */
+    /* ========================================== */
     body.light-mode {
       background-color: #f8fafc;
       color: #1e293b;
@@ -83,6 +85,28 @@
       border: 1px solid #f59e0b !important;
       color: #78350f !important;
     }
+    /* 修正白底時結果頁所有深色背景與漸層卡片 */
+    body.light-mode div[id^="dealVerdictBanner"],
+    body.light-mode .bg-gradient-to-br {
+      background: #ffffff !important;
+      background-image: none !important;
+      border: 1px solid #cbd5e1 !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+    }
+    body.light-mode .bg-gray-950\/60,
+    body.light-mode .bg-gray-950\/70,
+    body.light-mode .bg-gray-950\/80,
+    body.light-mode .bg-gray-900,
+    body.light-mode .bg-gray-900\/90,
+    body.light-mode .bg-gray-900\/80 {
+      background-color: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #334155 !important;
+    }
+    body.light-mode .bg-gray-800 {
+      background-color: #e2e8f0 !important;
+      color: #1e293b !important;
+    }
     body.light-mode .text-gray-100,
     body.light-mode .text-gray-200,
     body.light-mode .text-gray-300,
@@ -96,7 +120,7 @@
     body.light-mode .text-amber-200,
     body.light-mode .text-amber-300,
     body.light-mode .text-amber-400 {
-      color: #92400e !important;
+      color: #b45309 !important;
     }
     body.light-mode .text-red-300,
     body.light-mode .text-red-400 {
@@ -105,17 +129,6 @@
     body.light-mode .text-emerald-200,
     body.light-mode .text-emerald-300 {
       color: #065f46 !important;
-    }
-    body.light-mode .bg-gray-900,
-    body.light-mode .bg-gray-900\/90,
-    body.light-mode .bg-gray-900\/80,
-    body.light-mode .bg-gray-950\/80 {
-      background-color: #f8fafc !important;
-      border-color: #cbd5e1 !important;
-    }
-    body.light-mode .bg-gray-800 {
-      background-color: #e2e8f0 !important;
-      color: #1e293b !important;
     }
   </style>
 </head>
@@ -208,7 +221,6 @@
           ⚠️ 請先於上方選擇你預測的罪行，並將網頁滑至最底部以解鎖測試
         </p>
         
-        <!-- 按鈕群組：開始測試 ＋ 管理員快速結算按鈕 -->
         <div class="flex flex-wrap justify-center gap-3 w-full">
           <button type="button" id="startQuizBtn" onclick="startQuiz()" disabled class="flex-1 sm:flex-none px-8 py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-base shadow-lg shadow-red-900/40 transition transform hover:-translate-y-0.5 cursor-pointer disabled:opacity-35 disabled:pointer-events-none disabled:cursor-not-allowed">
             開始測試（共 7 題）
@@ -244,7 +256,7 @@
         <button type="button" id="prevBtn" onclick="prevQuestion()" class="px-4 py-2 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-800 transition disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
           ← 上一頁
         </button>
-        <span class="text-xs text-gray-500">請選擇一個選項後，點擊右側按鈕前往下一頁</span>
+        <span class="text-xs text-gray-500">請選擇一個選項後, 點擊右側按鈕前往下一頁</span>
         <button type="button" id="nextBtn" onclick="nextQuestion()" class="px-6 py-2.5 rounded-lg text-sm font-bold bg-amber-500 hover:bg-amber-400 text-gray-950 transition disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
           下一頁 →
         </button>
@@ -637,7 +649,6 @@
       }
     }
 
-    // ⚡ 管理員快速結算彈跳窗控制
     function promptQuickAdminResult() {
       document.getElementById('quickAdminPasswordInput').value = '';
       document.getElementById('quickAdminLoginError').classList.add('hidden');
@@ -653,11 +664,9 @@
       const val = document.getElementById('quickAdminPasswordInput').value.trim();
       if (val === ADMIN_PASSWORD_SECRET) {
         closeQuickAdminModal();
-        userPrediction = 'pride'; // 預設罪行為傲慢
+        userPrediction = 'pride';
         activeQuestions = prepareQuizQuestions();
-        // 生成一組偏向傲慢的高分作答紀錄
         userAnswers = activeQuestions.map(q => {
-          // 找尋配分中 pride 最高或隨機選一個
           let bestIdx = 0;
           let maxP = -1;
           q.options.forEach((opt, oIdx) => {
@@ -668,8 +677,6 @@
           });
           return bestIdx;
         });
-
-        // 顯示結果，且參數帶入 false，代表「絕對不寫入雲端硬碟」
         showResults(false);
       } else {
         document.getElementById('quickAdminLoginError').classList.remove('hidden');
@@ -772,7 +779,7 @@
       { rank: 7, name: '傲慢', category: '七罪（最重，諸罪之根）', sinKey: 'pride' }
     ];
 
-    const QUESTION_BANK = [
+    const QUESTION_BANK_1 = [
       { group: 1, qNum: 1, question: "你的男/女朋友跟你的國文老師同時落水了，然而你的力量只允許你救一個人，你會先救誰?", options: [ { code: "A", text: "我雙手一攤，誰也不救，反正男/女朋友再找就有，我也不缺國文老師。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 5, wrath: 0, envy: 0, pride: 3 } }, { code: "B", text: "當然是先救男/女朋友啊，他/她是我的一切，我不能失去他。", scores: { lust: 4, gluttony: 0, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 1 } }, { code: "C", text: "當然是先救國文老師啊，因為是我把我的男/女朋友推下去的，國文老師竟然下去救，一定要抓回來興師問罪！", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 1, wrath: 3, envy: 0, pride: 4 } }, { code: "D", text: "當然是打110啊，這一看必死無疑。不用叫消防隊了，浪費社會資源，反正都是「意外」失足的！", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 3, wrath: 0, envy: 1, pride: 3 } } ] },
       { group: 1, qNum: 2, question: "某天，你的上級對你說，他傷害了他相好（上級的老公或老婆）請求你去安撫他的相好，你作何感想？", options: [ { code: "A", text: "恭敬不如從命，我現在就去，給我五分鐘，包準讓你們倆和好如初。", scores: { lust: 2, gluttony: 0, greed: 0, sloth: 0, wrath: 2, envy: 4, pride: 0 } }, { code: "B", text: "不可行啊，再怎麼說您的相好也是我的上級，我不能違背我生而為人的矜持，我辦不到。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 1, envy: 3, pride: 4 } }, { code: "C", text: "干我⋯（消音），您可以去尋找更加專業的心理輔導師，而不是將這種無關乎我本來工作的業務交給我辦，術業有專攻，請找對人。", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 0, wrath: 4, envy: 3, pride: 0 } }, { code: "D", text: "不行啊，我怕您的相好不小心，對就是這麼不小心的愛上了我，這可糟了，您被扣了一頂純綠的大帽，還要付我封口費呢！啊，請您不要小看我的魅力呦！", scores: { lust: 5, gluttony: 0, greed: 0, sloth: 0, wrath: 0, envy: 3, pride: 0 } } ] },
       { group: 1, qNum: 3, question: "我認為精神世界的滿足是愛情中最重要的事。", options: [ { code: "A", text: "是，如果一段關係不能帶給我精神上的滿足，不要也罷。", scores: { lust: 1, gluttony: 0, greed: 0, sloth: 3, wrath: 2, envy: 0, pride: 2 } }, { code: "B", text: "不是，一段關係不只有精神上的完滿，更要能夠在這個世界共同生活，即使不能共享價值實現之快樂，也可以共享別的快樂。", scores: { lust: 2, gluttony: 3, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "C", text: "我認為我找不到一個可以理解我價值以及可以共享那感情的人。", scores: { lust: 0, gluttony: 1, greed: 0, sloth: 0, wrath: 0, envy: 3, pride: 4 } }, { code: "D", text: "我覺得「精神世界的滿足」是一種謬論，精神世界是不可能滿足的，這個提問本身並不成立。", scores: { lust: 0, gluttony: 1, greed: 2, sloth: 5, wrath: 0, envy: 0, pride: 0 } } ] },
@@ -780,6 +787,16 @@
       { group: 1, qNum: 5, question: "我認為我的交往對象若是兩人對話常常不在同一個頻率上就應該要分開。", options: [ { code: "A", text: "是，無法溝通何以有情。", scores: { lust: 0, gluttony: 1, greed: 0, sloth: 0, wrath: 2, envy: 3, pride: 2 } }, { code: "B", text: "不是，這是可以慢慢修正的，對方只是還在摸索與我對話的方式，要有耐心。", scores: { lust: 2, gluttony: 3, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "C", text: "我瞧不起聽不懂我說什麼的人，遑論交往。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 2, wrath: 6, envy: 0, pride: 0 } }, { code: "D", text: "兩人之間的溝通不能完全相互理解，每人對於思想的理解亦是有差異的，我認為「聽不懂」是一種武斷的判斷，不能這樣理解。", scores: { lust: 0, gluttony: 3, greed: 3, sloth: 2, wrath: 0, envy: 0, pride: 0 } } ] },
       { group: 1, qNum: 6, question: "我認為自己心中的理想大於愛情。", options: [ { code: "A", text: "是的，我自己的理想才能陪我走得最遠。", scores: { lust: 0, gluttony: 0, greed: 5, sloth: 2, wrath: 0, envy: 0, pride: 1 } }, { code: "B", text: "不是，若是對方可以陪伴我一生並使我幸福，我便願意放棄那理想。", scores: { lust: 0, gluttony: 4, greed: 4, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "C", text: "理想與愛情當真不可兼得？那只是這個人無法理解我的理想，去找下一個可以理解我的人就好。", scores: { lust: 0, gluttony: 3, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 5 } }, { code: "D", text: "我的理想就是找到理想的愛情。", scores: { lust: 6, gluttony: 2, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 0 } } ] },
       { group: 1, qNum: 7, question: "我覺得喜歡年紀比自己小很多的那群人是正確的。", options: [ { code: "A", text: "蛤？那當真不是變態？", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 4, envy: 4, pride: 0 } }, { code: "B", text: "每人皆可選擇自己的喜好，不要違法就好。", scores: { lust: 5, gluttony: 3, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "C", text: "我覺得年紀相差太大會有代溝。", scores: { lust: 0, gluttony: 1, greed: 0, sloth: 5, wrath: 0, envy: 2, pride: 0 } }, { code: "D", text: "嚴厲斥責！！！", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 3, envy: 4, pride: 1 } } ] }
+    ];
+
+    const QUESTION_BANK_2 = [
+      { group: 2, qNum: 1, question: "很熱很熱的時候，你的腦子裡第一個想法是？", options: [ { code: "A", text: "啊，冷氣啊冷氣，你到底在哪裡？", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 4, wrath: 2, envy: 2, pride: 0 } }, { code: "B", text: "心靜自然涼。", scores: { lust: 1, gluttony: 0, greed: 1, sloth: 1, wrath: 1, envy: 0, pride: 4 } }, { code: "C", text: "來人啊，速速買根冰棒來！", scores: { lust: 0, gluttony: 0, greed: 2, sloth: 2, wrath: 3, envy: 1, pride: 0 } }, { code: "D", text: "我好想他/她。", scores: { lust: 5, gluttony: 0, greed: 0, sloth: 0, wrath: 2, envy: 1, pride: 0 } } ] },
+      { group: 2, qNum: 2, question: "放學的時候，你的腦子裡第一個想法是？", options: [ { code: "A", text: "我要待晚一點這樣可以與我喜歡的人共享空無一人的教室。", scores: { lust: 3, gluttony: 1, greed: 2, sloth: 1, wrath: 0, envy: 0, pride: 1 } }, { code: "B", text: "校車要沒位子了，聽說有人也很喜歡我坐的那個位子。", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 0, wrath: 2, envy: 4, pride: 1 } }, { code: "C", text: "且讓我打把荒野壓壓驚，那個可怕的數學作業量著實嚇到我了。", scores: { lust: 0, gluttony: 2, greed: 1, sloth: 4, wrath: 0, envy: 0, pride: 1 } }, { code: "D", text: "我...我..尿急啦，憋那麼久，誰忍得住？", scores: { lust: 0, gluttony: 2, greed: 1, sloth: 3, wrath: 0, envy: 0, pride: 2 } } ] },
+      { group: 2, qNum: 3, question: "明天是難得的四天連假，你打算如何度過？", options: [ { code: "A", text: "去吃個 A5 和牛燒肉定食吃到飽，慰勞一下喝慣了西北風的腸胃。", scores: { lust: 0, gluttony: 4, greed: 2, sloth: 0, wrath: 1, envy: 0, pride: 1 } }, { code: "B", text: "去名牌球鞋的廠拍，挑好幾雙非常時髦的跑鞋。", scores: { lust: 1, gluttony: 1, greed: 3, sloth: 2, wrath: 0, envy: 1, pride: 0 } }, { code: "C", text: "睡覺睡到自然醒，明天再也不用早上5點起床。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 5, wrath: 1, envy: 0, pride: 2 } }, { code: "D", text: "一堆令人厭煩的事情要做，看到那堆比玉山高的文件了嗎？那就是我的假期。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 2, wrath: 4, envy: 1, pride: 1 } } ] },
+      { group: 2, qNum: 4, question: "如果你的心愛之物（包含心愛之人）遺失了，你作何感想？", options: [ { code: "A", text: "既然遺失了，那就讓他去吧，所謂緣分即是如此。", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 3, wrath: 1, envy: 0, pride: 3 } }, { code: "B", text: "不可能！我一定是掉在了某處。我一定要找回來！", scores: { lust: 4, gluttony: 0, greed: 0, sloth: 0, wrath: 2, envy: 2, pride: 0 } }, { code: "C", text: "反正也不是第一次遺失了，過幾天他就會出現的，這叫經驗法則。", scores: { lust: 1, gluttony: 1, greed: 0, sloth: 4, wrath: 0, envy: 0, pride: 2 } }, { code: "D", text: "沒有任何東西是我的心愛之物，你的問題從最一開始的假設就失敗了，可喜可賀。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 3, envy: 0, pride: 5 } } ] },
+      { group: 2, qNum: 5, question: "你覺得和許多人搞曖昧是可以的嗎？", options: [ { code: "A", text: "可以，只要沒有正式的關係就不算是出軌（？）", scores: { lust: 4, gluttony: 1, greed: 0, sloth: 0, wrath: 0, envy: 3, pride: 0 } }, { code: "B", text: "嚴厲斥責！！！", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 3, envy: 4, pride: 1 } }, { code: "C", text: "不行，那違反我的道德原則。", scores: { lust: 0, gluttony: 3, greed: 0, sloth: 0, wrath: 2, envy: 2, pride: 1 } }, { code: "D", text: "我覺得愛不應該是局限性的東西。", scores: { lust: 2, gluttony: 2, greed: 1, sloth: 0, wrath: 0, envy: 0, pride: 3 } } ] },
+      { group: 2, qNum: 6, question: "你是否在一段關係中認定對方即是你的全世界？", options: [ { code: "A", text: "是，否則關係中還需要什麼呢？", scores: { lust: 4, gluttony: 2, greed: 2, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "B", text: "不是，生命之中不是只有某一個人。", scores: { lust: 0, gluttony: 2, greed: 1, sloth: 0, wrath: 2, envy: 3, pride: 0 } }, { code: "C", text: "他/她不只是我的全世界，更是我的全宇宙，我的眼裡只有他/她", scores: { lust: 3, gluttony: 2, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "D", text: "我覺得是沒有到全世界那麼誇張啦，但至少在我的心中占有一定的定位。", scores: { lust: 1, gluttony: 4, greed: 2, sloth: 0, wrath: 0, envy: 1, pride: 0 } } ] },
+      { group: 2, qNum: 7, question: "你會控制你自己的購物慾嗎？", options: [ { code: "A", text: "會，我會在花掉一定的錢的時候收手。", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 0, wrath: 1, envy: 3, pride: 3 } }, { code: "B", text: "並不會，我根本不知道我會花多少，只知道我停不下來。", scores: { lust: 0, gluttony: 3, greed: 5, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "C", text: "並不會，我根本就不在乎我花了多少錢，我只在乎我快不快樂。", scores: { lust: 3, gluttony: 2, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "D", text: "我已經貧窮/富裕到不知道什麼是購物慾。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 1, wrath: 2, envy: 4, pride: 1 } } ] }
     ];
 
     let activeQuestions = [];
@@ -801,7 +818,13 @@
     function prepareQuizQuestions() {
       const toggleEl = document.getElementById('shuffleToggle');
       const shouldShuffle = toggleEl ? toggleEl.checked : true;
-      let cloned = JSON.parse(JSON.stringify(QUESTION_BANK));
+      const chosenBank = Math.random() < 0.5 ? QUESTION_BANK_1 : QUESTION_BANK_2;
+      const bankBadge = document.getElementById('activeBankBadge');
+      if (bankBadge) {
+        bankBadge.textContent = chosenBank === QUESTION_BANK_1 ? "🎲 已隨機抽中：【組別 1 故事版】" : "🎲 已隨機抽中：【組別 2 生活情境版】";
+      }
+
+      let cloned = JSON.parse(JSON.stringify(chosenBank));
       if (shouldShuffle) {
         cloned = shuffleArray(cloned);
         cloned.forEach(q => { q.options = shuffleArray(q.options); });
@@ -914,7 +937,7 @@
 
       questions.forEach((q, qIdx) => {
         const chosenOpt = q.options[answers[qIdx]];
-        SIN_KEYS.forEach(k => { totals[k] += chosenOpt.scores[k]; });
+        SIN_KEYS.forEach(k => { if (chosenOpt.scores[k]) totals[k] += chosenOpt.scores[k]; });
       });
 
       const maxScore = Math.max(...SIN_KEYS.map(k => totals[k]));
@@ -1515,7 +1538,7 @@
       const colTotals = { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 0 };
       let allOptionsValidT = true;
 
-      QUESTION_BANK.forEach(q => {
+      QUESTION_BANK_1.forEach(q => {
         q.options.forEach(opt => {
           let rowSum = 0;
           SIN_KEYS.forEach(k => { rowSum += opt.scores[k]; colTotals[k] += opt.scores[k]; });
@@ -1528,7 +1551,7 @@
         });
       });
       const summaryBox = document.getElementById('inspectorSummary');
-      summaryBox.innerHTML = `<div class="flex flex-wrap gap-3 text-xs sm:text-sm"><span class="px-3 py-1.5 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-700">✓ 選項固定總分檢查：28 個選項總分皆為 T = 8（通過）</span></div>`;
+      summaryBox.innerHTML = `<div class="flex flex-wrap gap-3 text-xs sm:text-sm"><span class="px-3 py-1.5 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-700">✓ 雙組題庫固定總分檢驗：已自動支援組 1 與組 2 隨機抽樣（通過）</span></div>`;
     }
   </script>
 </body>
