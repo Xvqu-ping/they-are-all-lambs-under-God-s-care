@@ -85,7 +85,6 @@
       border: 1px solid #f59e0b !important;
       color: #78350f !important;
     }
-    /* 修正白底時結果頁所有深色背景與漸層卡片 */
     body.light-mode div[id^="dealVerdictBanner"],
     body.light-mode .bg-gradient-to-br {
       background: #ffffff !important;
@@ -535,7 +534,7 @@
 
       <div id="tabInspector" class="hidden space-y-4">
         <div id="inspectorSummary"></div>
-        <div class="overflow-x-auto max-h-80 border border-gray-800 rounded-xl">
+        <div class="overflow-x-auto max-h-96 border border-gray-800 rounded-xl">
           <table class="w-full text-left border-collapse text-xs sm:text-sm">
             <thead>
               <tr class="border-b border-gray-700 text-gray-400 bg-gray-900 sticky top-0">
@@ -806,6 +805,19 @@
     const T_VALUE = 8;
     let lastComputedOutcome = null;
 
+    function formatTimestampDisplay(tsStr) {
+      if (!tsStr) return '';
+      const str = String(tsStr);
+      // 若為 ISO 格式 (如 2026-10-17T13:01:17.000Z)，自動轉為台灣本地時間 YYYY-MM-DD HH:MM:SS
+      if (str.includes('T') && str.endsWith('Z')) {
+        const d = new Date(str);
+        if (!isNaN(d.getTime())) {
+          return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+        }
+      }
+      return str;
+    }
+
     function shuffleArray(arr) {
       const copy = [...arr];
       for (let i = copy.length - 1; i > 0; i--) {
@@ -819,10 +831,6 @@
       const toggleEl = document.getElementById('shuffleToggle');
       const shouldShuffle = toggleEl ? toggleEl.checked : true;
       const chosenBank = Math.random() < 0.5 ? QUESTION_BANK_1 : QUESTION_BANK_2;
-      const bankBadge = document.getElementById('activeBankBadge');
-      if (bankBadge) {
-        bankBadge.textContent = chosenBank === QUESTION_BANK_1 ? "🎲 已隨機抽中：【組別 1 故事版】" : "🎲 已隨機抽中：【組別 2 生活情境版】";
-      }
 
       let cloned = JSON.parse(JSON.stringify(chosenBank));
       if (shouldShuffle) {
@@ -1438,7 +1446,6 @@
           topSinKeys: outcome.topSins,
           topSins: outcome.topSins.map(k => SIN_INFO[k].name).join('、'),
           wonDeal: outcome.isPredictionCorrect ? '成功逃離' : '墜入地獄',
-          lowestSins: outcome.lowestSins.map(k => SIN_INFO[k].name).join('、'),
           departureIndex: Number(outcome.departureIndex.toFixed(1)),
           scores: outcome.totals,
           answersDetail
@@ -1494,7 +1501,7 @@
         return `
           <tr class="hover:bg-gray-900/50">
             <td class="p-2 text-gray-500">${total - i}</td>
-            <td class="p-2 text-gray-400">${l.timestamp}</td>
+            <td class="p-2 text-gray-400">${formatTimestampDisplay(l.timestamp)}</td>
             <td class="p-2 text-amber-300">${l.predicted}</td>
             <td class="p-2 font-bold text-red-400">${l.topSins}</td>
             <td class="p-2 ${l.wonDeal === '成功逃離' ? 'text-emerald-400' : 'text-gray-400'}">${l.wonDeal}</td>
@@ -1512,7 +1519,7 @@
       const headers = ['序號', '測驗時間', '預測罪行', '實際最高罪行', '賭約結果', '背離指數', '色慾得分', '暴食得分', '貪婪得分', '怠惰得分', '憤怒得分', '嫉妒得分', '傲慢得分', '各題選答明細'];
       const rows = logs.map((l, idx) => {
         const s = l.scores || {};
-        return [logs.length - idx, `"${l.timestamp}"`, `"${l.predicted}"`, `"${l.topSins}"`, `"${l.wonDeal}"`, l.departureIndex, s.lust, s.gluttony, s.greed, s.sloth, s.wrath, s.envy, s.pride, `"${l.answersDetail || ''}"`].join(',');
+        return [logs.length - idx, `"${formatTimestampDisplay(l.timestamp)}"`, `"${l.predicted}"`, `"${l.topSins}"`, `"${l.wonDeal}"`, l.departureIndex, s.lust, s.gluttony, s.greed, s.sloth, s.wrath, s.envy, s.pride, `"${l.answersDetail || ''}"`].join(',');
       });
       const csvContent = '\uFEFF' + headers.join(',') + '\r\n' + rows.join('\r\n');
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -1531,27 +1538,96 @@
       }
     }
 
+    // ==========================================
+    // 7. 題庫驗證器 (完整顯示組別 1 與組別 2 摘要與小計)
+    // ==========================================
     function renderInspectorTable() {
       const tbody = document.getElementById('inspectorTableBody');
       if (!tbody) return;
       tbody.innerHTML = '';
-      const colTotals = { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 0 };
-      let allOptionsValidT = true;
 
-      QUESTION_BANK_1.forEach(q => {
-        q.options.forEach(opt => {
-          let rowSum = 0;
-          SIN_KEYS.forEach(k => { rowSum += opt.scores[k]; colTotals[k] += opt.scores[k]; });
-          if (rowSum !== T_VALUE) allOptionsValidT = false;
+      const banks = [
+        { name: '組別 1（故事版）', groupNum: 1, data: QUESTION_BANK_1 },
+        { name: '組別 2（生活情境版）', groupNum: 2, data: QUESTION_BANK_2 }
+      ];
 
-          const tr = document.createElement('tr');
-          tr.className = 'hover:bg-gray-900/50';
-          tr.innerHTML = `<td class="p-2 text-amber-400">${q.group}-${q.qNum}-${opt.code}</td><td class="p-2 text-gray-300 max-w-xs truncate" title="${opt.text}">${opt.text}</td><td class="p-2 text-center">${opt.scores.lust}</td><td class="p-2 text-center">${opt.scores.gluttony}</td><td class="p-2 text-center">${opt.scores.greed}</td><td class="p-2 text-center">${opt.scores.sloth}</td><td class="p-2 text-center">${opt.scores.wrath}</td><td class="p-2 text-center">${opt.scores.envy}</td><td class="p-2 text-center">${opt.scores.pride}</td><td class="p-2 text-center font-bold ${rowSum === T_VALUE ? 'text-emerald-400' : 'text-red-400'}">${rowSum}</td>`;
-          tbody.appendChild(tr);
+      let allValidT = true;
+      let allBanksBalanced = true;
+      const bankCheckHtml = [];
+
+      banks.forEach(bankObj => {
+        const colTotals = { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 0 };
+        let bankValidT = true;
+
+        // 加入組別分隔標題列
+        const headerTr = document.createElement('tr');
+        headerTr.className = 'bg-indigo-950/60 text-indigo-300 font-bold border-y border-indigo-500/40';
+        headerTr.innerHTML = `<td class="p-2" colspan="10">📂 ${bankObj.name}（共 7 題，28 個選項）</td>`;
+        tbody.appendChild(headerTr);
+
+        bankObj.data.forEach(q => {
+          q.options.forEach(opt => {
+            let rowSum = 0;
+            SIN_KEYS.forEach(k => {
+              const val = Number(opt.scores[k] || 0);
+              rowSum += val;
+              colTotals[k] += val;
+            });
+            if (rowSum !== T_VALUE) {
+              bankValidT = false;
+              allValidT = false;
+            }
+
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-gray-900/50';
+            tr.innerHTML = `
+              <td class="p-2 text-amber-400 font-bold">${q.group}-${q.qNum}-${opt.code}</td>
+              <td class="p-2 text-gray-300 max-w-xs truncate" title="${q.question} — ${opt.text}">${opt.text}</td>
+              <td class="p-2 text-center">${opt.scores.lust}</td>
+              <td class="p-2 text-center">${opt.scores.gluttony}</td>
+              <td class="p-2 text-center">${opt.scores.greed}</td>
+              <td class="p-2 text-center">${opt.scores.sloth}</td>
+              <td class="p-2 text-center">${opt.scores.wrath}</td>
+              <td class="p-2 text-center">${opt.scores.envy}</td>
+              <td class="p-2 text-center">${opt.scores.pride}</td>
+              <td class="p-2 text-center font-bold ${rowSum === T_VALUE ? 'text-emerald-400' : 'text-red-400'}">${rowSum}</td>
+            `;
+            tbody.appendChild(tr);
+          });
         });
+
+        const isBalanced32 = SIN_KEYS.every(k => colTotals[k] === 32);
+        if (!isBalanced32) allBanksBalanced = false;
+        const totalBankScore = SIN_KEYS.reduce((acc, k) => acc + colTotals[k], 0);
+
+        const summaryTr = document.createElement('tr');
+        summaryTr.className = 'bg-amber-950/40 font-bold text-amber-300 border-t-2 border-amber-600/50';
+        summaryTr.innerHTML = `
+          <td class="p-2" colspan="2">組${bankObj.groupNum}小計（此組 28 個選項各罪加總，應皆為 32）</td>
+          <td class="p-2 text-center">${colTotals.lust}</td>
+          <td class="p-2 text-center">${colTotals.gluttony}</td>
+          <td class="p-2 text-center">${colTotals.greed}</td>
+          <td class="p-2 text-center">${colTotals.sloth}</td>
+          <td class="p-2 text-center">${colTotals.wrath}</td>
+          <td class="p-2 text-center">${colTotals.envy}</td>
+          <td class="p-2 text-center">${colTotals.pride}</td>
+          <td class="p-2 text-center ${isBalanced32 ? 'text-emerald-400' : 'text-red-400'}">${totalBankScore}</td>
+        `;
+        tbody.appendChild(summaryTr);
+
+        bankCheckHtml.push(`
+          <span class="px-3 py-1.5 rounded-lg ${bankValidT && isBalanced32 ? 'bg-emerald-950 text-emerald-300 border border-emerald-700' : 'bg-red-950 text-red-300 border border-red-700'}">
+            ✓ 組別 ${bankObj.groupNum} 檢驗：${bankValidT ? '28 個選項總分皆為 T=8' : '選項總分異常'} ｜ ${isBalanced32 ? '七罪總分皆為 32（完全平衡）' : '七罪總分不相等'}
+          </span>
+        `);
       });
+
       const summaryBox = document.getElementById('inspectorSummary');
-      summaryBox.innerHTML = `<div class="flex flex-wrap gap-3 text-xs sm:text-sm"><span class="px-3 py-1.5 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-700">✓ 雙組題庫固定總分檢驗：已自動支援組 1 與組 2 隨機抽樣（通過）</span></div>`;
+      summaryBox.innerHTML = `
+        <div class="flex flex-wrap gap-2.5 text-xs sm:text-sm">
+          ${bankCheckHtml.join('')}
+        </div>
+      `;
     }
   </script>
 </body>
