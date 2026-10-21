@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>他們都是神膝下的羔羊</title>
+  <title>他們都是神膝下的羔羊 | 彼らは皆、神の膝元の仔羊</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- 引入霞鶩文楷字體 -->
+  <!-- 引入霞鶩文楷字體 (同時支援繁體中文與日文漢字/假名) -->
   <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
-    body, .serif, button, select, input, table {
+    body, .serif, button, select, input, table, textarea {
       font-family: 'LXGW WenKai TC', cursive, serif !important;
     }
     body {
@@ -92,6 +92,7 @@
       border: 1px solid #cbd5e1 !important;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
     }
+    body.light-mode .bg-gray-950,
     body.light-mode .bg-gray-950\/60,
     body.light-mode .bg-gray-950\/70,
     body.light-mode .bg-gray-950\/80,
@@ -105,6 +106,18 @@
     body.light-mode .bg-gray-800 {
       background-color: #e2e8f0 !important;
       color: #1e293b !important;
+    }
+    body.light-mode .option-btn {
+      background-color: #ffffff !important;
+      border-color: #cbd5e1 !important;
+    }
+    body.light-mode .option-btn:hover {
+      border-color: #d97706 !important;
+      background-color: #fffbeb !important;
+    }
+    body.light-mode .option-btn.selected {
+      border-color: #d97706 !important;
+      background-color: #fef3c7 !important;
     }
     body.light-mode .text-gray-100,
     body.light-mode .text-gray-200,
@@ -142,12 +155,15 @@
   <header class="w-full max-w-3xl flex flex-wrap justify-between items-center mb-6 gap-3 text-xs sm:text-sm text-gray-400 border-b border-gray-800 pb-4">
     <div class="flex items-center gap-2">
       <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
-      <span class="font-bold tracking-wider text-red-400 text-lg">他們都是神膝下的羔羊</span>
+      <span id="navBrandTitle" class="font-bold tracking-wider text-red-400 text-lg">他們都是神膝下的羔羊</span>
       <span id="adminUnlockedBadge" onclick="openAdminPanel()" class="hidden cursor-pointer text-xs px-2.5 py-0.5 rounded bg-indigo-900/80 text-indigo-300 border border-indigo-500/50 hover:bg-indigo-800 transition">
         👑 管理員已解鎖 (點此開後台)
       </span>
     </div>
-    <div class="flex flex-wrap items-center gap-2.5">
+    <div class="flex flex-wrap items-center gap-2">
+      <button type="button" id="langToggleBtn" onclick="toggleLanguage()" class="px-3.5 py-1.5 rounded-lg bg-gray-900/90 border border-gray-700 hover:border-amber-500/50 text-amber-300 font-bold transition cursor-pointer">
+        🌐 日本語
+      </button>
       <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="px-3.5 py-1.5 rounded-lg bg-gray-900/90 border border-gray-700 hover:border-amber-500/50 text-amber-400 font-bold transition cursor-pointer">
         ☀️ 切換白底
       </button>
@@ -161,38 +177,26 @@
     <section id="startScreen" class="card-glass rounded-2xl p-6 sm:p-10 relative overflow-hidden space-y-6">
       <div class="text-center">
         <div class="mb-2 text-red-500 tracking-[0.25em] text-xs uppercase font-bold">Lambs Beneath the Knees of God</div>
-        <h1 class="text-3xl sm:text-4xl font-bold red-gradient mb-3 tracking-wide">
+        <h1 id="mainTitle" class="text-3xl sm:text-4xl font-bold red-gradient mb-3 tracking-wide">
           他們都是神膝下的羔羊
         </h1>
-        <p class="text-sm text-amber-400/90 tracking-widest">七大罪心理傾向探索</p>
+        <p id="mainSubtitle" class="text-sm text-amber-400/90 tracking-widest">七大罪心理傾向探索</p>
       </div>
 
       <!-- Story Narrative Box -->
-      <div class="dialogue-box p-5 sm:p-6 rounded-xl space-y-4 text-gray-300 text-base sm:text-lg leading-relaxed">
-        <p class="text-amber-200 font-bold">某年中秋節前夕——</p>
-        <p>「啊—終於可以開心的放假了！」</p>
-        <p>處理完比山還高的工作（社務），你獲得了彌足珍貴的四天假期。一手提著公事包，一邊哼著耳機播放的歌，心裡已經飛快的計劃著四天連假要如何完美利用。</p>
-        <p>「難得的假期，要去吃個 A5 和牛燒肉定食吃到飽，還是去名牌球鞋的廠拍、睡覺睡到自然醒，或者……」</p>
-        <p class="text-red-400 font-bold">突然間，一陣紅光爆起，伴隨著闇黑的深淵波動向你襲來。</p>
-        <p>「鳴啊啊啊——」平日不怎麼運動的你，理所當然（？）的接下了這一擊。</p>
-        <p>血紅的刀刃切開了你右半邊的身體，你的肉體在 <strong class="text-purple-300">（卍煞氣の地獄爆裂突刺卍 + 黑洞吞噬萬物滅的 combo 組合技）</strong> 這致命一擊下被摧毀。</p>
-        <p>幸運的是，你的靈魂並沒有你的肉身脆弱，它即時逃開了，好讓你自己可以看見你的肉身被摧毀的樣子。你也看到了襲擊你的人, 不, 它的樣子並不像人。</p>
-        <p class="text-amber-300 font-bold bg-gray-900/80 p-4 rounded-lg border border-amber-500/30">
-          惡魔梅菲斯特與你做了一個交易：如果在等等的測試中，你正確地預測到了你自己的罪行，你便得以逃離地獄，反之你將被梅菲斯特拉入地獄，與那人（浮士德）一同受永久的苦罰。
-        </p>
-      </div>
+      <div id="storyIntroBox" class="dialogue-box p-5 sm:p-6 rounded-xl space-y-4 text-gray-300 text-base sm:text-lg leading-relaxed"></div>
 
       <!-- Pre-Quiz Prediction Form -->
       <div class="bg-gray-950/80 border border-red-500/40 rounded-xl p-5 space-y-4">
         <div class="flex items-center gap-2 text-red-400 font-bold text-lg">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-          梅菲斯特的考驗：請先預測你的罪行
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+          <span id="predictionBoxTitle">梅菲斯特的考驗：請先預測你的罪行</span>
         </div>
-        <p class="text-sm text-gray-400">
+        <p id="predictionBoxDesc" class="text-sm text-gray-400">
           測試者需要先選擇認為自己的罪行，並將本頁滑至最底部，方可開始測試。
         </p>
         <div>
-          <label for="userPredictionSelect" class="block text-sm font-bold text-gray-300 mb-2">請選擇你預測的罪行：</label>
+          <label id="predictionSelectLabel" for="userPredictionSelect" class="block text-sm font-bold text-gray-300 mb-2">請選擇你預測的罪行：</label>
           <select id="userPredictionSelect" onchange="checkStartButtonState()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-amber-300 text-base font-bold focus:outline-none focus:border-red-500 cursor-pointer">
             <option value="" selected disabled>請選擇</option>
             <option value="lust">色慾 (Lust)</option>
@@ -209,10 +213,10 @@
       <!-- Disclaimer Box -->
       <div class="bg-gray-950/70 border border-gray-800 rounded-xl p-4 text-left text-xs sm:text-sm text-gray-400 space-y-1">
         <div class="text-amber-400 font-bold flex items-center gap-1.5">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          測驗性質聲明
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span id="disclaimerTitle">測驗性質聲明</span>
         </div>
-        <p>• 本測驗屬娛樂與自我探索性質，並非臨床心理診斷工具；結果呈現的是相對傾向，僅供自我覺察與趣味討論。</p>
+        <p id="disclaimerText">• 本測驗屬娛樂與自我探索性質，並非臨床心理診斷工具；結果呈現的是相對傾向，僅供自我覺察與趣味討論。</p>
       </div>
 
       <div id="startSectionBottomAnchor" class="flex flex-col items-center justify-center pt-2 space-y-3">
@@ -225,7 +229,7 @@
             開始測試（共 7 題）
           </button>
           
-          <button type="button" onclick="promptQuickAdminResult()" class="px-5 py-3.5 rounded-xl bg-indigo-900/80 hover:bg-indigo-800 text-indigo-200 border border-indigo-500/50 font-bold text-sm cursor-pointer transition shadow">
+          <button type="button" id="quickAdminBtn" onclick="promptQuickAdminResult()" class="px-5 py-3.5 rounded-xl bg-indigo-900/80 hover:bg-indigo-800 text-indigo-200 border border-indigo-500/50 font-bold text-sm cursor-pointer transition shadow">
             ⚡ 管理員快速結算
           </button>
         </div>
@@ -255,7 +259,7 @@
         <button type="button" id="prevBtn" onclick="prevQuestion()" class="px-4 py-2 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-800 transition disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
           ← 上一頁
         </button>
-        <span class="text-xs text-gray-500">請選擇一個選項後, 點擊右側按鈕前往下一頁</span>
+        <span id="quizNavHint" class="text-xs text-gray-500">請選擇一個選項後, 點擊右側按鈕前往下一頁</span>
         <button type="button" id="nextBtn" onclick="nextQuestion()" class="px-6 py-2.5 rounded-lg text-sm font-bold bg-amber-500 hover:bg-amber-400 text-gray-950 transition disabled:opacity-30 disabled:pointer-events-none cursor-pointer">
           下一頁 →
         </button>
@@ -273,29 +277,15 @@
           <p id="verdictDescription" class="text-base sm:text-lg leading-relaxed max-w-xl mx-auto"></p>
         </div>
 
-        <!-- 🔗 分享按鈕區域 -->
-        <div class="bg-gray-950/80 border border-amber-500/40 rounded-2xl p-5 mb-6 text-center space-y-3">
-          <div class="text-sm font-bold text-amber-400">🔥 分享你的地獄審判結果：</div>
-          <div class="flex flex-wrap justify-center gap-3">
-            <button type="button" onclick="generateAndDownloadCard()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 text-gray-950 font-bold text-xs sm:text-sm cursor-pointer shadow hover:opacity-95 transition">
-              🖼️ 下載審判圖卡 (IG限動)
-            </button>
-            <button type="button" onclick="copyShareText()" class="px-5 py-2.5 rounded-xl bg-gray-800 text-amber-300 border border-amber-500/40 font-bold text-xs sm:text-sm cursor-pointer hover:bg-gray-700 transition">
-              📋 複製戰報文字 (LINE/Threads)
-            </button>
-          </div>
-          <div id="shareToast" class="hidden text-xs text-emerald-400 font-medium"></div>
-        </div>
-
         <div class="text-center mb-6">
-          <div class="text-xs uppercase tracking-[0.25em] text-amber-400 mb-1">靈魂解析與聖經經文啟示</div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-white">你的七罪傾向剖析</h2>
+          <div id="resultSectionSmallTitle" class="text-xs uppercase tracking-[0.25em] text-amber-400 mb-1">靈魂解析與聖經經文啟示</div>
+          <h2 id="resultSectionMainTitle" class="text-2xl sm:text-3xl font-bold text-white">你的七罪傾向剖析</h2>
         </div>
 
         <!-- Highest Sin(s) Banner -->
         <div class="bg-gradient-to-br from-red-950/60 via-gray-900 to-gray-900 border border-red-500/40 rounded-2xl p-6 mb-6 shadow-inner">
           <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-            <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-red-500/20 text-red-300 border border-red-500/30">
+            <span id="topSinBadgeLabel" class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-red-500/20 text-red-300 border border-red-500/30">
               主要突出傾向（最高分罪行）
             </span>
           </div>
@@ -307,8 +297,8 @@
         <div class="bg-gray-900/90 border border-gray-800 rounded-2xl p-5 mb-6">
           <div class="flex flex-wrap justify-between items-baseline gap-2 mb-2">
             <div>
-              <h3 class="font-bold text-amber-400 text-lg">整體背離指數（Departure Index）</h3>
-              <p class="text-xs sm:text-sm text-gray-400">依七罪階梯位置加權，衡量傾向往階梯下段（深層背離）集中的程度</p>
+              <h3 id="departureTitle" class="font-bold text-amber-400 text-lg">整體背離指數（Departure Index）</h3>
+              <p id="departureSubtitle" class="text-xs sm:text-sm text-gray-400">依七罪階梯位置加權，衡量傾向往階梯下段（深層背離）集中的程度</p>
             </div>
             <div class="text-right">
               <span id="departureIndexValue" class="text-3xl font-bold text-amber-400">0.0</span>
@@ -319,24 +309,53 @@
             <div id="departureBar" class="h-full rounded-full bg-gradient-to-r from-emerald-400 via-amber-500 to-red-600 transition-all duration-700" style="width: 50%"></div>
           </div>
           <div class="flex justify-between text-xs text-gray-500">
-            <span>0（偏向階梯上層：色慾）</span>
-            <span>100（偏向階梯底層：傲慢）</span>
+            <span id="departureMinLabel">0（偏向階梯上層：色慾）</span>
+            <span id="departureMaxLabel">100（偏向階梯底層：傲慢）</span>
           </div>
         </div>
 
         <!-- 7 Sins Vertical Ladder Profile -->
-        <div class="bg-gray-950/80 border border-gray-800 rounded-2xl p-5 sm:p-6">
+        <div class="bg-gray-950/80 border border-gray-800 rounded-2xl p-5 sm:p-6 mb-6">
           <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
             <div>
-              <h3 class="text-lg font-bold text-white">七大罪階梯直式剖面圖</h3>
-              <p class="text-xs sm:text-sm text-gray-400">依七罪由輕至重（色慾 ➔ 傲慢）的傾向分布</p>
+              <h3 id="ladderSectionTitle" class="text-lg font-bold text-white">七大罪階梯直式剖面圖</h3>
+              <p id="ladderSectionSubtitle" class="text-xs sm:text-sm text-gray-400">依七罪由輕至重（色慾 ➔ 傲慢）的傾向分布</p>
             </div>
             <div class="flex items-center gap-3 text-xs">
-              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-red-500 inline-block"></span>最高突出罪行</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-red-500 inline-block"></span><span id="ladderLegendTop">最高突出罪行</span></span>
             </div>
           </div>
 
           <div id="ladderContainer" class="space-y-2"></div>
+        </div>
+
+        <!-- 🔗 零延遲直出分享圖卡與戰報區塊 -->
+        <div class="bg-gray-950/80 border border-amber-500/40 rounded-2xl p-5 mb-6 space-y-4">
+          <div class="text-center space-y-2">
+            <div id="shareSectionTitle" class="text-base font-bold text-amber-400">🔥 分享你的地獄審判結果：</div>
+            <div class="flex flex-wrap justify-center gap-3 pt-1">
+              <button type="button" id="downloadCardBtn" onclick="downloadCardNow()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-gray-950 font-bold text-xs sm:text-sm cursor-pointer shadow hover:opacity-95 transition">
+                📥 下載審判圖卡 (PNG)
+              </button>
+              <button type="button" id="copyTextBtn" onclick="copyShareText()" class="px-5 py-2.5 rounded-xl bg-gray-800 text-amber-300 border border-amber-500/40 font-bold text-xs sm:text-sm cursor-pointer hover:bg-gray-700 transition">
+                📋 複製戰報文字 (LINE/Threads)
+              </button>
+            </div>
+            <div id="shareToast" class="hidden text-xs text-emerald-400 font-bold pt-1"></div>
+          </div>
+
+          <!-- 即時生成的 PNG 圖卡預覽（手機可直接長按儲存） -->
+          <div class="flex flex-col items-center space-y-2 pt-2 border-t border-gray-800">
+            <div id="shareCardPreviewHint" class="text-xs text-gray-400">🖼️ 專屬審判契約圖卡預覽（手機可直接長按圖片儲存，電腦可右鍵另存）：</div>
+            <canvas id="shareCanvas" width="800" height="1120" class="hidden"></canvas>
+            <img id="renderedCardImg" alt="審判結果圖卡預覽" class="w-full max-w-xs sm:max-w-sm rounded-2xl border-2 border-amber-500/60 shadow-2xl" />
+          </div>
+
+          <!-- 戰報文字預覽框 -->
+          <div class="space-y-1.5 pt-2">
+            <div id="shareTextPreviewHint" class="text-xs text-gray-400">📝 戰報文字預覽（也可直接選取複製）：</div>
+            <textarea id="shareTextArea" rows="5" readonly class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 text-xs sm:text-sm text-gray-200 focus:outline-none"></textarea>
+          </div>
         </div>
 
         <!-- Admin Only: Answer Review Accordion -->
@@ -349,16 +368,10 @@
 
         <!-- Wake Up Epilogue & Restart Section -->
         <div class="mt-8 pt-6 border-t border-gray-800 space-y-6">
-          <div class="dialogue-box p-5 sm:p-6 rounded-xl space-y-3 text-gray-300 text-base sm:text-lg leading-relaxed">
-            <p class="text-red-400 font-bold">就在死神 のProMax 2TB 大鐮刀要刺穿你的胸口時……</p>
-            <p>你將墜入萬劫不復的地獄時……</p>
-            <p class="text-amber-300 font-bold text-xl">砰——</p>
-            <p>後腦勺一陣劇痛，原來剛剛是在做夢啊……</p>
-            <p class="text-gray-200">「喂，你打瞌睡可以從坐著睡睡到整個翻倒在地啊……」</p>
-          </div>
+          <div id="epilogueBox" class="dialogue-box p-5 sm:p-6 rounded-xl space-y-3 text-gray-300 text-base sm:text-lg leading-relaxed"></div>
 
           <div class="flex flex-wrap justify-center gap-4">
-            <button type="button" onclick="restartQuiz()" class="px-10 py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-lg transition shadow-lg shadow-red-900/30 cursor-pointer transform hover:-translate-y-0.5">
+            <button type="button" id="restartQuizBtn" onclick="restartQuiz()" class="px-10 py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-bold text-lg transition shadow-lg shadow-red-900/30 cursor-pointer transform hover:-translate-y-0.5">
               再次墮落....？
             </button>
           </div>
@@ -580,7 +593,7 @@
   </div>
 
   <footer class="mt-10 text-center text-xs sm:text-sm text-gray-500 pb-6 flex items-center justify-center gap-2">
-    <span onclick="openAdminLogin()" class="cursor-pointer hover:text-gray-400 transition select-none" title="管理員入口">
+    <span id="footerText" onclick="openAdminLogin()" class="cursor-pointer hover:text-gray-400 transition select-none" title="管理員入口">
       他們都是神膝下的羔羊 • 七大罪心理測驗 🔒
     </span>
   </footer>
@@ -589,10 +602,498 @@
     const constHARDCODED_CLOUD_URL = 'https://script.google.com/macros/s/AKfycbz0E75wSIWq2ywS90d2t3lWBX_I1QQhAVd7SiPHafKKD7LVmnbLIc0GNQqpmm_AKL1x6A/exec';
     const ADMIN_PASSWORD_SECRET = 'INMUKING114514';
     let isAdminUnlocked = false;
+    let currentLang = 'zh'; // 'zh' 或 'ja'
     const STORAGE_KEY_LOGS = 'lambs_quiz_logs_v2';
     const STORAGE_KEY_DELETED_TS = 'lambs_quiz_deleted_ts_v1';
     let currentDisplayedLogs = [];
     let hasScrolledToBottom = false;
+
+    // ==========================================
+    // 🌐 多國語言字典 (繁體中文 & 日本語)
+    // ==========================================
+    const UI_TEXT = {
+      zh: {
+        brandTitle: '他們都是神膝下的羔羊',
+        subtitle: '七大罪心理傾向探索',
+        langBtn: '🌐 日本語',
+        themeLight: '☀️ 切換白底',
+        themeDark: '🌙 切換黑底',
+        storyHtml: `
+          <p class="text-amber-200 font-bold">某年中秋節前夕——</p>
+          <p>「啊—終於可以開心的放假了！」</p>
+          <p>處理完比山還高的工作（社務），你獲得了彌足珍貴的四天假期。一手提著公事包，一邊哼著耳機播放的歌，心裡已經飛快的計劃著四天連假要如何完美利用。</p>
+          <p>「難得的假期，要去吃個 A5 和牛燒肉定食吃到飽，還是去名牌球鞋的廠拍、睡覺睡到自然醒，或者……」</p>
+          <p class="text-red-400 font-bold">突然間，一陣紅光爆起，伴隨著闇黑的深淵波動向你襲來。</p>
+          <p>「鳴啊啊啊——」平日不怎麼運動的你，理所當然（？）的接下了這一擊。</p>
+          <p>血紅的刀刃切開了你右半邊的身體，你的肉體在 <strong class="text-purple-300">（卍煞氣の地獄爆裂突刺卍 + 黑洞吞噬萬物滅的 combo 組合技）</strong> 這致命一擊下被摧毀。</p>
+          <p>幸運的是，你的靈魂並沒有你的肉身脆弱，它即時逃開了，好讓你自己可以看見你的肉身被摧毀的樣子。你也看到了襲擊你的人，不，它的樣子並不像人。</p>
+          <p class="text-amber-300 font-bold bg-gray-900/80 p-4 rounded-lg border border-amber-500/30">
+            惡魔梅菲斯特與你做了一個交易：如果在等等的測試中，你正確地預測到了你自己的罪行，你便得以逃離地獄，反之你將被梅菲斯特拉入地獄，與那人（浮士德）一同受永久的苦罰。
+          </p>
+        `,
+        predTitle: '梅菲斯特的考驗：請先預測你的罪行',
+        predDesc: '測試者需要先選擇認為自己的罪行，並將本頁滑至最底部，方可開始測試。',
+        predLabel: '請選擇你預測的罪行：',
+        pleaseSelect: '請選擇',
+        disclaimerTitle: '測驗性質聲明',
+        disclaimerText: '• 本測驗屬娛樂與自我探索性質，並非臨床心理診斷工具；結果呈現的是相對傾向，僅供自我覺察與趣味討論。',
+        hintBothMissing: '⚠️ 請先於上方選擇你預測的罪行，並將網頁滑至最底部以解鎖測試',
+        hintSinMissing: '⚠️ 尚未選擇罪行！請先在上方下拉選單選擇你預測的罪行',
+        hintScrollMissing: '⬇️ 請將網頁繼續往下滑至最底部以解鎖開始按鈕',
+        hintReady: '✓ 已選擇預測罪行並閱讀完畢，請點擊下方按鈕開始測試！',
+        startBtn: '開始測試（共 7 題）',
+        quickAdminBtn: '⚡ 管理員快速結算',
+        prevBtn: '← 上一頁',
+        nextBtn: '下一頁 →',
+        finishBtn: '接受梅菲斯特的審判 ✨',
+        quizNavHint: '請選擇一個選項後，點擊右側按鈕前往下一頁',
+        resultSmallTitle: '靈魂解析與聖經經文啟示',
+        resultMainTitle: '你的七罪傾向剖析',
+        topSinBadge: '主要突出傾向（最高分罪行）',
+        aboutSinPrefix: '▸ 關於「',
+        aboutSinSuffix: '」傾向',
+        depTitle: '整體背離指數（Departure Index）',
+        depSubtitle: '依七罪階梯位置加權，衡量傾向往階梯下段（深層背離）集中的程度',
+        depMin: '0（偏向階梯上層：色慾）',
+        depMax: '100（偏向階梯底層：傲慢）',
+        ladderTitle: '七大罪階梯直式剖面圖',
+        ladderSubtitle: '依七罪由輕至重（色慾 ➔ 傲慢）的傾向分布',
+        ladderLegend: '最高突出罪行',
+        ladderTopBadge: '★ 最高突出罪行',
+        shareTitle: '🔥 分享你的地獄審判結果：',
+        downloadCardBtn: '📥 下載審判圖卡 (PNG)',
+        copyTextBtn: '📋 複製戰報文字 (LINE/Threads)',
+        shareCardHint: '🖼️ 專屬審判契約圖卡預覽（手機可直接長按圖片儲存，電腦可右鍵另存）：',
+        shareTextHint: '📝 戰報文字預覽（也可直接選取複製）：',
+        epilogueHtml: `
+          <p class="text-red-400 font-bold">就在死神 のProMax 2TB 大鐮刀要刺穿你的胸口時……</p>
+          <p>你將墜入萬劫不復的地獄時……</p>
+          <p class="text-amber-300 font-bold text-xl">砰——</p>
+          <p>後腦勺一陣劇痛，原來剛剛是在做夢啊……</p>
+          <p class="text-gray-200">「喂，你打瞌睡可以從坐著睡睡到整個翻倒在地啊……」</p>
+        `,
+        restartBtn: '再次墮落....？',
+        footerText: '他們都是神膝下的羔羊 • 七大罪心理測驗 🔒',
+        verdictWinSub: '梅菲斯特的賭約：挑戰成功',
+        verdictWinTitle: '✨ 預測命中！你成功逃離地獄！ ✨',
+        verdictWinDesc: (pred) => `你先前預測自己的罪行為<strong>「${pred}」</strong>，測驗結果確實指向此項！梅菲斯特守信用地放開了你——你得以重返人間，繼續享用那未竟的中秋連假與 A5 和牛燒肉定食！`,
+        verdictLoseSub: '梅菲斯特的賭約：挑戰失敗',
+        verdictLoseTitle: '🔥 預測失準！你被拉入地獄了！ 🔥',
+        verdictLoseDesc: (pred, actual) => `你預測自己的罪行為「${pred}」，但實際測驗得出的最高罪行卻是<strong>「${actual}」</strong>。梅菲斯特冷笑一聲，將你拖入深淵，從此你將與浮士德一同受永久的苦罰……`,
+        cardContractTitle: '《他們都是神膝下的羔羊》靈魂審判契約',
+        cardWinPill: (pred) => `✨ 賭約成功（預測：${pred}）成功逃離地獄！`,
+        cardLosePill: (pred) => `🔥 賭約失敗（預測：${pred}）墜入萬劫不復地獄！`,
+        cardSinHeader: '梅菲斯特審判之最高罪行傾向',
+        cardDepLabel: '整體背離指數 (Departure Index)',
+        cardEpilogue1: '「就在死神 のProMax 2TB 大鐮刀要刺穿你的胸口時……」',
+        cardEpilogue2: '砰——後腦勺一陣劇痛，原來剛剛是在做夢啊……',
+        cardFooter: '他們都是神膝下的羔羊 • 七大罪心理探索'
+      },
+      ja: {
+        brandTitle: '彼らは皆、神の膝元の仔羊',
+        subtitle: '七つの大罪・深層心理テスト',
+        langBtn: '🌐 繁體中文',
+        themeLight: '☀️ ライトモード',
+        themeDark: '🌙 ダークモード',
+        storyHtml: `
+          <p class="text-amber-200 font-bold">ある年の中秋節の前夜——</p>
+          <p>「あぁーっ、やっと楽しい連休だ！」</p>
+          <p>山積みの仕事（社畜業務）を片付け、あなたは貴重な四連休を手に入れた。片手にビジネスバッグを提げ、イヤホンから流れる曲を口ずさみながら、心の中では四連休の完璧な計画を思い描いていた。</p>
+          <p>「せっかくの連休だし、A5ランク黒毛和牛の焼肉食べ放題に行くか、ブランドスニーカーのセールに行くか、それともアラームなしで自然に目が覚めるまで爆睡するか……」</p>
+          <p class="text-red-400 font-bold">突如、真紅の閃光が炸裂し、漆黒の深淵なる波動があなたに襲いかかった。</p>
+          <p>「うわあああああっ——」日頃から運動不足のあなたは、当然のように（？）その一撃をまともに喰らってしまった。</p>
+          <p>血のように赤い刃が右半身を切り裂き、あなたの肉体は <strong class="text-purple-300">（卍煞気の地獄爆裂突き卍 ＋ ブラックホール万物呑噬滅のコンボ技）</strong> という致命的な一撃によって粉々に砕け散った。</p>
+          <p>幸いにも、あなたの魂は肉体ほど脆くはなく、間一髪で離脱したため、自分の肉体が破壊される様を客観的に見つめることができた。そして、あなたを襲った者の姿も目にした——いや、それは人の姿ではなかった。</p>
+          <p class="text-amber-300 font-bold bg-gray-900/80 p-4 rounded-lg border border-amber-500/30">
+            悪魔メフィストフェレスはあなたに取引を持ちかけた。「これからのテストで、己の罪を正確に予言できれば地獄から逃がしてやろう。だが外れれば、お前を地獄へ引きずり込み、あの男（ファウスト）と共に永遠の業火で苦しむことになる。」
+          </p>
+        `,
+        predTitle: 'メフィストの試練：まず己の「罪」を予言せよ',
+        predDesc: 'テストを始めるには、自分が該当すると思う罪を選択し、このページの一番下までスクロールしてください。',
+        predLabel: 'あなたが予言する自分の罪を選んでください：',
+        pleaseSelect: '選択してください',
+        disclaimerTitle: 'テストの性質に関する声明',
+        disclaimerText: '• 本テストはエンターテインメントおよび自己探求を目的としたものであり、臨床的な心理診断ツールではありません。結果は相対的な傾向を示すものです。',
+        hintBothMissing: '⚠️ 上記で自分の罪を予言し、ページの一番下までスクロールしてロックを解除してください',
+        hintSinMissing: '⚠️ 罪が選択されていません！上のメニューから予言する罪を選んでください',
+        hintScrollMissing: '⬇️ ページの最下部までスクロールして開始ボタンを解除してください',
+        hintReady: '✓ 罪の予言と確認が完了しました。下のボタンを押してテストを開始してください！',
+        startBtn: 'テスト開始（全 7 問）',
+        quickAdminBtn: '⚡ 管理者クイック決済',
+        prevBtn: '← 前のページ',
+        nextBtn: '次のページ →',
+        finishBtn: 'メフィストの審判を受ける ✨',
+        quizNavHint: '選択肢を選んだ後、右側のボタンを押して次へ進んでください',
+        resultSmallTitle: '魂の解析と聖書の啓示',
+        resultMainTitle: 'あなたの七つの大罪・傾向解剖',
+        topSinBadge: '最も際立つ傾向（最高スコアの罪）',
+        aboutSinPrefix: '▸ 「',
+        aboutSinSuffix: '」の傾向について',
+        depTitle: '全体背離指数（Departure Index）',
+        depSubtitle: '七つの大罪の階層位置で加重計算し、深層の罪（傲慢）へどれだけ傾いているかを示します',
+        depMin: '0（上層寄り：色欲）',
+        depMax: '100（最下層寄り：傲慢）',
+        ladderTitle: '七つの大罪・階層断面図',
+        ladderSubtitle: '罪の軽い順から重い順（色欲 ➔ 傲慢）の傾向分布',
+        ladderLegend: '最高スコアの罪',
+        ladderTopBadge: '★ 最高スコアの罪',
+        shareTitle: '🔥 地獄の審判結果をシェアする：',
+        downloadCardBtn: '📥 審判カードを保存 (PNG)',
+        copyTextBtn: '📋 結果テキストをコピー (LINE/Threads)',
+        shareCardHint: '🖼️ 専用審判カードプレビュー（スマホは長押しで保存、PCは右クリックで保存可能）：',
+        shareTextHint: '📝 シェア用テキストプレビュー（直接選択してコピーも可能）：',
+        epilogueHtml: `
+          <p class="text-red-400 font-bold">死神の ProMax 2TB 大鎌があなたの胸を貫こうとしたその瞬間……</p>
+          <p>あなたが永劫の地獄へと堕ちかけたその時……</p>
+          <p class="text-amber-300 font-bold text-xl">ドンッ——</p>
+          <p>後頭部に激しい痛みが走った。なんだ、さっきのは全部夢だったのか……</p>
+          <p class="text-gray-200">「おい、居眠りして椅子から床にひっくり返るやつがあるかよ……」</p>
+        `,
+        restartBtn: '再び堕ちる....？',
+        footerText: '彼らは皆、神の膝元の仔羊 • 七つの大罪心理テスト 🔒',
+        verdictWinSub: 'メフィストの賭け：挑戦成功',
+        verdictWinTitle: '✨ 予言的中！あなたは地獄から生還した！ ✨',
+        verdictWinDesc: (pred) => `あなたが事前に予言した罪は<strong>「${pred}」</strong>。審判の結果は見事に一致した！メフィストは約束通りあなたを解放した——あなたは現世へと舞い戻り、中断されていた四連休とA5和牛焼肉食べ放題を満喫できるのだ！`,
+        verdictLoseSub: 'メフィストの賭け：挑戦失敗',
+        verdictLoseTitle: '🔥 予言失敗！あなたは地獄へ引きずり込まれた！ 🔥',
+        verdictLoseDesc: (pred, actual) => `あなたは自分の罪を「${pred}」と予言したが、実際の審判で導き出された最高の罪は<strong>「${actual}」</strong>だった。メフィストは冷酷に笑い、あなたを深淵へと引きずり込んだ。これからファウストと共に永遠の責め苦を受けるのだ……`,
+        cardContractTitle: '『彼らは皆、神の膝元の仔羊』魂の審判契約書',
+        cardWinPill: (pred) => `✨ 賭けに勝利（予言：${pred}）地獄から生還！`,
+        cardLosePill: (pred) => `🔥 賭けに敗北（予言：${pred}）永劫の地獄へ墜落！`,
+        cardSinHeader: 'メフィストが下した最高スコアの罪',
+        cardDepLabel: '全体背離指数 (Departure Index)',
+        cardEpilogue1: '「死神の ProMax 2TB 大鎌が胸を貫こうとしたその瞬間……」',
+        cardEpilogue2: 'ドンッ——後頭部に激痛が走った。全部夢だったのか……',
+        cardFooter: '彼らは皆、神の膝元の仔羊 • 七つの大罪深層心理'
+      }
+    };
+
+    const SIN_KEYS = ['lust', 'gluttony', 'greed', 'sloth', 'wrath', 'envy', 'pride'];
+    const NAME_TO_KEY = {
+      '色慾': 'lust', '色欲': 'lust',
+      '暴食': 'gluttony',
+      '貪婪': 'greed', '強欲': 'greed',
+      '怠惰': 'sloth',
+      '憤怒': 'wrath',
+      '嫉妒': 'envy', '嫉妬': 'envy',
+      '傲慢': 'pride'
+    };
+
+    const SIN_INFO = {
+      lust: {
+        key: 'lust', name: '色慾', jaName: '色欲', en: 'Lust', weight: 1, ladderRank: 1,
+        catZh: '七罪（最輕）', catJa: '七つの大罪（最軽）',
+        tendencyDesc: '你在關係與生命選擇中，特別重視強烈的情感連結、感官吸引或浪漫的峰值體驗。你容易被充滿魅力的人事物深深吸引，渴望全然的親密與投入；但有時也可能因為過度追求「愛與被愛的感覺」，而忽略了現實層面的界線與長遠基礎。',
+        jaTendencyDesc: 'あなたは人間関係や人生の選択において、強い感情的な繋がりや感覚的な魅力、ロマンチックな絶頂体験を特に重視します。魅力的な人や物に深く惹かれやすく、完全なる親密さと没頭を渇望しますが、時に「愛し愛される感覚」を追い求めるあまり、現実的な境界線や長期的な基盤を見失うことがあります。',
+        scriptureText: '「天堂的天使們看到，並且貪戀她們，然後，對彼此說：『來吧！讓我們在人類的女孩子之中，選擇我們的妻子並且讓她們替我們生孩子！』」',
+        jaScriptureText: '「天の使いらは彼女たちを見て欲望を抱き、互いに言った。『さあ、人間の娘たちの中から妻を選び、我々のために子を産ませよう！』」',
+        scriptureRef: '——《以諾書》第6章第2節',
+        jaScriptureRef: '——『エノク書』第6章第2節'
+      },
+      gluttony: {
+        key: 'gluttony', name: '暴食', jaName: '暴食', en: 'Gluttony', weight: 2, ladderRank: 2,
+        catZh: '七罪', catJa: '七つの大罪',
+        tendencyDesc: '你傾向重視當下的快樂、舒適感與世俗生活中的實質陪伴。比起抽象遙遠的精神教條，你更相信「能一起吃飯、一起開心過日子」的溫度；然而當壓力或不安來臨時，也較容易傾向尋求立即的感官滿足或安逸，來填補內心的空缺。',
+        jaTendencyDesc: 'あなたは「今この瞬間の楽しさ」、心地よさ、そして日常における実質的な繋がりを重視します。抽象的で遠い精神論よりも、「一緒に美味しいものを食べ、楽しく日々を過ごせる温もり」を信じています。しかし、ストレスや不安に直面すると、心の空白を埋めるために即座の快楽や安逸に逃避しやすい傾向もあります。',
+        scriptureText: '「我若靠著別西卜趕鬼，你們的子弟趕鬼又靠著誰呢？這樣，他們就要斷定你們的是非。我若靠著神的靈趕鬼，這就是神的國臨到你們了。」',
+        jaScriptureText: '「もしわたしがベルゼブルによって悪霊を追い出すのなら、あなたたちの仲間は何によって追い出すのか。だから、彼ら自身があなたたちを裁く者となる。しかし、わたしが神の霊によって悪霊を追い出しているのであれば、神の国はあなたたちのところに来ているのだ。」',
+        scriptureRef: '——《馬太福音》第12章第27節',
+        jaScriptureRef: '——『マタイによる福音書』第12章第27節'
+      },
+      greed: {
+        key: 'greed', name: '貪婪', jaName: '強欲', en: 'Greed', weight: 3, ladderRank: 3,
+        catZh: '七罪', catJa: '七つの大罪',
+        tendencyDesc: '你在面對關係與人生決策時，有著清晰的價值衡量與資源意識。你重視付出的回報率、未來的保障以及實際握在手中的理想或利益；這讓你不易盲目犧牲，但有時也可能讓你不自覺地在感情裡計算得失，害怕失去掌控或吃虧。',
+        jaTendencyDesc: 'あなたは人間関係や人生の決断において、明確な価値基準とリソース意識を持っています。見返りの大きさや将来の保障、そして実際に自分の手中に収められる理想や利益を重んじます。そのため盲目的な自己犠牲に陥ることはありませんが、無意識のうちに愛情の中でも損得勘定をしてしまい、主導権を失うことや損をすることを恐れる一面があります。',
+        scriptureText: '「不要為自己積蓄財寶在地上，地上有蟲蛀、鏽蝕，也有賊挖洞偷竊；只要為自己積蓄財寶在天上，天上沒有蟲蛀、鏽蝕，也沒有賊挖洞偷竊。因為你的財寶在哪裡，你的心也必在哪裡。」',
+        jaScriptureText: '「自分のために地上に富を積んではならない。そこでは虫が食ったり、錆びついたりするし、また盗人が忍び込んで盗み出す。富は、自分のために天に積みなさい……あなたの富のあるところに、あなたの心もあるのだ。」',
+        scriptureRef: '——《馬太福音》第6章第19節',
+        jaScriptureRef: '——『マタイによる福音書』第6章第19節'
+      },
+      sloth: {
+        key: 'sloth', name: '怠惰', jaName: '怠惰', en: 'Sloth', weight: 4, ladderRank: 4,
+        catZh: '七罪', catJa: '七つの大罪',
+        tendencyDesc: '你面對複雜的人際糾葛或高張力的情感衝突時，常展現出一種「抽離、省事或順其自然」的防衛機制。你討厭無謂的麻煩與情緒內耗，有時會用看破紅塵或自嘲來避開深度的磨合; 這雖然保護了你的平靜，卻也可能讓你錯失深刻連結的契機。',
+        jaTendencyDesc: 'あなたは複雑な人間関係や激しい感情の衝突に直面した際、「距離を置く・面倒を避ける・成り行きに任せる」といった防衛機制を働かせがちです。無意味なトラブルや感情の消耗を嫌い、達観した態度や自嘲によって深いぶつかり合いを回避します。それは心の平穏を守ってくれますが、同時に深い絆を築く好機を逃してしまうこともあります。',
+        scriptureText: '「因為這女子叫百姓來，一同給他們的神獻祭，百姓就吃他們的祭物，跪拜他們的神。以色列人與巴力毗珥連合，耶和華的怒氣就向以色列人發作。」',
+        jaScriptureText: '「娘たちは民を自分たちの神々の犠牲の祭りに招き、民は食べ、彼らの神々にひれ伏した。こうしてイスラエルはペオルのバアルに結びついたので、主の怒りがイスラエルに対して燃え上がった。」',
+        scriptureRef: '——《民數記》第25章第3節',
+        jaScriptureRef: '——『民数記』第25章第3節'
+      },
+      wrath: {
+        key: 'wrath', name: '憤怒', jaName: '憤怒', en: 'Wrath', weight: 5, ladderRank: 5,
+        catZh: '七罪', catJa: '七つの大罪',
+        tendencyDesc: '你對於是非對錯、個人界線與溝通頻率有著極高的敏銳度與標準。當遭遇不公、愚昧或越界的要求時，你會直接展現出強烈的排斥與批判力；你的愛恨分明讓你保有真實的稜角，但過於鋒利的防衛有時也會在無意間灼傷身邊的人。',
+        jaTendencyDesc: 'あなたは是非善悪や個人の境界線、そして会話の波長に対して極めて高い感度と基準を持っています。不条理や愚かさ、あるいは一線を越えた要求に直面すると、強い拒絶反応と批判精神を隠そうとしません。白黒はっきりした性格はあなたの誠実な個性ですが、鋭すぎる防衛本能が時に周囲の人々を焼き焦がしてしまうこともあります。',
+        scriptureText: '「你因美麗心中高傲，又因榮光敗壞智慧，我已將你摔倒在地，使你倒在君王面前，好叫他們目睹眼見。你因罪孽眾多，貿易不公，就褻瀆你那裡的聖所。故此，我讓火從你中間發出，燒滅你，使你在所有觀看的人眼前變為地上的爐灰。」',
+        jaScriptureText: '「あなたの心は自分の美しさに高ぶり、その輝きのゆえに自分の知恵を損なった。わたしはあなたを地に投げ出し、王たちの前にさらし者にした……わたしはあなたのうちから火を出し、あなたを焼き尽くし、見ているすべての者の前であなたを地上の灰とした。」',
+        scriptureRef: '——《以西結書》第28章第17節',
+        jaScriptureRef: '——『エゼキエル書』第28章第17節'
+      },
+      envy: {
+        key: 'envy', name: '嫉妒', jaName: '嫉妬', en: 'Envy', weight: 6, ladderRank: 6,
+        catZh: '七罪', catJa: '七つの大罪',
+        tendencyDesc: '你的內心細膩而敏感，對於「誰更受重視」、「誰真正理解誰」或人際間微妙的高低差距特別有感。你渴望獨特且排他的深刻理解，因此當感覺自己被比下去、不被理解或捲入微妙的三角張力時，內心容易泛起強烈的酸楚與防備。',
+        jaTendencyDesc: 'あなたの心は繊細で敏感であり、「誰がより重視されているか」「誰が誰を本当に理解しているか」といった人間関係の微妙な優劣や距離感に強く反応します。特別で排他的な深い理解を渇望しているため、自分が誰かと比較されたり、理解されなかったり、微妙な三角関係の緊張に巻き込まれたりすると、強い痛みと警戒心を抱きやすい傾向があります。',
+        scriptureText: '「到那日，耶和華必用他剛硬有力的大刀刑罰鱷魚，就是那快行的蛇，刑罰鱷魚，就是那曲行的蛇，並殺海中的大魚。」',
+        jaScriptureText: '「その日、主は鋭く、大きく、強い剣をもって、逃げる蛇レビヤタン、曲がりくねる蛇レビヤタンを罰し、海にいる竜を殺される。」',
+        scriptureRef: '——《以賽亞書》第27章第1節',
+        jaScriptureRef: '——『イザヤ書』第27章第1節'
+      },
+      pride: {
+        key: 'pride', name: '傲慢', jaName: '傲慢', en: 'Pride', weight: 7, ladderRank: 7,
+        catZh: '七罪（最重，諸罪之根）', catJa: '七つの大罪（最重・諸悪の根源）',
+        tendencyDesc: '你擁有極強的自我意識、自尊心與精神潔癖。你高度看重自己的原則、才智與主體性，絕不輕易為了迎合他人而委曲求全；然而，當這份自持推到極致時，可能會變成一種居高臨下的審視，覺得世上鮮少有人真正配得上或能理解你的高度。',
+        jaTendencyDesc: 'あなたは極めて強い自我、自尊心、そして精神的な潔癖さを持っています。自身の原則や知性、主体性を高く重んじ、他人に迎合して自分を曲げることを決して良しとしません。しかし、その矜持が極限に達すると、周囲を上から見下ろすような視点になり、「この世で自分の高さに釣り合う者、自分を真に理解できる者などほとんどいない」という孤独な優越感に陥ることがあります。',
+        scriptureText: '「明亮之星，早晨之子啊，你何竟從天墜落？你這攻敗列國的何竟被砍倒在地上？你心裡曾說：我要升到天上；我要高舉我的寶座在神眾星以上；我要坐在聚會的山上，在北方的極處。我要升到高雲之上；我要與至上者同等。然而，你必墜落陰間，到坑中極深之處。」',
+        jaScriptureText: '「黎明の子、明けの明星よ、どうしてあなたは天から落ちたのか。国々を打ち破った者よ、どうしてあなたは地に切り倒されたのか。あなたは心の中で言った。『わたしは天に昇り、神の星々の上にわたしの王座を高く据え……いと高き方のようになろう』と。しかし、あなたは陰府へ、深い穴の底へと落とされる。」',
+        scriptureRef: '——《以賽亞書》第14章第12節',
+        jaScriptureRef: '——『イザヤ書』第14章第12節'
+      }
+    };
+
+    const QUESTION_BANK_1 = [
+      {
+        group: 1, qNum: 1,
+        question: "你的男/女朋友跟你的國文老師同時落水了，然而你的力量只允許你救一個人，你會先救誰?",
+        jaQuestion: "あなたの恋人（彼氏／彼女）と国語の先生が同時に水に落ちました。しかし、あなたの力では一人しか救えません。どちらを先に救いますか？",
+        options: [
+          { code: "A", text: "我雙手一攤，誰也不救，反正男/女朋友再找就有，我也不缺國文老師。", jaText: "両手を広げてお手上げ。誰も救わない。恋人はまた探せばいいし、国語の先生がいなくても困らない。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 5, wrath: 0, envy: 0, pride: 3 } },
+          { code: "B", text: "當然是先救男/女朋友啊，他/她是我的一切，我不能失去他。", jaText: "もちろん恋人を先に救う。彼／彼女は私のすべてであり、絶対に失うわけにはいかない。", scores: { lust: 4, gluttony: 0, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 1 } },
+          { code: "C", text: "當然是先救國文老師啊，因為是我把我的男/女朋友推下去的，國文老師竟然下去救，一定要抓回來興師問罪！", jaText: "もちろん国語の先生を先に救う。なぜなら恋人を突き落としたのは私自身だからだ。勝手に助けに飛び込んだ先生を引きずり上げて問い詰めてやる！", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 1, wrath: 3, envy: 0, pride: 4 } },
+          { code: "D", text: "當然是打110啊，這一看必死無疑。不用叫消防隊了，浪費社會資源，反正都是「意外」失足的！", jaText: "もちろん警察（110番）に通報する。どう見ても助からないし、消防車を呼ぶのは社会資源の無駄。どうせ全部「不慮の事故」なんだから！", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 3, wrath: 0, envy: 1, pride: 3 } }
+        ]
+      },
+      {
+        group: 1, qNum: 2,
+        question: "某天，你的上級對你說，他傷害了他相好（上級的老公或老婆）請求你去安撫他的相好，你作何感想？",
+        jaQuestion: "ある日、上司が「自分のパートナー（配偶者）を傷つけてしまったので、代わりに慰めてきてほしい」とあなたに頼んできました。どう思いますか？",
+        options: [
+          { code: "A", text: "恭敬不如從命，我現在就去，給我五分鐘，包準讓你們倆和好如初。", jaText: "謹んでお引き受けします。今すぐ行ってきます。5分くだされば、お二人を元通り仲直りさせてみせますよ。", scores: { lust: 2, gluttony: 0, greed: 0, sloth: 0, wrath: 2, envy: 4, pride: 0 } },
+          { code: "B", text: "不可行啊，再怎麼說您的相好也是我的上級，我不能違背我生而為人的矜持，我辦不到。", jaText: "滅相もございません。パートナーの方も私にとっては目上の方。人としての矜持に背くような真似は、私にはできかねます。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 1, envy: 3, pride: 4 } },
+          { code: "C", text: "干我⋯（消音），您可以去尋找更加專業的心理輔導師，而不是將這種無關乎我本來工作的業務交給我辦，術業有專攻，請找對人。", jaText: "知ったことか⋯（自主規制）。本来の業務と無関係な仕事を私に押し付けず、専門のカウンセラーを探してください。餅は餅屋です。", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 0, wrath: 4, envy: 3, pride: 0 } },
+          { code: "D", text: "不行啊，我怕您的相好不小心，對就是這麼不小心的愛上了我，這可糟了，您被扣了一頂純綠的大帽，還要付我封口費呢！啊，請您不要小看我的魅力呦！", jaText: "ダメですよ、もしパートナーの方がうっかり、ええ、うっかり私に惚れてしまったら大変です！寝取られた上に私に口止め料まで払う羽目になりますよ？ふふ、私の魅力を甘く見ないでくださいね！", scores: { lust: 5, gluttony: 0, greed: 0, sloth: 0, wrath: 0, envy: 3, pride: 0 } }
+        ]
+      },
+      {
+        group: 1, qNum: 3,
+        question: "我認為精神世界的滿足是愛情中最重要的事。",
+        jaQuestion: "「精神世界の充足こそが、恋愛において最も重要なことである」と思いますか？",
+        options: [
+          { code: "A", text: "是，如果一段關係不能帶給我精神上的滿足，不要也罷。", jaText: "はい。精神的な充足をもたらしてくれない関係など、いっそ無い方がマシです。", scores: { lust: 1, gluttony: 0, greed: 0, sloth: 3, wrath: 2, envy: 0, pride: 2 } },
+          { code: "B", text: "不是，一段關係不只有精神上的完滿，更要能夠在這個世界共同生活，即使不能共享價值實現之快樂，也可以共享別的快樂。", jaText: "いいえ。関係には精神的な充足だけでなく、この現実世界で共に生きていくことが必要です。自己実現の喜びを共有できなくても、他の楽しみを分かち合えればいいのです。", scores: { lust: 2, gluttony: 3, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 0 } },
+          { code: "C", text: "我認為我找不到一個可以理解我價值以及可以共享那感情的人。", jaText: "そもそも、私の価値観を理解し、その感情を分かち合える人間などこの世に見つかるとは思えません。", scores: { lust: 0, gluttony: 1, greed: 0, sloth: 0, wrath: 0, envy: 3, pride: 4 } },
+          { code: "D", text: "我覺得「精神世界的滿足」是一種謬論，精神世界是不可能滿足的，這個提問本身並不成立。", jaText: "「精神世界の充足」などというものは詭弁です。精神世界が満たされることなどあり得ないため、この質問自体が成り立ちません。", scores: { lust: 0, gluttony: 1, greed: 2, sloth: 5, wrath: 0, envy: 0, pride: 0 } }
+        ]
+      },
+      {
+        group: 1, qNum: 4,
+        question: "我認為我無法與比我笨的人交往。",
+        jaQuestion: "「自分より頭が悪い人とは付き合えない」と思いますか？",
+        options: [
+          { code: "A", text: "是，愚蠢不是罪，但是我無法忍受。", jaText: "はい。愚かさは罪ではありませんが、私は到底我慢できません。", scores: { lust: 0, gluttony: 1, greed: 0, sloth: 0, wrath: 5, envy: 0, pride: 2 } },
+          { code: "B", text: "不是，除了知識以外還有更多個人特質是不能以「聰明」或「笨」來概括的。", jaText: "いいえ。知識以外にも、「賢い」か「愚か」かだけでは測れない個人の魅力や特質がたくさんあります。", scores: { lust: 1, gluttony: 2, greed: 5, sloth: 0, wrath: 0, envy: 0, pride: 0 } },
+          { code: "C", text: "我就是笨的那個。", jaText: "私自身が「頭が悪い方」です。", scores: { lust: 0, gluttony: 2, greed: 0, sloth: 4, wrath: 0, envy: 2, pride: 0 } },
+          { code: "D", text: "只要那人對我而言是真正的真愛，就算智力跟藍綠菌一樣也可以。", jaText: "その人が私にとって真実の愛の相手なら、たとえ知能がシアノバクテリア（藍藻）レベルでも構いません。", scores: { lust: 4, gluttony: 2, greed: 2, sloth: 0, wrath: 0, envy: 0, pride: 0 } }
+        ]
+      },
+      {
+        group: 1, qNum: 5,
+        question: "我認為我的交往對象若是兩人對話常常不在同一個頻率上就應該要分開。",
+        jaQuestion: "「交際相手と会話の波長（テンポやレベル）が合わないことが多ければ、別れるべきだ」と思いますか？",
+        options: [
+          { code: "A", text: "是，無法溝通何以有情。", jaText: "はい。意思疎通ができなくて、どうして愛が育めるでしょうか。", scores: { lust: 0, gluttony: 1, greed: 0, sloth: 0, wrath: 2, envy: 3, pride: 2 } },
+          { code: "B", text: "不是，這是可以慢慢修正的，對方只是還在摸索與我對話的方式，要有耐心。", jaText: "いいえ。それは少しずつすり合わせていけるものです。相手はまだ私との対話の仕方を模索しているだけなので、忍耐強く待つべきです。", scores: { lust: 2, gluttony: 3, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 0 } },
+          { code: "C", text: "我瞧不起聽不懂我說什麼的人，遑論交往。", jaText: "私の言っていることが理解できない人間など見下しています。付き合うなど論外です。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 2, wrath: 6, envy: 0, pride: 0 } },
+          { code: "D", text: "兩人之間的溝通不能完全相互理解，每人對於思想的理解亦是有差異的，我認為「聽不懂」是一種武斷的判斷，不能這樣理解。", jaText: "人間同士の対話において完全な相互理解など不可能です。思想の解釈には個人差があるため、「話が通じない」と決めつけるのは独断的すぎます。", scores: { lust: 0, gluttony: 3, greed: 3, sloth: 2, wrath: 0, envy: 0, pride: 0 } }
+        ]
+      },
+      {
+        group: 1, qNum: 6,
+        question: "我認為自己心中的理想大於愛情。",
+        jaQuestion: "「自分の胸にある理想は、恋愛よりも優先されるべきだ」と思いますか？",
+        options: [
+          { code: "A", text: "是的，我自己的理想才能陪我走得最遠。", jaText: "はい。自分自身の理想こそが、最後まで私と共に歩んでくれるものです。", scores: { lust: 0, gluttony: 0, greed: 5, sloth: 2, wrath: 0, envy: 0, pride: 1 } },
+          { code: "B", text: "不是，若是對方可以陪伴我一生並使我幸福，我便願意放棄那理想。", jaText: "いいえ。もし相手が一生寄り添い、私を幸せにしてくれるのなら、理想を捨てても構いません。", scores: { lust: 0, gluttony: 4, greed: 4, sloth: 0, wrath: 0, envy: 0, pride: 0 } },
+          { code: "C", text: "理想與愛情當真不可兼得？那只是這個人無法理解我的理想，去找下一個可以理解我的人就好。", jaText: "理想と恋愛は本当に両立できないものでしょうか？単にその相手が私の理想を理解できないだけです。理解できる次の相手を探せばいいのです。", scores: { lust: 0, gluttony: 3, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 5 } },
+          { code: "D", text: "我的理想就是找到理想的愛情。", jaText: "私の理想とは、「理想の愛」を見つけることです。", scores: { lust: 6, gluttony: 2, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 0 } }
+        ]
+      },
+      {
+        group: 1, qNum: 7,
+        question: "我覺得喜歡年紀比自己小很多的那群人是正確的。",
+        jaQuestion: "「自分よりずっと年下の世代を恋愛対象として好む人たち」について、どう思いますか？",
+        options: [
+          { code: "A", text: "蛤？那當真不是變態？", jaText: "はぁ？それって普通に変態じゃないの？", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 4, envy: 4, pride: 0 } },
+          { code: "B", text: "每人皆可選擇自己的喜好，不要違法就好。", jaText: "好みは人それぞれ自由です。法律にさえ違反しなければ問題ありません。", scores: { lust: 5, gluttony: 3, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 0 } },
+          { code: "C", text: "我覺得年紀相差太大會有代溝。", jaText: "年齢が離れすぎていると、ジェネレーションギャップがあると思います。", scores: { lust: 0, gluttony: 1, greed: 0, sloth: 5, wrath: 0, envy: 2, pride: 0 } },
+          { code: "D", text: "嚴厲斥責！！！", jaText: "断固として糾弾する！！！", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 3, envy: 4, pride: 1 } }
+        ]
+      }
+    ];
+
+    const QUESTION_BANK_2 = [
+      {
+        group: 2, qNum: 1,
+        question: "很熱很熱的時候，你的腦子裡第一個想法是？",
+        jaQuestion: "猛烈に暑いとき、あなたの頭に真っ先に浮かぶ考えは何ですか？",
+        options: [
+          { code: "A", text: "啊，冷氣啊冷氣，你到底在哪裡？", jaText: "ああ、エアコンよエアコン、一体どこにあるんだ？", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 4, wrath: 2, envy: 2, pride: 0 } },
+          { code: "B", text: "心靜自然涼。", jaText: "心頭滅却すれば火もまた涼し。", scores: { lust: 1, gluttony: 0, greed: 1, sloth: 1, wrath: 1, envy: 0, pride: 4 } },
+          { code: "C", text: "來人啊，速速買根冰棒來！", jaText: "誰かある！早々にアイスキャンディーを買って参れ！", scores: { lust: 0, gluttony: 0, greed: 2, sloth: 2, wrath: 3, envy: 1, pride: 0 } },
+          { code: "D", text: "我好想他/她。", jaText: "あの人に会いたいなあ……。", scores: { lust: 5, gluttony: 0, greed: 0, sloth: 0, wrath: 2, envy: 1, pride: 0 } }
+        ]
+      },
+      {
+        group: 2, qNum: 2,
+        question: "放學的時候，你的腦子裡第一個想法是？",
+        jaQuestion: "放課後（または終業時）、あなたの頭に真っ先に浮かぶ考えは何ですか？",
+        options: [
+          { code: "A", text: "我要待晚一點這樣可以與我喜歡的人共享空無一人的教室。", jaText: "少し遅くまで残って、好きな人と誰もいない教室を二人占めしたい。", scores: { lust: 3, gluttony: 1, greed: 2, sloth: 1, wrath: 0, envy: 0, pride: 1 } },
+          { code: "B", text: "校車要沒位子了，聽說有人也很喜歡我坐的那個位子。", jaText: "スクールバスの席がなくなっちゃう！私がいつも座るあの席、他にも狙ってる人がいるらしいし。", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 0, wrath: 2, envy: 4, pride: 1 } },
+          { code: "C", text: "且讓我打把荒野壓壓驚，那個可怕的數學作業量著實嚇到我了。", jaText: "とりあえずブロスタでもやって落ち着こう。あの恐ろしい数学の宿題の量にはマジでビビった。", scores: { lust: 0, gluttony: 2, greed: 1, sloth: 4, wrath: 0, envy: 0, pride: 1 } },
+          { code: "D", text: "我...我..尿急啦，憋那麼久，誰忍得住？", jaText: "お、おしっこ漏れそう……！あんなに長く我慢させられて耐えられるわけないだろ！", scores: { lust: 0, gluttony: 2, greed: 1, sloth: 3, wrath: 0, envy: 0, pride: 2 } }
+        ]
+      },
+      {
+        group: 2, qNum: 3,
+        question: "明天是難得的四天連假，你打算如何度過？",
+        jaQuestion: "明日から待ちに待った四連休です。どのように過ごす予定ですか？",
+        options: [
+          { code: "A", text: "去吃個 A5 和牛燒肉定食吃到飽，慰勞一下喝慣了西北風的腸胃。", jaText: "A5ランク黒毛和牛の焼肉食べ放題に行って、普段ひもじい思いをしている胃袋を労ってやる。", scores: { lust: 0, gluttony: 4, greed: 2, sloth: 0, wrath: 1, envy: 0, pride: 1 } },
+          { code: "B", text: "去名牌球鞋的廠拍，挑好幾雙非常時髦的跑鞋。", jaText: "ブランドスニーカーのセールに行って、最高にクールなランニングシューズを何足も買い込む。", scores: { lust: 1, gluttony: 1, greed: 3, sloth: 2, wrath: 0, envy: 1, pride: 0 } },
+          { code: "C", text: "睡覺睡到自然醒，明天再也不用早上5點起床。", jaText: "自然に目が覚めるまでひたすら眠る。明日はもう朝5時に起きなくていいんだ。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 5, wrath: 1, envy: 0, pride: 2 } },
+          { code: "D", text: "一堆令人厭煩的事情要做，看到那堆比玉山高的文件了嗎？那就是我的假期。", jaText: "うんざりする雑務が山積みだ。富士山より高いあの書類の山が見えるか？あれが私の連休だよ。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 2, wrath: 4, envy: 1, pride: 1 } }
+        ]
+      },
+      {
+        group: 2, qNum: 4,
+        question: "如果你的心愛之物（包含心愛之人）遺失了，你作何感想？",
+        jaQuestion: "もしあなたの愛するもの（愛する人を含む）を失ってしまったら、どう思いますか？",
+        options: [
+          { code: "A", text: "既然遺失了，那就讓他去吧，所謂緣分即是如此。", jaText: "失ってしまったのなら、手放すまでだ。縁とはそういうものだろう。", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 3, wrath: 1, envy: 0, pride: 3 } },
+          { code: "B", text: "不可能！我一定是掉在了某處。我一定要找回來！", jaText: "あり得ない！きっとどこかに落としただけだ。絶対に探し出して取り戻してみせる！", scores: { lust: 4, gluttony: 0, greed: 0, sloth: 0, wrath: 2, envy: 2, pride: 0 } },
+          { code: "C", text: "反正也不是第一次遺失了，過幾天他就會出現的，這叫經驗法則。", jaText: "どうせなくしたのは初めてじゃないし、数日経てばひょっこり出てくるさ。これが経験則ってやつだ。", scores: { lust: 1, gluttony: 1, greed: 0, sloth: 4, wrath: 0, envy: 0, pride: 2 } },
+          { code: "D", text: "沒有任何東西是我的心愛之物，你的問題從最一開始的假設就失敗了，可喜可賀。", jaText: "私に「愛するもの」など存在しない。あなたの質問は最初の前提からして破綻しているよ、めでたいね。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 3, envy: 0, pride: 5 } }
+        ]
+      },
+      {
+        group: 2, qNum: 5,
+        question: "你覺得和許多人搞曖昧是可以的嗎？",
+        jaQuestion: "「複数の人と同時に曖昧な関係（友達以上恋人未満）を持つこと」は許されると思いますか？",
+        options: [
+          { code: "A", text: "可以，只要沒有正式的關係就不算是出軌（？）", jaText: "アリでしょ。正式に付き合っていなければ浮気にはならない（？）", scores: { lust: 4, gluttony: 1, greed: 0, sloth: 0, wrath: 0, envy: 3, pride: 0 } },
+          { code: "B", text: "嚴厲斥責！！！", jaText: "断固として糾弾する！！！", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 3, envy: 4, pride: 1 } },
+          { code: "C", text: "不行，那違反我的道德原則。", jaText: "ダメだ。それは私の道徳的原則に反する。", scores: { lust: 0, gluttony: 3, greed: 0, sloth: 0, wrath: 2, envy: 2, pride: 1 } },
+          { code: "D", text: "我覺得愛不應該是局限性的東西。", jaText: "愛とは本来、一つの形や相手に縛られるべきものではないと思う。", scores: { lust: 2, gluttony: 2, greed: 1, sloth: 0, wrath: 0, envy: 0, pride: 3 } }
+        ]
+      },
+      {
+        group: 2, qNum: 6,
+        question: "你是否在一段關係中認定對方即是你的全世界？",
+        jaQuestion: "恋愛において、「相手こそが自分の全世界である」と思いますか？",
+        options: [
+          { code: "A", text: "是，否則關係中還需要什麼呢？", jaText: "はい。そうでなければ、関係において他に何が必要だというのですか？", scores: { lust: 4, gluttony: 2, greed: 2, sloth: 0, wrath: 0, envy: 0, pride: 0 } },
+          { code: "B", text: "不是，生命之中不是只有某一個人。", jaText: "いいえ。人生には特定の誰か一人だけが存在するわけではありません。", scores: { lust: 0, gluttony: 2, greed: 1, sloth: 0, wrath: 2, envy: 3, pride: 0 } },
+          { code: "C", text: "他/她不只是我的全世界，更是我的全宇宙，我的眼裡只有他/她", jaText: "全世界どころか、私の全宇宙です。私の瞳にはあの人しか映っていません。", scores: { lust: 3, gluttony: 2, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 0 } },
+          { code: "D", text: "我覺得是沒有到全世界那麼誇張啦，但至少在我的心中占有一定的定位。", jaText: "全世界というのは大げさですが、少なくとも心の中で確かな位置を占めています。", scores: { lust: 1, gluttony: 4, greed: 2, sloth: 0, wrath: 0, envy: 1, pride: 0 } }
+        ]
+      },
+      {
+        group: 2, qNum: 7,
+        question: "你會控制你自己的購物慾嗎？",
+        jaQuestion: "自分の買い物欲（物欲）をコントロールできますか？",
+        options: [
+          { code: "A", text: "會，我會在花掉一定的錢的時候收手。", jaText: "はい。一定の金額を使った時点でちゃんと手を引きます。", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 0, wrath: 1, envy: 3, pride: 3 } },
+          { code: "B", text: "並不會，我根本不知道我會花多少，只知道我停不下來。", jaText: "いいえ。自分がいくら使っているかも把握していないし、とにかく止められません。", scores: { lust: 0, gluttony: 3, greed: 5, sloth: 0, wrath: 0, envy: 0, pride: 0 } },
+          { code: "C", text: "並不會，我根本就不在乎我花了多少錢，我只在乎我快不快樂。", jaText: "いいえ。いくら使ったかなんてどうでもいい、自分が楽しいかどうかがすべてです。", scores: { lust: 3, gluttony: 2, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 0 } },
+          { code: "D", text: "我已經貧窮/富裕到不知道什麼是購物慾。", jaText: "私はすでに買い物欲という概念すら分からないほど貧しい（あるいは富んでいる）。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 1, wrath: 2, envy: 4, pride: 1 } }
+        ]
+      }
+    ];
+
+    let activeQuestions = [];
+    let currentIndex = 0;
+    let userAnswers = [];
+    let userPrediction = '';
+    const T_VALUE = 8;
+    let lastComputedOutcome = null;
+
+    function getSinDisplayName(key) {
+      if (!SIN_INFO[key]) return '';
+      return currentLang === 'ja' ? SIN_INFO[key].jaName : SIN_INFO[key].name;
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'zh' ? 'ja' : 'zh';
+      document.documentElement.lang = currentLang === 'ja' ? 'ja' : 'zh-Hant';
+      applyLanguageUI();
+    }
+
+    function applyLanguageUI() {
+      const t = UI_TEXT[currentLang];
+      const isLight = document.body.classList.contains('light-mode');
+
+      document.getElementById('navBrandTitle').textContent = t.brandTitle;
+      document.getElementById('mainTitle').textContent = t.brandTitle;
+      document.getElementById('mainSubtitle').textContent = t.subtitle;
+      document.getElementById('langToggleBtn').textContent = t.langBtn;
+      document.getElementById('themeToggleBtn').textContent = isLight ? t.themeDark : t.themeLight;
+
+      document.getElementById('storyIntroBox').innerHTML = t.storyHtml;
+      document.getElementById('predictionBoxTitle').textContent = t.predTitle;
+      document.getElementById('predictionBoxDesc').textContent = t.predDesc;
+      document.getElementById('predictionSelectLabel').textContent = t.predLabel;
+
+      // 更新下拉選單文字並保留當前選擇值
+      const sel = document.getElementById('userPredictionSelect');
+      const currentVal = sel.value;
+      sel.options[0].textContent = t.pleaseSelect;
+      SIN_KEYS.forEach((k, idx) => {
+        const info = SIN_INFO[k];
+        const disp = currentLang === 'ja' ? info.jaName : info.name;
+        sel.options[idx + 1].textContent = `${disp} (${info.en})`;
+      });
+      sel.value = currentVal;
+
+      document.getElementById('disclaimerTitle').textContent = t.disclaimerTitle;
+      document.getElementById('disclaimerText').textContent = t.disclaimerText;
+      document.getElementById('startQuizBtn').textContent = t.startBtn;
+      document.getElementById('quickAdminBtn').textContent = t.quickAdminBtn;
+
+      document.getElementById('prevBtn').textContent = t.prevBtn;
+      document.getElementById('quizNavHint').textContent = t.quizNavHint;
+
+      document.getElementById('resultSectionSmallTitle').textContent = t.resultSmallTitle;
+      document.getElementById('resultSectionMainTitle').textContent = t.resultMainTitle;
+      document.getElementById('topSinBadgeLabel').textContent = t.topSinBadge;
+      document.getElementById('departureTitle').textContent = t.depTitle;
+      document.getElementById('departureSubtitle').textContent = t.depSubtitle;
+      document.getElementById('departureMinLabel').textContent = t.depMin;
+      document.getElementById('departureMaxLabel').textContent = t.depMax;
+      document.getElementById('ladderSectionTitle').textContent = t.ladderTitle;
+      document.getElementById('ladderSectionSubtitle').textContent = t.ladderSubtitle;
+      document.getElementById('ladderLegendTop').textContent = t.ladderLegend;
+
+      document.getElementById('shareSectionTitle').textContent = t.shareTitle;
+      document.getElementById('downloadCardBtn').textContent = t.downloadCardBtn;
+      document.getElementById('copyTextBtn').textContent = t.copyTextBtn;
+      document.getElementById('shareCardPreviewHint').textContent = t.shareCardHint;
+      document.getElementById('shareTextPreviewHint').textContent = t.shareTextHint;
+
+      document.getElementById('epilogueBox').innerHTML = t.epilogueHtml;
+      document.getElementById('restartQuizBtn').textContent = t.restartBtn;
+      document.getElementById('footerText').textContent = t.footerText;
+
+      checkStartButtonState();
+
+      if (!document.getElementById('quizScreen').classList.contains('hidden')) {
+        renderCurrentQuestion();
+      }
+      if (!document.getElementById('resultScreen').classList.contains('hidden') && lastComputedOutcome) {
+        showResults(false);
+      }
+    }
 
     window.addEventListener('keydown', function(e) {
       if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
@@ -619,7 +1120,10 @@
 
     window.addEventListener('scroll', handleScrollCheck);
     window.addEventListener('resize', handleScrollCheck);
-    window.addEventListener('DOMContentLoaded', () => { setTimeout(handleScrollCheck, 200); });
+    window.addEventListener('DOMContentLoaded', () => {
+      applyLanguageUI();
+      setTimeout(handleScrollCheck, 200);
+    });
 
     function checkStartButtonState() {
       const selectEl = document.getElementById('userPredictionSelect');
@@ -627,23 +1131,24 @@
       const hintEl = document.getElementById('startConditionHint');
       if (!selectEl || !startBtn || !hintEl) return;
 
+      const t = UI_TEXT[currentLang];
       const hasSelectedSin = selectEl.value !== '';
 
       if (hasSelectedSin && hasScrolledToBottom) {
         startBtn.disabled = false;
-        hintEl.textContent = '✓ 已選擇預測罪行並閱讀完畢，請點擊下方按鈕開始測試！';
+        hintEl.textContent = t.hintReady;
         hintEl.className = 'text-xs sm:text-sm text-emerald-400 font-bold';
       } else if (!hasSelectedSin && !hasScrolledToBottom) {
         startBtn.disabled = true;
-        hintEl.textContent = '⚠️ 請先於上方選擇你預測的罪行，並將網頁滑至最底部以解鎖測試';
+        hintEl.textContent = t.hintBothMissing;
         hintEl.className = 'text-xs sm:text-sm text-amber-400 font-bold';
       } else if (!hasSelectedSin) {
         startBtn.disabled = true;
-        hintEl.textContent = '⚠️ 尚未選擇罪行！請先在上方下拉選單選擇你預測的罪行';
+        hintEl.textContent = t.hintSinMissing;
         hintEl.className = 'text-xs sm:text-sm text-red-400 font-bold';
       } else {
         startBtn.disabled = true;
-        hintEl.textContent = '⬇️ 請將網頁繼續往下滑至最底部以解鎖開始按鈕';
+        hintEl.textContent = t.hintScrollMissing;
         hintEl.className = 'text-xs sm:text-sm text-amber-400 font-bold';
       }
     }
@@ -685,11 +1190,12 @@
     function toggleTheme() {
       const body = document.body;
       const btn = document.getElementById('themeToggleBtn');
+      const t = UI_TEXT[currentLang];
       body.classList.toggle('light-mode');
       if (body.classList.contains('light-mode')) {
-        btn.textContent = '🌙 切換黑底';
+        btn.textContent = t.themeDark;
       } else {
-        btn.textContent = '☀️ 切換白底';
+        btn.textContent = t.themeLight;
       }
     }
 
@@ -755,60 +1261,9 @@
       document.getElementById('adminAnswerReviewBox').classList.toggle('hidden', !show);
     }
 
-    const SIN_KEYS = ['lust', 'gluttony', 'greed', 'sloth', 'wrath', 'envy', 'pride'];
-    const NAME_TO_KEY = { '色慾': 'lust', '暴食': 'gluttony', '貪婪': 'greed', '怠惰': 'sloth', '憤怒': 'wrath', '嫉妒': 'envy', '傲慢': 'pride' };
-
-    const SIN_INFO = {
-      lust: { key: 'lust', name: '色慾', en: 'Lust', weight: 1, ladderRank: 1, tendencyDesc: '你在關係與生命選擇中，特別重視強烈的情感連結、感官吸引或浪漫的峰值體驗。你容易被充滿魅力的人事物深深吸引，渴望全然的親密與投入；但有時也可能因為過度追求「愛與被愛的感覺」，而忽略了現實層面的界線與長遠基礎。', scriptureText: '「天堂的天使們看到，並且貪戀她們，然後，對彼此說：『來吧！讓我們在人類的女孩子之中，選擇我們的妻子並且讓她們替我們生孩子！』」', scriptureRef: '——《以諾書》第6章第2節' },
-      gluttony: { key: 'gluttony', name: '暴食', en: 'Gluttony', weight: 2, ladderRank: 2, tendencyDesc: '你傾向重視當下的快樂、舒適感與世俗生活中的實質陪伴。比起抽象遙遠的精神教條，你更相信「能一起吃飯、一起開心過日子」的溫度；然而當壓力或不安來臨時，也較容易傾向尋求立即的感官滿足或安逸，來填補內心的空缺。', scriptureText: '「我若靠著別西卜趕鬼，你們的子弟趕鬼又靠著誰呢？這樣，他們就要斷定你們的是非。我若靠著神的靈趕鬼，這就是神的國臨到你們了。」', scriptureRef: '——《馬太福音》第12章第27節' },
-      greed: { key: 'greed', name: '貪婪', en: 'Greed', weight: 3, ladderRank: 3, tendencyDesc: '你在面對關係與人生決策時，有著清晰的價值衡量與資源意識。你重視付出的回報率、未來的保障以及實際握在手中的理想或利益；這讓你不易盲目犧牲，但有時也可能讓你不自覺地在感情裡計算得失，害怕失去掌控或吃虧。', scriptureText: '「不要為自己積蓄財寶在地上，地上有蟲蛀、鏽蝕，也有賊挖洞偷竊；只要為自己積蓄財寶在天上，天上沒有蟲蛀、鏽蝕，也沒有賊挖洞偷竊。因為你的財寶在哪裡，你的心也必在哪裡。」', scriptureRef: '——《馬太福音》第6章第19節' },
-      sloth: { key: 'sloth', name: '怠惰', en: 'Sloth', weight: 4, ladderRank: 4, tendencyDesc: '你面對複雜的人際糾葛或高張力的情感衝突時，常展現出一種「抽離、省事或順其自然」的防衛機制。你討厭無謂的麻煩與情緒內耗，有時會用看破紅塵或自嘲來避開深度的磨合; 這雖然保護了你的平靜，卻也可能讓你錯失深刻連結的契機。', scriptureText: '「因為這女子叫百姓來，一同給他們的神獻祭，百姓就吃他們的祭物，跪拜他們的神。以色列人與巴力毗珥連合，耶和華的怒氣就向以色列人發作。」', scriptureRef: '——《民數記》第25章第3節' },
-      wrath: { key: 'wrath', name: '憤怒', en: 'Wrath', weight: 5, ladderRank: 5, tendencyDesc: '你對於是非對錯、個人界線與溝通頻率有著極高的敏銳度與標準。當遭遇不公、愚昧或越界的要求時，你會直接展現出強烈的排斥與批判力；你的愛恨分明讓你保有真實的稜角，但過於鋒利的防衛有時也會在無意間灼傷身邊的人。', scriptureText: '「你因美麗心中高傲，又因榮光敗壞智慧，我已將你摔倒在地，使你倒在君王面前，好叫他們目睹眼見。你因罪孽眾多，貿易不公，就褻瀆你那裡的聖所。故此，我讓火從你中間發出，燒滅你，使你在所有觀看的人眼前變為地上的爐灰。」', scriptureRef: '——《以西結書》第28章第17節' },
-      envy: { key: 'envy', name: '嫉妒', en: 'Envy', weight: 6, ladderRank: 6, tendencyDesc: '你的內心細膩而敏感，對於「誰更受重視」、「誰真正理解誰」或人際間微妙的高低差距特別有感。你渴望獨特且排他的深刻理解，因此當感覺自己被比下去、不被理解或捲入微妙的三角張力時，內心容易泛起強烈的酸楚與防備。', scriptureText: '「到那日，耶和華必用他剛硬有力的大刀刑罰鱷魚，就是那快行的蛇，刑罰鱷魚，就是那曲行的蛇，並殺海中的大魚。」', scriptureRef: '——《以賽亞書》第27章第1節' },
-      pride: { key: 'pride', name: '傲慢', en: 'Pride', weight: 7, ladderRank: 7, tendencyDesc: '你擁有極強的自我意識、自尊心與精神潔癖。你高度看重自己的原則、才智與主體性，絕不輕易為了迎合他人而委曲求全；然而，當這份自持推到極致時，可能會變成一種居高臨下的審視，覺得世上鮮少有人真正配得上或能理解你的高度。', scriptureText: '「明亮之星，早晨之子啊，你何竟從天墜落？你這攻敗列國的何竟被砍倒在地上？你心裡曾說：我要升到天上；我要高舉我的寶座在神眾星以上；我要坐在聚會的山上，在北方的極處。我要升到高雲之上；我要與至上者同等。然而，你必墜落陰間，到坑中極深之處。」', scriptureRef: '——《以賽亞書》第14章第12節' }
-    };
-
-    const LADDER_STEPS = [
-      { rank: 1, name: '色慾', category: '七罪（最輕）', sinKey: 'lust' },
-      { rank: 2, name: '暴食', category: '七罪', sinKey: 'gluttony' },
-      { rank: 3, name: '貪婪', category: '七罪', sinKey: 'greed' },
-      { rank: 4, name: '怠惰', category: '七罪', sinKey: 'sloth' },
-      { rank: 5, name: '憤怒', category: '七罪', sinKey: 'wrath' },
-      { rank: 6, name: '嫉妒', category: '七罪', sinKey: 'envy' },
-      { rank: 7, name: '傲慢', category: '七罪（最重，諸罪之根）', sinKey: 'pride' }
-    ];
-
-    const QUESTION_BANK_1 = [
-      { group: 1, qNum: 1, question: "你的男/女朋友跟你的國文老師同時落水了，然而你的力量只允許你救一個人，你會先救誰?", options: [ { code: "A", text: "我雙手一攤，誰也不救，反正男/女朋友再找就有，我也不缺國文老師。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 5, wrath: 0, envy: 0, pride: 3 } }, { code: "B", text: "當然是先救男/女朋友啊，他/她是我的一切，我不能失去他。", scores: { lust: 4, gluttony: 0, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 1 } }, { code: "C", text: "當然是先救國文老師啊，因為是我把我的男/女朋友推下去的，國文老師竟然下去救，一定要抓回來興師問罪！", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 1, wrath: 3, envy: 0, pride: 4 } }, { code: "D", text: "當然是打110啊，這一看必死無疑。不用叫消防隊了，浪費社會資源，反正都是「意外」失足的！", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 3, wrath: 0, envy: 1, pride: 3 } } ] },
-      { group: 1, qNum: 2, question: "某天，你的上級對你說，他傷害了他相好（上級的老公或老婆）請求你去安撫他的相好，你作何感想？", options: [ { code: "A", text: "恭敬不如從命，我現在就去，給我五分鐘，包準讓你們倆和好如初。", scores: { lust: 2, gluttony: 0, greed: 0, sloth: 0, wrath: 2, envy: 4, pride: 0 } }, { code: "B", text: "不可行啊，再怎麼說您的相好也是我的上級，我不能違背我生而為人的矜持，我辦不到。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 1, envy: 3, pride: 4 } }, { code: "C", text: "干我⋯（消音），您可以去尋找更加專業的心理輔導師，而不是將這種無關乎我本來工作的業務交給我辦，術業有專攻，請找對人。", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 0, wrath: 4, envy: 3, pride: 0 } }, { code: "D", text: "不行啊，我怕您的相好不小心，對就是這麼不小心的愛上了我，這可糟了，您被扣了一頂純綠的大帽，還要付我封口費呢！啊，請您不要小看我的魅力呦！", scores: { lust: 5, gluttony: 0, greed: 0, sloth: 0, wrath: 0, envy: 3, pride: 0 } } ] },
-      { group: 1, qNum: 3, question: "我認為精神世界的滿足是愛情中最重要的事。", options: [ { code: "A", text: "是，如果一段關係不能帶給我精神上的滿足，不要也罷。", scores: { lust: 1, gluttony: 0, greed: 0, sloth: 3, wrath: 2, envy: 0, pride: 2 } }, { code: "B", text: "不是，一段關係不只有精神上的完滿，更要能夠在這個世界共同生活，即使不能共享價值實現之快樂，也可以共享別的快樂。", scores: { lust: 2, gluttony: 3, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "C", text: "我認為我找不到一個可以理解我價值以及可以共享那感情的人。", scores: { lust: 0, gluttony: 1, greed: 0, sloth: 0, wrath: 0, envy: 3, pride: 4 } }, { code: "D", text: "我覺得「精神世界的滿足」是一種謬論，精神世界是不可能滿足的，這個提問本身並不成立。", scores: { lust: 0, gluttony: 1, greed: 2, sloth: 5, wrath: 0, envy: 0, pride: 0 } } ] },
-      { group: 1, qNum: 4, question: "我認為我無法與比我笨的人交往。", options: [ { code: "A", text: "是，愚蠢不是罪，但是我無法忍受。", scores: { lust: 0, gluttony: 1, greed: 0, sloth: 0, wrath: 5, envy: 0, pride: 2 } }, { code: "B", text: "不是，除了知識以外還有更多個人特質是不能以「聰明」或「笨」來概括的。", scores: { lust: 1, gluttony: 2, greed: 5, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "C", text: "我就是笨的那個。", scores: { lust: 0, gluttony: 2, greed: 0, sloth: 4, wrath: 0, envy: 2, pride: 0 } }, { code: "D", text: "只要那人對我而言是真正的真愛，就算智力跟藍綠菌一樣也可以。", scores: { lust: 4, gluttony: 2, greed: 2, sloth: 0, wrath: 0, envy: 0, pride: 0 } } ] },
-      { group: 1, qNum: 5, question: "我認為我的交往對象若是兩人對話常常不在同一個頻率上就應該要分開。", options: [ { code: "A", text: "是，無法溝通何以有情。", scores: { lust: 0, gluttony: 1, greed: 0, sloth: 0, wrath: 2, envy: 3, pride: 2 } }, { code: "B", text: "不是，這是可以慢慢修正的，對方只是還在摸索與我對話的方式，要有耐心。", scores: { lust: 2, gluttony: 3, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "C", text: "我瞧不起聽不懂我說什麼的人，遑論交往。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 2, wrath: 6, envy: 0, pride: 0 } }, { code: "D", text: "兩人之間的溝通不能完全相互理解，每人對於思想的理解亦是有差異的，我認為「聽不懂」是一種武斷的判斷，不能這樣理解。", scores: { lust: 0, gluttony: 3, greed: 3, sloth: 2, wrath: 0, envy: 0, pride: 0 } } ] },
-      { group: 1, qNum: 6, question: "我認為自己心中的理想大於愛情。", options: [ { code: "A", text: "是的，我自己的理想才能陪我走得最遠。", scores: { lust: 0, gluttony: 0, greed: 5, sloth: 2, wrath: 0, envy: 0, pride: 1 } }, { code: "B", text: "不是，若是對方可以陪伴我一生並使我幸福，我便願意放棄那理想。", scores: { lust: 0, gluttony: 4, greed: 4, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "C", text: "理想與愛情當真不可兼得？那只是這個人無法理解我的理想，去找下一個可以理解我的人就好。", scores: { lust: 0, gluttony: 3, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 5 } }, { code: "D", text: "我的理想就是找到理想的愛情。", scores: { lust: 6, gluttony: 2, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 0 } } ] },
-      { group: 1, qNum: 7, question: "我覺得喜歡年紀比自己小很多的那群人是正確的。", options: [ { code: "A", text: "蛤？那當真不是變態？", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 4, envy: 4, pride: 0 } }, { code: "B", text: "每人皆可選擇自己的喜好，不要違法就好。", scores: { lust: 5, gluttony: 3, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "C", text: "我覺得年紀相差太大會有代溝。", scores: { lust: 0, gluttony: 1, greed: 0, sloth: 5, wrath: 0, envy: 2, pride: 0 } }, { code: "D", text: "嚴厲斥責！！！", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 3, envy: 4, pride: 1 } } ] }
-    ];
-
-    const QUESTION_BANK_2 = [
-      { group: 2, qNum: 1, question: "很熱很熱的時候，你的腦子裡第一個想法是？", options: [ { code: "A", text: "啊，冷氣啊冷氣，你到底在哪裡？", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 4, wrath: 2, envy: 2, pride: 0 } }, { code: "B", text: "心靜自然涼。", scores: { lust: 1, gluttony: 0, greed: 1, sloth: 1, wrath: 1, envy: 0, pride: 4 } }, { code: "C", text: "來人啊，速速買根冰棒來！", scores: { lust: 0, gluttony: 0, greed: 2, sloth: 2, wrath: 3, envy: 1, pride: 0 } }, { code: "D", text: "我好想他/她。", scores: { lust: 5, gluttony: 0, greed: 0, sloth: 0, wrath: 2, envy: 1, pride: 0 } } ] },
-      { group: 2, qNum: 2, question: "放學的時候，你的腦子裡第一個想法是？", options: [ { code: "A", text: "我要待晚一點這樣可以與我喜歡的人共享空無一人的教室。", scores: { lust: 3, gluttony: 1, greed: 2, sloth: 1, wrath: 0, envy: 0, pride: 1 } }, { code: "B", text: "校車要沒位子了，聽說有人也很喜歡我坐的那個位子。", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 0, wrath: 2, envy: 4, pride: 1 } }, { code: "C", text: "且讓我打把荒野壓壓驚，那個可怕的數學作業量著實嚇到我了。", scores: { lust: 0, gluttony: 2, greed: 1, sloth: 4, wrath: 0, envy: 0, pride: 1 } }, { code: "D", text: "我...我..尿急啦，憋那麼久，誰忍得住？", scores: { lust: 0, gluttony: 2, greed: 1, sloth: 3, wrath: 0, envy: 0, pride: 2 } } ] },
-      { group: 2, qNum: 3, question: "明天是難得的四天連假，你打算如何度過？", options: [ { code: "A", text: "去吃個 A5 和牛燒肉定食吃到飽，慰勞一下喝慣了西北風的腸胃。", scores: { lust: 0, gluttony: 4, greed: 2, sloth: 0, wrath: 1, envy: 0, pride: 1 } }, { code: "B", text: "去名牌球鞋的廠拍，挑好幾雙非常時髦的跑鞋。", scores: { lust: 1, gluttony: 1, greed: 3, sloth: 2, wrath: 0, envy: 1, pride: 0 } }, { code: "C", text: "睡覺睡到自然醒，明天再也不用早上5點起床。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 5, wrath: 1, envy: 0, pride: 2 } }, { code: "D", text: "一堆令人厭煩的事情要做，看到那堆比玉山高的文件了嗎？那就是我的假期。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 2, wrath: 4, envy: 1, pride: 1 } } ] },
-      { group: 2, qNum: 4, question: "如果你的心愛之物（包含心愛之人）遺失了，你作何感想？", options: [ { code: "A", text: "既然遺失了，那就讓他去吧，所謂緣分即是如此。", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 3, wrath: 1, envy: 0, pride: 3 } }, { code: "B", text: "不可能！我一定是掉在了某處。我一定要找回來！", scores: { lust: 4, gluttony: 0, greed: 0, sloth: 0, wrath: 2, envy: 2, pride: 0 } }, { code: "C", text: "反正也不是第一次遺失了，過幾天他就會出現的，這叫經驗法則。", scores: { lust: 1, gluttony: 1, greed: 0, sloth: 4, wrath: 0, envy: 0, pride: 2 } }, { code: "D", text: "沒有任何東西是我的心愛之物，你的問題從最一開始的假設就失敗了，可喜可賀。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 3, envy: 0, pride: 5 } } ] },
-      { group: 2, qNum: 5, question: "你覺得和許多人搞曖昧是可以的嗎？", options: [ { code: "A", text: "可以，只要沒有正式的關係就不算是出軌（？）", scores: { lust: 4, gluttony: 1, greed: 0, sloth: 0, wrath: 0, envy: 3, pride: 0 } }, { code: "B", text: "嚴厲斥責！！！", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 3, envy: 4, pride: 1 } }, { code: "C", text: "不行，那違反我的道德原則。", scores: { lust: 0, gluttony: 3, greed: 0, sloth: 0, wrath: 2, envy: 2, pride: 1 } }, { code: "D", text: "我覺得愛不應該是局限性的東西。", scores: { lust: 2, gluttony: 2, greed: 1, sloth: 0, wrath: 0, envy: 0, pride: 3 } } ] },
-      { group: 2, qNum: 6, question: "你是否在一段關係中認定對方即是你的全世界？", options: [ { code: "A", text: "是，否則關係中還需要什麼呢？", scores: { lust: 4, gluttony: 2, greed: 2, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "B", text: "不是，生命之中不是只有某一個人。", scores: { lust: 0, gluttony: 2, greed: 1, sloth: 0, wrath: 2, envy: 3, pride: 0 } }, { code: "C", text: "他/她不只是我的全世界，更是我的全宇宙，我的眼裡只有他/她", scores: { lust: 3, gluttony: 2, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "D", text: "我覺得是沒有到全世界那麼誇張啦，但至少在我的心中占有一定的定位。", scores: { lust: 1, gluttony: 4, greed: 2, sloth: 0, wrath: 0, envy: 1, pride: 0 } } ] },
-      { group: 2, qNum: 7, question: "你會控制你自己的購物慾嗎？", options: [ { code: "A", text: "會，我會在花掉一定的錢的時候收手。", scores: { lust: 0, gluttony: 0, greed: 1, sloth: 0, wrath: 1, envy: 3, pride: 3 } }, { code: "B", text: "並不會，我根本不知道我會花多少，只知道我停不下來。", scores: { lust: 0, gluttony: 3, greed: 5, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "C", text: "並不會，我根本就不在乎我花了多少錢，我只在乎我快不快樂。", scores: { lust: 3, gluttony: 2, greed: 3, sloth: 0, wrath: 0, envy: 0, pride: 0 } }, { code: "D", text: "我已經貧窮/富裕到不知道什麼是購物慾。", scores: { lust: 0, gluttony: 0, greed: 0, sloth: 1, wrath: 2, envy: 4, pride: 1 } } ] }
-    ];
-
-    let activeQuestions = [];
-    let currentIndex = 0;
-    let userAnswers = [];
-    let userPrediction = '';
-    const T_VALUE = 8;
-    let lastComputedOutcome = null;
-
     function formatTimestampDisplay(tsStr) {
       if (!tsStr) return '';
       const str = String(tsStr);
-      // 若為 ISO 格式 (如 2026-10-17T13:01:17.000Z)，自動轉為台灣本地時間 YYYY-MM-DD HH:MM:SS
       if (str.includes('T') && str.endsWith('Z')) {
         const d = new Date(str);
         if (!isNaN(d.getTime())) {
@@ -842,7 +1297,7 @@
 
     function startQuiz() {
       const selectEl = document.getElementById('userPredictionSelect');
-      if (!selectEl || !selectEl.value) { alert('請先選擇你預測的罪行！'); return; }
+      if (!selectEl || !selectEl.value) { return; }
       userPrediction = selectEl.value;
       activeQuestions = prepareQuizQuestions();
       currentIndex = 0;
@@ -873,13 +1328,21 @@
       const q = activeQuestions[currentIndex];
       const total = activeQuestions.length;
       const showDebug = document.getElementById('debugScoreToggle').checked;
+      const t = UI_TEXT[currentLang];
 
       document.getElementById('debugActiveHint').classList.toggle('hidden', !showDebug);
-      document.getElementById('questionGroupBadge').textContent = showDebug
-        ? `第 ${currentIndex + 1} / ${total} 題（原題號：${q.group}-${q.qNum}）`
-        : `第 ${currentIndex + 1} / ${total} 題`;
+      if (currentLang === 'ja') {
+        document.getElementById('questionGroupBadge').textContent = showDebug
+          ? `第 ${currentIndex + 1} / ${total} 問（元番号：${q.group}-${q.qNum}）`
+          : `第 ${currentIndex + 1} / ${total} 問`;
+      } else {
+        document.getElementById('questionGroupBadge').textContent = showDebug
+          ? `第 ${currentIndex + 1} / ${total} 題（原題號：${q.group}-${q.qNum}）`
+          : `第 ${currentIndex + 1} / ${total} 題`;
+      }
+
       document.getElementById('progressBar').style.width = `${((currentIndex + 1) / total) * 100}%`;
-      document.getElementById('questionText').textContent = q.question;
+      document.getElementById('questionText').textContent = (currentLang === 'ja' && q.jaQuestion) ? q.jaQuestion : q.question;
 
       const container = document.getElementById('optionsContainer');
       container.innerHTML = '';
@@ -894,14 +1357,16 @@
 
         let scoreTagsHtml = '';
         if (showDebug) {
-          const tags = SIN_KEYS.filter(k => opt.scores[k] > 0).map(k => `<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs">${SIN_INFO[k].name} +${opt.scores[k]}</span>`).join('');
-          scoreTagsHtml = `<div class="flex flex-wrap gap-1.5 pt-1 border-t border-gray-800 text-xs text-gray-400"><span class="text-gray-500">[原選項 ${opt.code}] 配分：</span>${tags}</div>`;
+          const tags = SIN_KEYS.filter(k => opt.scores[k] > 0).map(k => `<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs">${getSinDisplayName(k)} +${opt.scores[k]}</span>`).join('');
+          scoreTagsHtml = `<div class="flex flex-wrap gap-1.5 pt-1 border-t border-gray-800 text-xs text-gray-400"><span class="text-gray-500">[${opt.code}]：</span>${tags}</div>`;
         }
+
+        const optText = (currentLang === 'ja' && opt.jaText) ? opt.jaText : opt.text;
 
         btn.innerHTML = `
           <div class="flex items-start gap-3.5">
             <span class="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center font-bold text-sm ${isSelected ? 'bg-amber-500 text-gray-950' : 'bg-gray-800 text-amber-400'}">${displayLabels[idx]}</span>
-            <span class="text-gray-100 text-base sm:text-lg leading-relaxed">${opt.text}</span>
+            <span class="text-gray-100 text-base sm:text-lg leading-relaxed">${optText}</span>
           </div>
           ${scoreTagsHtml}
         `;
@@ -911,7 +1376,7 @@
       document.getElementById('prevBtn').disabled = currentIndex === 0;
       const nextBtn = document.getElementById('nextBtn');
       nextBtn.disabled = userAnswers[currentIndex] === null;
-      nextBtn.textContent = currentIndex === total - 1 ? '接受梅菲斯特的審判 ✨' : '下一頁 →';
+      nextBtn.textContent = currentIndex === total - 1 ? t.finishBtn : t.nextBtn;
     }
 
     function selectOption(optIdx) {
@@ -967,6 +1432,7 @@
       const outcome = computeQuizOutcome(activeQuestions, userAnswers, userPrediction);
       lastComputedOutcome = outcome;
       const { totals, maxScore, topSins, isPredictionCorrect, departureIndex } = outcome;
+      const t = UI_TEXT[currentLang];
 
       if (shouldRecordLog) { recordSubmissionLog(outcome); }
 
@@ -974,36 +1440,41 @@
       const verdictSubtitle = document.getElementById('verdictSubtitle');
       const verdictTitle = document.getElementById('verdictTitle');
       const verdictDesc = document.getElementById('verdictDescription');
-      const predictedName = SIN_INFO[userPrediction] ? SIN_INFO[userPrediction].name : '未選擇';
+      const predictedName = getSinDisplayName(userPrediction) || (currentLang === 'ja' ? '未選択' : '未選擇');
+      const actualTopNames = topSins.map(k => getSinDisplayName(k)).join('、');
 
       if (isPredictionCorrect) {
         verdictBanner.className = "mb-6 rounded-2xl p-6 text-center border bg-gradient-to-br from-emerald-950/80 via-gray-900 to-gray-900 border-emerald-500/60 shadow-emerald-950/50";
         verdictSubtitle.className = "text-xs uppercase tracking-[0.3em] font-bold mb-2 text-emerald-400";
-        verdictSubtitle.textContent = "梅菲斯特的賭約：挑戰成功";
+        verdictSubtitle.textContent = t.verdictWinSub;
         verdictTitle.className = "text-2xl sm:text-3xl font-bold mb-3 text-emerald-300";
-        verdictTitle.textContent = "✨ 預測命中！你成功逃離地獄！ ✨";
-        verdictDesc.innerHTML = `你先前預測自己的罪行為<strong>「${predictedName}」</strong>，測驗結果確實指向此項！梅菲斯特守信用地放開了你——你得以重返人間，繼續享用那未竟的中秋連假與 A5 和牛燒肉定食！`;
+        verdictTitle.textContent = t.verdictWinTitle;
+        verdictDesc.innerHTML = t.verdictWinDesc(predictedName);
       } else {
         verdictBanner.className = "mb-6 rounded-2xl p-6 text-center border bg-gradient-to-br from-red-950/90 via-gray-900 to-gray-900 border-red-500/80 shadow-red-950/60";
         verdictSubtitle.className = "text-xs uppercase tracking-[0.3em] font-bold mb-2 text-red-400";
-        verdictSubtitle.textContent = "梅菲斯特的賭約：挑戰失敗";
+        verdictSubtitle.textContent = t.verdictLoseSub;
         verdictTitle.className = "text-2xl sm:text-3xl font-bold mb-3 text-red-400";
-        verdictTitle.textContent = "🔥 預測失準！你被拉入地獄了！ 🔥";
-        verdictDesc.innerHTML = `你預測自己的罪行為「${predictedName}」，但實際測驗得出的最高罪行卻是<strong>「${topSins.map(k => SIN_INFO[k].name).join('、')}」</strong>。梅菲斯特冷笑一聲，將你拖入深淵，從此你將與浮士德一同受永久的苦罰……`;
+        verdictTitle.textContent = t.verdictLoseTitle;
+        verdictDesc.innerHTML = t.verdictLoseDesc(predictedName, actualTopNames);
       }
 
-      document.getElementById('topSinTitle').textContent = topSins.map(k => `【${SIN_INFO[k].name} ${SIN_INFO[k].en}】`).join(' ＆ ');
+      document.getElementById('topSinTitle').textContent = topSins.map(k => `【${getSinDisplayName(k)} ${SIN_INFO[k].en}】`).join(' ＆ ');
 
       const descContainer = document.getElementById('topSinDescriptions');
       descContainer.innerHTML = topSins.map(k => {
         const info = SIN_INFO[k];
+        const sName = getSinDisplayName(k);
+        const sDesc = currentLang === 'ja' ? info.jaTendencyDesc : info.tendencyDesc;
+        const sText = currentLang === 'ja' ? info.jaScriptureText : info.scriptureText;
+        const sRef = currentLang === 'ja' ? info.jaScriptureRef : info.scriptureRef;
         return `
           <div class="bg-gray-950/60 border border-red-900/40 rounded-xl p-4">
-            <div class="font-bold text-red-300 mb-1 text-lg">▸ 關於「${info.name}」傾向</div>
-            <p class="text-gray-300 text-base leading-relaxed mb-3">${info.tendencyDesc}</p>
+            <div class="font-bold text-red-300 mb-1 text-lg">${t.aboutSinPrefix}${sName}${t.aboutSinSuffix}</div>
+            <p class="text-gray-300 text-base leading-relaxed mb-3">${sDesc}</p>
             <div class="scripture-box mt-3 p-4 rounded-xl text-sm sm:text-base italic leading-relaxed">
-              <div>${info.scriptureText}</div>
-              <div class="mt-2 text-right font-bold">${info.scriptureRef}</div>
+              <div>${sText}</div>
+              <div class="mt-2 text-right font-bold">${sRef}</div>
             </div>
           </div>
         `;
@@ -1014,19 +1485,26 @@
 
       renderLadderProfile(totals, topSins, maxScore);
       renderAnswerReview();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      renderShareCardAndText();
+
+      if (shouldRecordLog) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
 
     function renderLadderProfile(totals, topSins, maxScore) {
       const container = document.getElementById('ladderContainer');
       container.innerHTML = '';
       const scaleMax = Math.max(20, maxScore + 2);
+      const t = UI_TEXT[currentLang];
 
-      LADDER_STEPS.forEach(step => {
-        const sinKey = step.sinKey;
+      SIN_KEYS.forEach((sinKey, idx) => {
+        const info = SIN_INFO[sinKey];
         const score = totals[sinKey];
         const isTop = topSins.includes(sinKey);
         const widthPct = Math.round((score / scaleMax) * 100);
+        const sName = getSinDisplayName(sinKey);
+        const sCat = currentLang === 'ja' ? info.catJa : info.catZh;
 
         const row = document.createElement('div');
         row.className = `p-3 rounded-xl border transition ${isTop ? 'bg-red-950/50 border-red-500/70 shadow-md shadow-red-950/30' : 'bg-gray-900/80 border-gray-800'}`;
@@ -1034,10 +1512,10 @@
         row.innerHTML = `
           <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5 text-xs sm:text-sm">
             <div class="flex items-center gap-2.5">
-              <span class="text-xs w-6 text-center px-1 py-0.5 rounded bg-gray-800 text-gray-300">#${step.rank}</span>
-              <span class="font-bold text-sm sm:text-base ${isTop ? 'text-red-300' : 'text-gray-200'}">${step.name}</span>
-              <span class="text-xs text-gray-500">（${step.category}）</span>
-              ${isTop ? `<span class="px-2 py-0.5 rounded bg-red-500 text-white font-bold text-xs">★ 最高突出罪行</span>` : ''}
+              <span class="text-xs w-6 text-center px-1 py-0.5 rounded bg-gray-800 text-gray-300">#${idx + 1}</span>
+              <span class="font-bold text-sm sm:text-base ${isTop ? 'text-red-300' : 'text-gray-200'}">${sName}</span>
+              <span class="text-xs text-gray-500">（${sCat}）</span>
+              ${isTop ? `<span class="px-2 py-0.5 rounded bg-red-500 text-white font-bold text-xs">${t.ladderTopBadge}</span>` : ''}
             </div>
           </div>
           <div class="w-full h-2.5 bg-gray-800 rounded-full overflow-hidden">
@@ -1052,167 +1530,44 @@
       const container = document.getElementById('answerReviewList');
       container.innerHTML = activeQuestions.map((q, idx) => {
         const chosen = q.options[userAnswers[idx]];
-        const scoreText = SIN_KEYS.filter(k => chosen.scores[k] > 0).map(k => `${SIN_INFO[k].name} +${chosen.scores[k]}`).join('、');
+        const scoreText = SIN_KEYS.filter(k => chosen.scores[k] > 0).map(k => `${getSinDisplayName(k)} +${chosen.scores[k]}`).join('、');
+        const qText = (currentLang === 'ja' && q.jaQuestion) ? q.jaQuestion : q.question;
+        const oText = (currentLang === 'ja' && chosen.jaText) ? chosen.jaText : chosen.text;
         return `
           <div class="p-3 rounded-lg bg-gray-950/60 border border-gray-800/80">
-            <div class="font-bold text-amber-400 mb-1">Q${idx + 1}（原題號 ${q.group}-${q.qNum}）：${q.question}</div>
-            <div class="text-gray-300 mb-1">選擇（原選項 ${chosen.code}）：${chosen.text}</div>
-            <div class="text-gray-500">計分明細：${scoreText}（合計 ${T_VALUE} 分）</div>
+            <div class="font-bold text-amber-400 mb-1">Q${idx + 1}（${q.group}-${q.qNum}）：${qText}</div>
+            <div class="text-gray-300 mb-1">[${chosen.code}]：${oText}</div>
+            <div class="text-gray-500">${scoreText}（T = ${T_VALUE}）</div>
           </div>
         `;
       }).join('');
     }
 
     // ==========================================
-    // 🖼️ 離屏自動繪製專屬審判圖卡 (PNG)
+    // 🖼️ 零延遲直出分享圖卡與戰報引擎 (支援中日雙語)
     // ==========================================
-    function generateAndDownloadCard() {
-      if (!lastComputedOutcome) { alert('尚無測驗結果可供產生圖卡！'); return; }
-      const toast = document.getElementById('shareToast');
-      toast.textContent = "⏳ 正在生成高清審判圖卡...";
-      toast.classList.remove('hidden');
-
-      const canvas = document.createElement('canvas');
-      canvas.width = 800;
-      canvas.height = 1200;
-      const ctx = canvas.getContext('2d');
-
-      const bgGrad = ctx.createRadialGradient(400, 200, 50, 400, 600, 700);
-      bgGrad.addColorStop(0, '#2e1065');
-      bgGrad.addColorStop(0.6, '#030712');
-      bgGrad.addColorStop(1, '#000000');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, 800, 1200);
-
-      ctx.strokeStyle = '#d97706';
-      ctx.lineWidth = 6;
-      ctx.strokeRect(30, 30, 740, 1140);
-
-      ctx.fillStyle = '#fbbf24';
-      ctx.font = 'bold 20px "LXGW WenKai TC", sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('LAMBS BENEATH THE KNEES OF GOD', 400, 85);
-
-      ctx.fillStyle = '#9ca3af';
-      ctx.font = '16px "LXGW WenKai TC", sans-serif';
-      ctx.fillText('《他們都是神膝下的羔羊》靈魂審判契約', 400, 120);
-
-      const isWin = lastComputedOutcome.isPredictionCorrect;
-      ctx.fillStyle = isWin ? 'rgba(6, 78, 59, 0.9)' : 'rgba(127, 29, 29, 0.9)';
-      ctx.strokeStyle = isWin ? '#34d399' : '#f87171';
-      ctx.lineWidth = 2;
+    function drawRoundRect(ctx, x, y, w, h, r) {
       ctx.beginPath();
-      ctx.roundRect(150, 155, 500, 45, 22);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = isWin ? '#6ee7b7' : '#fca5a5';
-      ctx.font = 'bold 18px "LXGW WenKai TC", sans-serif';
-      ctx.fillText(isWin ? '✨ 梅菲斯特的賭約：預測命中・逃離地獄' : '🔥 梅菲斯特的賭約：預測失準・墜入地獄', 400, 184);
-
-      ctx.fillStyle = '#9ca3af';
-      ctx.font = '16px "LXGW WenKai TC", sans-serif';
-      ctx.fillText('你的主要突出罪行傾向', 400, 250);
-
-      const topSinNames = lastComputedOutcome.topSins.map(k => `【${SIN_INFO[k].name} ${SIN_INFO[k].en}】`).join(' ＆ ');
-      ctx.fillStyle = '#f87171';
-      ctx.font = 'bold 36px "LXGW WenKai TC", sans-serif';
-      ctx.fillText(topSinNames, 400, 305);
-
-      ctx.fillStyle = 'rgba(3, 7, 18, 0.8)';
-      ctx.strokeStyle = '#374151';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.roundRect(80, 350, 640, 95, 16);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = '#9ca3af';
-      ctx.font = '16px "LXGW WenKai TC", sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText('整體背離指數 (Departure Index)', 110, 390);
-
-      ctx.fillStyle = '#fbbf24';
-      ctx.font = 'bold 28px "LXGW WenKai TC", sans-serif';
-      ctx.textAlign = 'right';
-      ctx.fillText(`${lastComputedOutcome.departureIndex.toFixed(1)} / 100`, 690, 395);
-
-      ctx.fillStyle = '#1f2937';
-      ctx.beginPath();
-      ctx.roundRect(110, 410, 580, 12, 6);
-      ctx.fill();
-
-      const barWidth = Math.max(20, (lastComputedOutcome.departureIndex / 100) * 580);
-      const barGrad = ctx.createLinearGradient(110, 0, 690, 0);
-      barGrad.addColorStop(0, '#34d399');
-      barGrad.addColorStop(0.5, '#fbbf24');
-      barGrad.addColorStop(1, '#dc2626');
-      ctx.fillStyle = barGrad;
-      ctx.beginPath();
-      ctx.roundRect(110, 410, barWidth, 12, 6);
-      ctx.fill();
-
-      ctx.fillStyle = 'rgba(3, 7, 18, 0.9)';
-      ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.roundRect(80, 475, 640, 175, 16);
-      ctx.fill();
-      ctx.stroke();
-
-      const mainSinKey = lastComputedOutcome.topSins[0];
-      const scriptureObj = SIN_INFO[mainSinKey];
-      
-      ctx.fillStyle = '#fde68a';
-      ctx.font = '16px "LXGW WenKai TC", sans-serif';
-      ctx.textAlign = 'left';
-      wrapText(ctx, scriptureObj.scriptureText, 110, 520, 580, 26);
-      ctx.font = 'bold 16px "LXGW WenKai TC", sans-serif';
-      ctx.textAlign = 'right';
-      ctx.fillText(scriptureObj.scriptureRef, 690, 620);
-
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(80, 690);
-      ctx.lineTo(720, 690);
-      ctx.stroke();
-
-      ctx.fillStyle = '#fbbf24';
-      ctx.font = 'bold 18px "LXGW WenKai TC", sans-serif';
-      ctx.textAlign = 'left';
-      ctx.fillText('他們都是神膝下的羔羊', 110, 735);
-
-      ctx.fillStyle = '#9ca3af';
-      ctx.font = '14px "LXGW WenKai TC", sans-serif';
-      ctx.fillText('掃描或前往網頁挑戰梅菲斯特的賭約', 110, 760);
-
-      const qrImg = new Image();
-      qrImg.crossOrigin = 'anonymous';
-      qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&bgcolor=030712&color=fbbf24&data=${encodeURIComponent(window.location.href)}`;
-      qrImg.onload = function() {
-        ctx.drawImage(qrImg, 580, 705, 90, 90);
-
-        const link = document.createElement('a');
-        link.download = '他們都是神膝下的羔羊_審判圖卡.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-
-        toast.textContent = "✓ 審判圖卡已成功下載！可直接發至 IG 限時動態！";
-        setTimeout(() => toast.classList.add('hidden'), 4000);
-      };
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
     }
 
     function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-      let words = text.split('');
+      const chars = text.split('');
       let line = '';
-      for(let n = 0; n < words.length; n++) {
-        let testLine = line + words[n];
-        let metrics = ctx.measureText(testLine);
-        let testWidth = metrics.width;
-        if (testWidth > maxWidth && n > 0) {
+      for (let n = 0; n < chars.length; n++) {
+        const testLine = line + chars[n];
+        if (ctx.measureText(testLine).width > maxWidth && n > 0) {
           ctx.fillText(line, x, y);
-          line = words[n];
+          line = chars[n];
           y += lineHeight;
         } else {
           line = testLine;
@@ -1221,39 +1576,207 @@
       ctx.fillText(line, x, y);
     }
 
-    function getShareText() {
-      if (!lastComputedOutcome) return '';
+    function renderShareCardAndText() {
+      if (!lastComputedOutcome) return;
       const outcome = lastComputedOutcome;
-      const predictedName = SIN_INFO[userPrediction] ? SIN_INFO[userPrediction].name : '未選擇';
-      const outcomeText = outcome.isPredictionCorrect
-        ? '✨ 預測命中！我成功從梅菲斯特手中逃離地獄，回去放中秋連假吃 A5 和牛了！'
-        : '🔥 預測失準！我被梅菲斯特拖入地獄，跟浮士德一起受永久的苦罰了……';
-
+      const t = UI_TEXT[currentLang];
+      const predName = getSinDisplayName(userPrediction) || (currentLang === 'ja' ? '未選択' : '未選擇');
       const mainKey = outcome.topSins[0];
       const info = SIN_INFO[mainKey];
+      const isWin = outcome.isPredictionCorrect;
+      const depIndex = outcome.departureIndex;
 
-      return `🩸【他們都是神膝下的羔羊】七大罪心理測驗\n` +
-             `🔮 我預言的罪行：${predictedName}\n` +
-             `⚖️ 實際審判結果：【${info.name} ${info.en}】（背離指數：${outcome.departureIndex.toFixed(1)}）\n` +
-             `${outcomeText}\n` +
-             `📜 ${info.scriptureText} ${info.scriptureRef}\n` +
-             `👉 立即測驗你能逃離地獄嗎：${window.location.href}`;
+      const canvas = document.getElementById('shareCanvas');
+      const ctx = canvas.getContext('2d');
+
+      const bgGrad = ctx.createRadialGradient(400, 180, 40, 400, 560, 750);
+      bgGrad.addColorStop(0, '#3b0764');
+      bgGrad.addColorStop(0.55, '#111827');
+      bgGrad.addColorStop(1, '#030712');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, 800, 1120);
+
+      ctx.strokeStyle = '#d97706';
+      ctx.lineWidth = 5;
+      ctx.strokeRect(28, 28, 744, 1064);
+      ctx.strokeStyle = 'rgba(251, 191, 36, 0.3)';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(40, 40, 720, 1040);
+
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('LAMBS BENEATH THE KNEES OF GOD', 400, 95);
+
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '22px "LXGW WenKai TC", serif';
+      ctx.fillText(t.cardContractTitle, 400, 135);
+
+      ctx.fillStyle = isWin ? 'rgba(6, 78, 59, 0.9)' : 'rgba(127, 29, 29, 0.9)';
+      ctx.strokeStyle = isWin ? '#34d399' : '#f87171';
+      ctx.lineWidth = 2;
+      drawRoundRect(ctx, 110, 165, 580, 52, 26);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = isWin ? '#6ee7b7' : '#fca5a5';
+      ctx.font = 'bold 21px "LXGW WenKai TC", serif';
+      ctx.fillText(isWin ? t.cardWinPill(predName) : t.cardLosePill(predName), 400, 199);
+
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '20px "LXGW WenKai TC", serif';
+      ctx.fillText(t.cardSinHeader, 400, 275);
+
+      const topSinTitleStr = outcome.topSins.map(k => `【${getSinDisplayName(k)} ${SIN_INFO[k].en}】`).join(' ＆ ');
+      ctx.fillStyle = '#f87171';
+      ctx.font = 'bold 46px "LXGW WenKai TC", serif';
+      ctx.fillText(topSinTitleStr, 400, 345);
+
+      ctx.fillStyle = 'rgba(3, 7, 18, 0.85)';
+      ctx.strokeStyle = '#374151';
+      ctx.lineWidth = 2;
+      drawRoundRect(ctx, 80, 395, 640, 115, 18);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#d1d5db';
+      ctx.font = '22px "LXGW WenKai TC", serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(t.cardDepLabel, 110, 440);
+
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 32px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(`${depIndex.toFixed(1)} / 100`, 690, 442);
+
+      ctx.fillStyle = '#1f2937';
+      drawRoundRect(ctx, 110, 465, 580, 16, 8);
+      ctx.fill();
+
+      const barW = Math.max(24, (depIndex / 100) * 580);
+      const barGrad = ctx.createLinearGradient(110, 0, 690, 0);
+      barGrad.addColorStop(0, '#34d399');
+      barGrad.addColorStop(0.5, '#fbbf24');
+      barGrad.addColorStop(1, '#dc2626');
+      ctx.fillStyle = barGrad;
+      drawRoundRect(ctx, 110, 465, barW, 16, 8);
+      ctx.fill();
+
+      ctx.fillStyle = 'rgba(3, 7, 18, 0.92)';
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.5)';
+      ctx.lineWidth = 2;
+      drawRoundRect(ctx, 80, 540, 640, 220, 18);
+      ctx.fill();
+      ctx.stroke();
+
+      const sText = currentLang === 'ja' ? info.jaScriptureText : info.scriptureText;
+      const sRef = currentLang === 'ja' ? info.jaScriptureRef : info.scriptureRef;
+
+      ctx.fillStyle = '#fde68a';
+      ctx.font = '20px "LXGW WenKai TC", serif';
+      ctx.textAlign = 'left';
+      wrapText(ctx, sText, 110, 585, 580, 32);
+
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 20px "LXGW WenKai TC", serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(sRef, 690, 735);
+
+      ctx.fillStyle = 'rgba(30, 41, 59, 0.55)';
+      drawRoundRect(ctx, 80, 790, 640, 120, 14);
+      ctx.fill();
+      ctx.fillStyle = '#fca5a5';
+      ctx.font = '18px "LXGW WenKai TC", serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(t.cardEpilogue1, 400, 835);
+      ctx.fillStyle = '#cbd5e1';
+      ctx.fillText(t.cardEpilogue2, 400, 875);
+
+      ctx.strokeStyle = 'rgba(251, 191, 36, 0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(400, 995, 36, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.fillText('MEPHISTO', 400, 1000);
+
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '18px "LXGW WenKai TC", serif';
+      ctx.fillText(t.cardFooter, 400, 1060);
+
+      document.getElementById('renderedCardImg').src = canvas.toDataURL('image/png');
+
+      let shareText = '';
+      if (currentLang === 'ja') {
+        const outLine = isWin
+          ? '✨ 予言的中！メフィストの賭けに勝ち、地獄から生還してA5和牛焼肉食べ放題へ！'
+          : '🔥 予言失敗！メフィストに地獄へ引きずり込まれ、死神のProMax 2TB大鎌に貫かれかけた……';
+        shareText =
+          `🩸【彼らは皆、神の膝元の仔羊】七つの大罪心理テスト\n` +
+          `🔮 私が予言した罪：${predName}\n` +
+          `⚖️ 実際の審判結果：${topSinTitleStr}（背離指数：${depIndex.toFixed(1)}）\n` +
+          `${outLine}\n` +
+          `📜 ${sText}${sRef}\n` +
+          `👉 あなたも地獄から脱出できるか挑戦する：${window.location.href}`;
+      } else {
+        const outLine = isWin
+          ? '✨ 預測命中！我成功從梅菲斯特手中逃離地獄，回去放中秋連假吃 A5 和牛了！'
+          : '🔥 預測失準！我被梅菲斯特拖入地獄，差點死在死神 のProMax 2TB 大鐮刀下……';
+        shareText =
+          `🩸【他們都是神膝下的羔羊】七大罪心理測驗\n` +
+          `🔮 我預言的罪行：${predName}\n` +
+          `⚖️ 實際審判結果：${topSinTitleStr}（背離指數：${depIndex.toFixed(1)}）\n` +
+          `${outLine}\n` +
+          `📜 ${sText}${sRef}\n` +
+          `👉 立即測驗你能逃離地獄嗎：${window.location.href}`;
+      }
+      document.getElementById('shareTextArea').value = shareText;
+    }
+
+    function downloadCardNow() {
+      const canvas = document.getElementById('shareCanvas');
+      const link = document.createElement('a');
+      link.download = currentLang === 'ja' ? '彼らは皆神の膝元の仔羊_審判カード.png' : '他們都是神膝下的羔羊_審判圖卡.png';
+      link.href = canvas.toDataURL('image/png');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      const toast = document.getElementById('shareToast');
+      toast.textContent = currentLang === 'ja'
+        ? '✓ 画像のダウンロードを開始しました！（保存できない場合は下の画像を長押ししてください）'
+        : '✓ 已觸發圖卡下載！（若瀏覽器阻擋，可直接長按或右鍵儲存下方圖片）';
+      toast.classList.remove('hidden');
     }
 
     function copyShareText() {
-      const text = getShareText();
-      navigator.clipboard.writeText(text).then(() => {
-        const t = document.getElementById('shareToast');
-        t.textContent = "✓ 已複製中二戰報文字到剪貼簿！可直接貼到 LINE、IG 或 Threads。";
-        t.classList.remove('hidden');
-        setTimeout(() => t.classList.add('hidden'), 4000);
-      }).catch(() => {
-        alert("複製失敗，請手動複製網址分享！");
-      });
+      const textarea = document.getElementById('shareTextArea');
+      textarea.select();
+      textarea.setSelectionRange(0, 99999);
+      const toast = document.getElementById('shareToast');
+      const msg = currentLang === 'ja'
+        ? '✓ テキストをクリップボードにコピーしました！LINEやThreadsに貼り付けられます。'
+        : '✓ 已複製中二戰報文字到剪貼簿！可直接貼到 LINE、IG 或 Threads。';
+
+      try {
+        navigator.clipboard.writeText(textarea.value).then(() => {
+          toast.textContent = msg;
+          toast.classList.remove('hidden');
+        }).catch(() => {
+          document.execCommand('copy');
+          toast.textContent = msg;
+          toast.classList.remove('hidden');
+        });
+      } catch (e) {
+        document.execCommand('copy');
+        toast.textContent = msg;
+        toast.classList.remove('hidden');
+      }
     }
 
     // ==========================================
-    // 6. 後台雲端與資料管理系統
+    // 6. 後台雲端與資料管理系統 (自動統一為中文格式儲存)
     // ==========================================
     function getStoredLogs() {
       try { const raw = localStorage.getItem(STORAGE_KEY_LOGS); return raw ? JSON.parse(raw) : []; } catch (e) { return []; }
@@ -1297,11 +1820,11 @@
         return `${q.group}-${q.qNum}:${chosen.code}`;
       }).join('; ');
 
-      const predictedName = SIN_INFO[userPrediction] ? SIN_INFO[userPrediction].name : '未選擇';
+      const predictedNameZh = SIN_INFO[userPrediction] ? SIN_INFO[userPrediction].name : '未選擇';
       const entry = {
         timestamp: timeStr,
         predictedKey: userPrediction,
-        predicted: predictedName,
+        predicted: predictedNameZh,
         topSinKeys: outcome.topSins,
         topSins: outcome.topSins.map(k => SIN_INFO[k].name).join('、'),
         wonDeal: outcome.isPredictionCorrect ? '成功逃離' : '墜入地獄',
@@ -1538,9 +2061,6 @@
       }
     }
 
-    // ==========================================
-    // 7. 題庫驗證器 (完整顯示組別 1 與組別 2 摘要與小計)
-    // ==========================================
     function renderInspectorTable() {
       const tbody = document.getElementById('inspectorTableBody');
       if (!tbody) return;
@@ -1551,15 +2071,12 @@
         { name: '組別 2（生活情境版）', groupNum: 2, data: QUESTION_BANK_2 }
       ];
 
-      let allValidT = true;
-      let allBanksBalanced = true;
       const bankCheckHtml = [];
 
       banks.forEach(bankObj => {
         const colTotals = { lust: 0, gluttony: 0, greed: 0, sloth: 0, wrath: 0, envy: 0, pride: 0 };
         let bankValidT = true;
 
-        // 加入組別分隔標題列
         const headerTr = document.createElement('tr');
         headerTr.className = 'bg-indigo-950/60 text-indigo-300 font-bold border-y border-indigo-500/40';
         headerTr.innerHTML = `<td class="p-2" colspan="10">📂 ${bankObj.name}（共 7 題，28 個選項）</td>`;
@@ -1573,10 +2090,7 @@
               rowSum += val;
               colTotals[k] += val;
             });
-            if (rowSum !== T_VALUE) {
-              bankValidT = false;
-              allValidT = false;
-            }
+            if (rowSum !== T_VALUE) bankValidT = false;
 
             const tr = document.createElement('tr');
             tr.className = 'hover:bg-gray-900/50';
@@ -1597,7 +2111,6 @@
         });
 
         const isBalanced32 = SIN_KEYS.every(k => colTotals[k] === 32);
-        if (!isBalanced32) allBanksBalanced = false;
         const totalBankScore = SIN_KEYS.reduce((acc, k) => acc + colTotals[k], 0);
 
         const summaryTr = document.createElement('tr');
@@ -1623,11 +2136,7 @@
       });
 
       const summaryBox = document.getElementById('inspectorSummary');
-      summaryBox.innerHTML = `
-        <div class="flex flex-wrap gap-2.5 text-xs sm:text-sm">
-          ${bankCheckHtml.join('')}
-        </div>
-      `;
+      summaryBox.innerHTML = `<div class="flex flex-wrap gap-2.5 text-xs sm:text-sm">${bankCheckHtml.join('')}</div>`;
     }
   </script>
 </body>
