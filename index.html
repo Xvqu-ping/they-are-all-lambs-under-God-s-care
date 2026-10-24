@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>他們都是神膝下的羔羊 | 彼らは皆、神の膝元の仔羊</title>
+  <title>他們都是神膝下的羔羊 | 彼らは皆、神の膝元の仔羊 | 𗙫𗺓𗠁</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- 引入霞鶩文楷字體 (同時支援繁體中文與日文漢字/假名) -->
-  <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@300;400;700&display=swap" rel="stylesheet">
+  <!-- 引入霞鶩文楷字體 + Google 思源西夏文字體 (Noto Serif Tangut) -->
+  <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@300;400;700&family=Noto+Serif+Tangut&display=swap" rel="stylesheet">
   <style>
     body, .serif, button, select, input, table, textarea {
-      font-family: 'LXGW WenKai TC', cursive, serif !important;
+      font-family: 'LXGW WenKai TC', 'Noto Serif Tangut', cursive, serif !important;
     }
     body {
       background-color: #0b0c10;
@@ -156,14 +156,20 @@
     <div class="flex items-center gap-2">
       <span class="inline-block w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
       <span id="navBrandTitle" class="font-bold tracking-wider text-red-400 text-lg">他們都是神膝下的羔羊</span>
+      <span id="tangutBetaBadge" class="hidden px-2 py-0.5 rounded bg-purple-950/90 text-purple-300 border border-purple-500/40 text-xs font-bold">
+        𗼇𗟲 西夏文 Beta
+      </span>
       <span id="adminUnlockedBadge" onclick="openAdminPanel()" class="hidden cursor-pointer text-xs px-2.5 py-0.5 rounded bg-indigo-900/80 text-indigo-300 border border-indigo-500/50 hover:bg-indigo-800 transition">
         👑 管理員已解鎖 (點此開後台)
       </span>
     </div>
     <div class="flex flex-wrap items-center gap-2">
-      <button type="button" id="langToggleBtn" onclick="toggleLanguage()" class="px-3.5 py-1.5 rounded-lg bg-gray-900/90 border border-gray-700 hover:border-amber-500/50 text-amber-300 font-bold transition cursor-pointer">
-        🌐 日本語
-      </button>
+      <!-- 語言選擇下拉選單 (支援繁中 / 日文 / 西夏文 Beta) -->
+      <select id="langSelect" onchange="changeLanguage(this.value)" class="px-3 py-1.5 rounded-lg bg-gray-900/90 border border-gray-700 hover:border-amber-500/50 text-amber-300 font-bold transition cursor-pointer focus:outline-none">
+        <option value="zh">🌐 繁體中文</option>
+        <option value="ja">🌐 日本語</option>
+        <option value="txg">📜 𗼇𗟲 (西夏文 Beta)</option>
+      </select>
       <button type="button" id="themeToggleBtn" onclick="toggleTheme()" class="px-3.5 py-1.5 rounded-lg bg-gray-900/90 border border-gray-700 hover:border-amber-500/50 text-amber-400 font-bold transition cursor-pointer">
         ☀️ 切換白底
       </button>
@@ -266,7 +272,7 @@
       </div>
     </section>
 
-    <!-- 3. RESULT SCREEN -->
+    <!-- 3. RESULT SCREEN (已移除分享區塊) -->
     <section id="resultScreen" class="hidden space-y-6">
       <div class="card-glass rounded-2xl p-6 sm:p-10 border-t-4 border-t-red-500">
         
@@ -327,35 +333,6 @@
           </div>
 
           <div id="ladderContainer" class="space-y-2"></div>
-        </div>
-
-        <!-- 🔗 零延遲直出分享圖卡與戰報區塊 -->
-        <div class="bg-gray-950/80 border border-amber-500/40 rounded-2xl p-5 mb-6 space-y-4">
-          <div class="text-center space-y-2">
-            <div id="shareSectionTitle" class="text-base font-bold text-amber-400">🔥 分享你的地獄審判結果：</div>
-            <div class="flex flex-wrap justify-center gap-3 pt-1">
-              <button type="button" id="downloadCardBtn" onclick="downloadCardNow()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 text-gray-950 font-bold text-xs sm:text-sm cursor-pointer shadow hover:opacity-95 transition">
-                📥 下載審判圖卡 (PNG)
-              </button>
-              <button type="button" id="copyTextBtn" onclick="copyShareText()" class="px-5 py-2.5 rounded-xl bg-gray-800 text-amber-300 border border-amber-500/40 font-bold text-xs sm:text-sm cursor-pointer hover:bg-gray-700 transition">
-                📋 複製戰報文字 (LINE/Threads)
-              </button>
-            </div>
-            <div id="shareToast" class="hidden text-xs text-emerald-400 font-bold pt-1"></div>
-          </div>
-
-          <!-- 即時生成的 PNG 圖卡預覽（手機可直接長按儲存） -->
-          <div class="flex flex-col items-center space-y-2 pt-2 border-t border-gray-800">
-            <div id="shareCardPreviewHint" class="text-xs text-gray-400">🖼️ 專屬審判契約圖卡預覽（手機可直接長按圖片儲存，電腦可右鍵另存）：</div>
-            <canvas id="shareCanvas" width="800" height="1120" class="hidden"></canvas>
-            <img id="renderedCardImg" alt="審判結果圖卡預覽" class="w-full max-w-xs sm:max-w-sm rounded-2xl border-2 border-amber-500/60 shadow-2xl" />
-          </div>
-
-          <!-- 戰報文字預覽框 -->
-          <div class="space-y-1.5 pt-2">
-            <div id="shareTextPreviewHint" class="text-xs text-gray-400">📝 戰報文字預覽（也可直接選取複製）：</div>
-            <textarea id="shareTextArea" rows="5" readonly class="w-full bg-gray-900 border border-gray-700 rounded-xl p-3 text-xs sm:text-sm text-gray-200 focus:outline-none"></textarea>
-          </div>
         </div>
 
         <!-- Admin Only: Answer Review Accordion -->
@@ -602,20 +579,59 @@
     const constHARDCODED_CLOUD_URL = 'https://script.google.com/macros/s/AKfycbz0E75wSIWq2ywS90d2t3lWBX_I1QQhAVd7SiPHafKKD7LVmnbLIc0GNQqpmm_AKL1x6A/exec';
     const ADMIN_PASSWORD_SECRET = 'INMUKING114514';
     let isAdminUnlocked = false;
-    let currentLang = 'zh'; // 'zh' 或 'ja'
+    let currentLang = 'zh'; // 'zh', 'ja', 'txg' (西夏文 Beta)
     const STORAGE_KEY_LOGS = 'lambs_quiz_logs_v2';
     const STORAGE_KEY_DELETED_TS = 'lambs_quiz_deleted_ts_v1';
     let currentDisplayedLogs = [];
     let hasScrolledToBottom = false;
 
     // ==========================================
-    // 🌐 多國語言字典 (繁體中文 & 日本語)
+    // 📜 西夏文 (Tangut Beta) 詞彙與決定性轉譯引擎
+    // ==========================================
+    const TANGUT_LEXICON = [
+      ['他們都是神膝下的羔羊', '𗍫𗥃𗙫𗰗𗺓𗠁𗢳'],
+      ['七大罪', '𗏁𗣼𗡪'],
+      ['梅菲斯特', '𗙏𗰗𗧓𗫂'],
+      ['浮士德', '𗦇𗤋𗐱'],
+      ['死神', 'MP𗙫'],
+      ['地獄', '𗍯𗰗'],
+      ['色慾', '𗤋𗰗'],
+      ['暴食', '𗡪𗺓'],
+      ['貪婪', '𗣼𗦇'],
+      ['怠惰', '𗫂𗟲'],
+      ['憤怒', '𗠁𗙏'],
+      ['嫉妒', '𗢳𗍫'],
+      ['傲慢', '𗼇𗙫']
+    ];
+
+    function toTangutBeta(str) {
+      if (!str) return '';
+      let res = String(str);
+      TANGUT_LEXICON.forEach(([zh, txg]) => {
+        res = res.split(zh).join(txg);
+      });
+      let out = '';
+      for (const ch of res) {
+        const code = ch.codePointAt(0);
+        if (code >= 0x17000 && code <= 0x187FF) {
+          out += ch;
+        } else if (code >= 0x4E00 && code <= 0x9FFF) {
+          const tCode = 0x17000 + ((code * 2654435761) >>> 0) % 1800;
+          out += String.fromCodePoint(tCode);
+        } else {
+          out += ch;
+        }
+      }
+      return out;
+    }
+
+    // ==========================================
+    // 🌐 多國語言字典 (繁體中文 & 日本語 & 西夏文 Beta)
     // ==========================================
     const UI_TEXT = {
       zh: {
         brandTitle: '他們都是神膝下的羔羊',
         subtitle: '七大罪心理傾向探索',
-        langBtn: '🌐 日本語',
         themeLight: '☀️ 切換白底',
         themeDark: '🌙 切換黑底',
         storyHtml: `
@@ -660,11 +676,6 @@
         ladderSubtitle: '依七罪由輕至重（色慾 ➔ 傲慢）的傾向分布',
         ladderLegend: '最高突出罪行',
         ladderTopBadge: '★ 最高突出罪行',
-        shareTitle: '🔥 分享你的地獄審判結果：',
-        downloadCardBtn: '📥 下載審判圖卡 (PNG)',
-        copyTextBtn: '📋 複製戰報文字 (LINE/Threads)',
-        shareCardHint: '🖼️ 專屬審判契約圖卡預覽（手機可直接長按圖片儲存，電腦可右鍵另存）：',
-        shareTextHint: '📝 戰報文字預覽（也可直接選取複製）：',
         epilogueHtml: `
           <p class="text-red-400 font-bold">就在死神 のProMax 2TB 大鐮刀要刺穿你的胸口時……</p>
           <p>你將墜入萬劫不復的地獄時……</p>
@@ -679,20 +690,11 @@
         verdictWinDesc: (pred) => `你先前預測自己的罪行為<strong>「${pred}」</strong>，測驗結果確實指向此項！梅菲斯特守信用地放開了你——你得以重返人間，繼續享用那未竟的中秋連假與 A5 和牛燒肉定食！`,
         verdictLoseSub: '梅菲斯特的賭約：挑戰失敗',
         verdictLoseTitle: '🔥 預測失準！你被拉入地獄了！ 🔥',
-        verdictLoseDesc: (pred, actual) => `你預測自己的罪行為「${pred}」，但實際測驗得出的最高罪行卻是<strong>「${actual}」</strong>。梅菲斯特冷笑一聲，將你拖入深淵，從此你將與浮士德一同受永久的苦罰……`,
-        cardContractTitle: '《他們都是神膝下的羔羊》靈魂審判契約',
-        cardWinPill: (pred) => `✨ 賭約成功（預測：${pred}）成功逃離地獄！`,
-        cardLosePill: (pred) => `🔥 賭約失敗（預測：${pred}）墜入萬劫不復地獄！`,
-        cardSinHeader: '梅菲斯特審判之最高罪行傾向',
-        cardDepLabel: '整體背離指數 (Departure Index)',
-        cardEpilogue1: '「就在死神 のProMax 2TB 大鐮刀要刺穿你的胸口時……」',
-        cardEpilogue2: '砰——後腦勺一陣劇痛，原來剛剛是在做夢啊……',
-        cardFooter: '他們都是神膝下的羔羊 • 七大罪心理探索'
+        verdictLoseDesc: (pred, actual) => `你預測自己的罪行為「${pred}」，但實際測驗得出的最高罪行卻是<strong>「${actual}」</strong>。梅菲斯特冷笑一聲，將你拖入深淵，從此你將與浮士德一同受永久的苦罰……`
       },
       ja: {
         brandTitle: '彼らは皆、神の膝元の仔羊',
         subtitle: '七つの大罪・深層心理テスト',
-        langBtn: '🌐 繁體中文',
         themeLight: '☀️ ライトモード',
         themeDark: '🌙 ダークモード',
         storyHtml: `
@@ -737,11 +739,6 @@
         ladderSubtitle: '罪の軽い順から重い順（色欲 ➔ 傲慢）の傾向分布',
         ladderLegend: '最高スコアの罪',
         ladderTopBadge: '★ 最高スコアの罪',
-        shareTitle: '🔥 地獄の審判結果をシェアする：',
-        downloadCardBtn: '📥 審判カードを保存 (PNG)',
-        copyTextBtn: '📋 結果テキストをコピー (LINE/Threads)',
-        shareCardHint: '🖼️ 専用審判カードプレビュー（スマホは長押しで保存、PCは右クリックで保存可能）：',
-        shareTextHint: '📝 シェア用テキストプレビュー（直接選択してコピーも可能）：',
         epilogueHtml: `
           <p class="text-red-400 font-bold">死神の ProMax 2TB 大鎌があなたの胸を貫こうとしたその瞬間……</p>
           <p>あなたが永劫の地獄へと堕ちかけたその時……</p>
@@ -756,33 +753,88 @@
         verdictWinDesc: (pred) => `あなたが事前に予言した罪は<strong>「${pred}」</strong>。審判の結果は見事に一致した！メフィストは約束通りあなたを解放した——あなたは現世へと舞い戻り、中断されていた四連休とA5和牛焼肉食べ放題を満喫できるのだ！`,
         verdictLoseSub: 'メフィストの賭け：挑戦失敗',
         verdictLoseTitle: '🔥 予言失敗！あなたは地獄へ引きずり込まれた！ 🔥',
-        verdictLoseDesc: (pred, actual) => `あなたは自分の罪を「${pred}」と予言したが、実際の審判で導き出された最高の罪は<strong>「${actual}」</strong>だった。メフィストは冷酷に笑い、あなたを深淵へと引きずり込んだ。これからファウストと共に永遠の責め苦を受けるのだ……`,
-        cardContractTitle: '『彼らは皆、神の膝元の仔羊』魂の審判契約書',
-        cardWinPill: (pred) => `✨ 賭けに勝利（予言：${pred}）地獄から生還！`,
-        cardLosePill: (pred) => `🔥 賭けに敗北（予言：${pred}）永劫の地獄へ墜落！`,
-        cardSinHeader: 'メフィストが下した最高スコアの罪',
-        cardDepLabel: '全体背離指数 (Departure Index)',
-        cardEpilogue1: '「死神の ProMax 2TB 大鎌が胸を貫こうとしたその瞬間……」',
-        cardEpilogue2: 'ドンッ——後頭部に激痛が走った。全部夢だったのか……',
-        cardFooter: '彼らは皆、神の膝元の仔羊 • 七つの大罪深層心理'
+        verdictLoseDesc: (pred, actual) => `あなたは自分の罪を「${pred}」と予言したが、実際の審判で導き出された最高の罪は<strong>「${actual}」</strong>だった。メフィストは冷酷に笑い、あなたを深淵へと引きずり込んだ。これからファウストと共に永遠の責め苦を受けるのだ……`
+      },
+      txg: {
+        brandTitle: '𗍫𗥃𗙫𗰗𗺓𗠁𗢳',
+        subtitle: '𗏁𗣼𗡪 • 𗼇𗟲𗫂 (Tangut Beta)',
+        themeLight: '☀️ 𗦇𗤋𗐱',
+        themeDark: '🌙 𗍯𗰗𗐱',
+        storyHtml: `
+          <p class="text-amber-200 font-bold">${toTangutBeta('某年中秋節前夕——')}</p>
+          <p>${toTangutBeta('「啊—終於可以開心的放假了！」')}</p>
+          <p>${toTangutBeta('處理完比山還高的工作（社務），你獲得了彌足珍貴的四天假期。一手提著公事包，一邊哼著耳機播放的歌，心裡已經飛快的計劃著四天連假要如何完美利用。')}</p>
+          <p>${toTangutBeta('「難得的假期，要去吃個 A5 和牛燒肉定食吃到飽，還是去名牌球鞋的廠拍、睡覺睡到自然醒，或者……」')}</p>
+          <p class="text-red-400 font-bold">${toTangutBeta('突然間，一陣紅光爆起，伴隨著闇黑的深淵波動向你襲來。')}</p>
+          <p>${toTangutBeta('「鳴啊啊啊——」平日不怎麼運動的你，理所當然（？）的接下了這一擊。')}</p>
+          <p>${toTangutBeta('血紅的刀刃切開了你右半邊的身體，你的肉體在')} <strong class="text-purple-300">（卍${toTangutBeta('煞氣の地獄爆裂突刺')}卍 + ${toTangutBeta('黑洞吞噬萬物滅的 combo 組合技')}）</strong> ${toTangutBeta('這致命一擊下被摧毀。')}</p>
+          <p>${toTangutBeta('幸運的是，你的靈魂並沒有你的肉身脆弱，它即時逃開了，好讓你自己可以看見你的肉身被摧毀的樣子。你也看到了襲擊你的人，不，它的樣子並不像人。')}</p>
+          <p class="text-amber-300 font-bold bg-gray-900/80 p-4 rounded-lg border border-amber-500/30">
+            ${toTangutBeta('惡魔梅菲斯特與你做了一個交易：如果在等等的測試中，你正確地預測到了你自己的罪行，你便得以逃離地獄，反之你將被梅菲斯特拉入地獄，與那人（浮士德）一同受永久的苦罰。')}
+          </p>
+        `,
+        predTitle: toTangutBeta('梅菲斯特的考驗：請先預測你的罪行'),
+        predDesc: toTangutBeta('測試者需要先選擇認為自己的罪行，並將本頁滑至最底部，方可開始測試。'),
+        predLabel: toTangutBeta('請選擇你預測的罪行：'),
+        pleaseSelect: toTangutBeta('請選擇'),
+        disclaimerTitle: toTangutBeta('測驗性質聲明 (Beta)'),
+        disclaimerText: '• ' + toTangutBeta('本測驗屬娛樂與自我探索性質，並非臨床心理診斷工具；結果呈現的是相對傾向，僅供自我覺察與趣味討論。'),
+        hintBothMissing: '⚠️ ' + toTangutBeta('請先於上方選擇你預測的罪行，並將網頁滑至最底部以解鎖測試'),
+        hintSinMissing: '⚠️ ' + toTangutBeta('尚未選擇罪行！請先在上方下拉選單選擇你預測的罪行'),
+        hintScrollMissing: '⬇️ ' + toTangutBeta('請將網頁繼續往下滑至最底部以解鎖開始按鈕'),
+        hintReady: '✓ ' + toTangutBeta('已選擇預測罪行並閱讀完畢，請點擊下方按鈕開始測試！'),
+        startBtn: toTangutBeta('開始測試（共 7 題）'),
+        quickAdminBtn: '⚡ ' + toTangutBeta('管理員快速結算'),
+        prevBtn: '← ' + toTangutBeta('上一頁'),
+        nextBtn: toTangutBeta('下一頁') + ' →',
+        finishBtn: toTangutBeta('接受梅菲斯特的審判') + ' ✨',
+        quizNavHint: toTangutBeta('請選擇一個選項後，點擊右側按鈕前往下一頁'),
+        resultSmallTitle: toTangutBeta('靈魂解析與聖經經文啟示'),
+        resultMainTitle: toTangutBeta('你的七罪傾向剖析'),
+        topSinBadge: toTangutBeta('主要突出傾向（最高分罪行）'),
+        aboutSinPrefix: '▸ ' + toTangutBeta('關於') + '「',
+        aboutSinSuffix: '」' + toTangutBeta('傾向'),
+        depTitle: toTangutBeta('整體背離指數') + ' (Departure Index)',
+        depSubtitle: toTangutBeta('依七罪階梯位置加權，衡量傾向往階梯下段集中的程度'),
+        depMin: '0（𗤋𗰗 Lust）',
+        depMax: '100（𗼇𗙫 Pride）',
+        ladderTitle: toTangutBeta('七大罪階梯直式剖面圖'),
+        ladderSubtitle: toTangutBeta('依七罪由輕至重的傾向分布'),
+        ladderLegend: toTangutBeta('最高突出罪行'),
+        ladderTopBadge: '★ ' + toTangutBeta('最高罪行'),
+        epilogueHtml: `
+          <p class="text-red-400 font-bold">${toTangutBeta('就在死神 のProMax 2TB 大鐮刀要刺穿你的胸口時……')}</p>
+          <p>${toTangutBeta('你將墜入萬劫不復的地獄時……')}</p>
+          <p class="text-amber-300 font-bold text-xl">${toTangutBeta('砰——')}</p>
+          <p>${toTangutBeta('後腦勺一陣劇痛，原來剛剛是在做夢啊……')}</p>
+          <p class="text-gray-200">${toTangutBeta('「喂，你打瞌睡可以從坐著睡睡到整個翻倒在地啊……」')}</p>
+        `,
+        restartBtn: toTangutBeta('再次墮落....？'),
+        footerText: '𗍫𗥃𗙫𗰗𗺓𗠁𗢳 • 𗏁𗣼𗡪 (Tangut Beta) 🔒',
+        verdictWinSub: toTangutBeta('梅菲斯特的賭約：挑戰成功'),
+        verdictWinTitle: '✨ ' + toTangutBeta('預測命中！你成功逃離地獄！') + ' ✨',
+        verdictWinDesc: (pred) => toTangutBeta(`你先前預測自己的罪行為「${pred}」，測驗結果確實指向此項！梅菲斯特守信用地放開了你——你得以重返人間，繼續享用那未竟的中秋連假與 A5 和牛燒肉定食！`),
+        verdictLoseSub: toTangutBeta('梅菲斯特的賭約：挑戰失敗'),
+        verdictLoseTitle: '🔥 ' + toTangutBeta('預測失準！你被拉入地獄了！') + ' 🔥',
+        verdictLoseDesc: (pred, actual) => toTangutBeta(`你預測自己的罪行為「${pred}」，但實際測驗得出的最高罪行卻是「${actual}」。梅菲斯特冷笑一聲，將你拖入深淵，從此你將與浮士德一同受永久的苦罰……`)
       }
     };
 
     const SIN_KEYS = ['lust', 'gluttony', 'greed', 'sloth', 'wrath', 'envy', 'pride'];
     const NAME_TO_KEY = {
-      '色慾': 'lust', '色欲': 'lust',
-      '暴食': 'gluttony',
-      '貪婪': 'greed', '強欲': 'greed',
-      '怠惰': 'sloth',
-      '憤怒': 'wrath',
-      '嫉妒': 'envy', '嫉妬': 'envy',
-      '傲慢': 'pride'
+      '色慾': 'lust', '色欲': 'lust', '𗤋𗰗': 'lust',
+      '暴食': 'gluttony', '𗡪𗺓': 'gluttony',
+      '貪婪': 'greed', '強欲': 'greed', '𗣼𗦇': 'greed',
+      '怠惰': 'sloth', '𗫂𗟲': 'sloth',
+      '憤怒': 'wrath', '𗠁𗙏': 'wrath',
+      '嫉妒': 'envy', '嫉妬': 'envy', '𗢳𗍫': 'envy',
+      '傲慢': 'pride', '𗼇𗙫': 'pride'
     };
 
     const SIN_INFO = {
       lust: {
-        key: 'lust', name: '色慾', jaName: '色欲', en: 'Lust', weight: 1, ladderRank: 1,
-        catZh: '七罪（最輕）', catJa: '七つの大罪（最軽）',
+        key: 'lust', name: '色慾', jaName: '色欲', txgName: '𗤋𗰗 (色慾)', en: 'Lust', weight: 1, ladderRank: 1,
+        catZh: '七罪（最輕）', catJa: '七つの大罪（最軽）', catTxg: '𗏁𗡪 (最輕)',
         tendencyDesc: '你在關係與生命選擇中，特別重視強烈的情感連結、感官吸引或浪漫的峰值體驗。你容易被充滿魅力的人事物深深吸引，渴望全然的親密與投入；但有時也可能因為過度追求「愛與被愛的感覺」，而忽略了現實層面的界線與長遠基礎。',
         jaTendencyDesc: 'あなたは人間関係や人生の選択において、強い感情的な繋がりや感覚的な魅力、ロマンチックな絶頂体験を特に重視します。魅力的な人や物に深く惹かれやすく、完全なる親密さと没頭を渇望しますが、時に「愛し愛される感覚」を追い求めるあまり、現実的な境界線や長期的な基盤を見失うことがあります。',
         scriptureText: '「天堂的天使們看到，並且貪戀她們，然後，對彼此說：『來吧！讓我們在人類的女孩子之中，選擇我們的妻子並且讓她們替我們生孩子！』」',
@@ -791,8 +843,8 @@
         jaScriptureRef: '——『エノク書』第6章第2節'
       },
       gluttony: {
-        key: 'gluttony', name: '暴食', jaName: '暴食', en: 'Gluttony', weight: 2, ladderRank: 2,
-        catZh: '七罪', catJa: '七つの大罪',
+        key: 'gluttony', name: '暴食', jaName: '暴食', txgName: '𗡪𗺓 (暴食)', en: 'Gluttony', weight: 2, ladderRank: 2,
+        catZh: '七罪', catJa: '七つの大罪', catTxg: '𗏁𗡪',
         tendencyDesc: '你傾向重視當下的快樂、舒適感與世俗生活中的實質陪伴。比起抽象遙遠的精神教條，你更相信「能一起吃飯、一起開心過日子」的溫度；然而當壓力或不安來臨時，也較容易傾向尋求立即的感官滿足或安逸，來填補內心的空缺。',
         jaTendencyDesc: 'あなたは「今この瞬間の楽しさ」、心地よさ、そして日常における実質的な繋がりを重視します。抽象的で遠い精神論よりも、「一緒に美味しいものを食べ、楽しく日々を過ごせる温もり」を信じています。しかし、ストレスや不安に直面すると、心の空白を埋めるために即座の快楽や安逸に逃避しやすい傾向もあります。',
         scriptureText: '「我若靠著別西卜趕鬼，你們的子弟趕鬼又靠著誰呢？這樣，他們就要斷定你們的是非。我若靠著神的靈趕鬼，這就是神的國臨到你們了。」',
@@ -801,8 +853,8 @@
         jaScriptureRef: '——『マタイによる福音書』第12章第27節'
       },
       greed: {
-        key: 'greed', name: '貪婪', jaName: '強欲', en: 'Greed', weight: 3, ladderRank: 3,
-        catZh: '七罪', catJa: '七つの大罪',
+        key: 'greed', name: '貪婪', jaName: '強欲', txgName: '𗣼𗦇 (貪婪)', en: 'Greed', weight: 3, ladderRank: 3,
+        catZh: '七罪', catJa: '七つの大罪', catTxg: '𗏁𗡪',
         tendencyDesc: '你在面對關係與人生決策時，有著清晰的價值衡量與資源意識。你重視付出的回報率、未來的保障以及實際握在手中的理想或利益；這讓你不易盲目犧牲，但有時也可能讓你不自覺地在感情裡計算得失，害怕失去掌控或吃虧。',
         jaTendencyDesc: 'あなたは人間関係や人生の決断において、明確な価値基準とリソース意識を持っています。見返りの大きさや将来の保障、そして実際に自分の手中に収められる理想や利益を重んじます。そのため盲目的な自己犠牲に陥ることはありませんが、無意識のうちに愛情の中でも損得勘定をしてしまい、主導権を失うことや損をすることを恐れる一面があります。',
         scriptureText: '「不要為自己積蓄財寶在地上，地上有蟲蛀、鏽蝕，也有賊挖洞偷竊；只要為自己積蓄財寶在天上，天上沒有蟲蛀、鏽蝕，也沒有賊挖洞偷竊。因為你的財寶在哪裡，你的心也必在哪裡。」',
@@ -811,8 +863,8 @@
         jaScriptureRef: '——『マタイによる福音書』第6章第19節'
       },
       sloth: {
-        key: 'sloth', name: '怠惰', jaName: '怠惰', en: 'Sloth', weight: 4, ladderRank: 4,
-        catZh: '七罪', catJa: '七つの大罪',
+        key: 'sloth', name: '怠惰', jaName: '怠惰', txgName: '𗫂𗟲 (怠惰)', en: 'Sloth', weight: 4, ladderRank: 4,
+        catZh: '七罪', catJa: '七つの大罪', catTxg: '𗏁𗡪',
         tendencyDesc: '你面對複雜的人際糾葛或高張力的情感衝突時，常展現出一種「抽離、省事或順其自然」的防衛機制。你討厭無謂的麻煩與情緒內耗，有時會用看破紅塵或自嘲來避開深度的磨合; 這雖然保護了你的平靜，卻也可能讓你錯失深刻連結的契機。',
         jaTendencyDesc: 'あなたは複雑な人間関係や激しい感情の衝突に直面した際、「距離を置く・面倒を避ける・成り行きに任せる」といった防衛機制を働かせがちです。無意味なトラブルや感情の消耗を嫌い、達観した態度や自嘲によって深いぶつかり合いを回避します。それは心の平穏を守ってくれますが、同時に深い絆を築く好機を逃してしまうこともあります。',
         scriptureText: '「因為這女子叫百姓來，一同給他們的神獻祭，百姓就吃他們的祭物，跪拜他們的神。以色列人與巴力毗珥連合，耶和華的怒氣就向以色列人發作。」',
@@ -821,8 +873,8 @@
         jaScriptureRef: '——『民数記』第25章第3節'
       },
       wrath: {
-        key: 'wrath', name: '憤怒', jaName: '憤怒', en: 'Wrath', weight: 5, ladderRank: 5,
-        catZh: '七罪', catJa: '七つの大罪',
+        key: 'wrath', name: '憤怒', jaName: '憤怒', txgName: '𗠁𗙏 (憤怒)', en: 'Wrath', weight: 5, ladderRank: 5,
+        catZh: '七罪', catJa: '七つの大罪', catTxg: '𗏁𗡪',
         tendencyDesc: '你對於是非對錯、個人界線與溝通頻率有著極高的敏銳度與標準。當遭遇不公、愚昧或越界的要求時，你會直接展現出強烈的排斥與批判力；你的愛恨分明讓你保有真實的稜角，但過於鋒利的防衛有時也會在無意間灼傷身邊的人。',
         jaTendencyDesc: 'あなたは是非善悪や個人の境界線、そして会話の波長に対して極めて高い感度と基準を持っています。不条理や愚かさ、あるいは一線を越えた要求に直面すると、強い拒絶反応と批判精神を隠そうとしません。白黒はっきりした性格はあなたの誠実な個性ですが、鋭すぎる防衛本能が時に周囲の人々を焼き焦がしてしまうこともあります。',
         scriptureText: '「你因美麗心中高傲，又因榮光敗壞智慧，我已將你摔倒在地，使你倒在君王面前，好叫他們目睹眼見。你因罪孽眾多，貿易不公，就褻瀆你那裡的聖所。故此，我讓火從你中間發出，燒滅你，使你在所有觀看的人眼前變為地上的爐灰。」',
@@ -831,8 +883,8 @@
         jaScriptureRef: '——『エゼキエル書』第28章第17節'
       },
       envy: {
-        key: 'envy', name: '嫉妒', jaName: '嫉妬', en: 'Envy', weight: 6, ladderRank: 6,
-        catZh: '七罪', catJa: '七つの大罪',
+        key: 'envy', name: '嫉妒', jaName: '嫉妬', txgName: '𗢳𗍫 (嫉妒)', en: 'Envy', weight: 6, ladderRank: 6,
+        catZh: '七罪', catJa: '七つの大罪', catTxg: '𗏁𗡪',
         tendencyDesc: '你的內心細膩而敏感，對於「誰更受重視」、「誰真正理解誰」或人際間微妙的高低差距特別有感。你渴望獨特且排他的深刻理解，因此當感覺自己被比下去、不被理解或捲入微妙的三角張力時，內心容易泛起強烈的酸楚與防備。',
         jaTendencyDesc: 'あなたの心は繊細で敏感であり、「誰がより重視されているか」「誰が誰を本当に理解しているか」といった人間関係の微妙な優劣や距離感に強く反応します。特別で排他的な深い理解を渇望しているため、自分が誰かと比較されたり、理解されなかったり、微妙な三角関係の緊張に巻き込まれたりすると、強い痛みと警戒心を抱きやすい傾向があります。',
         scriptureText: '「到那日，耶和華必用他剛硬有力的大刀刑罰鱷魚，就是那快行的蛇，刑罰鱷魚，就是那曲行的蛇，並殺海中的大魚。」',
@@ -841,8 +893,8 @@
         jaScriptureRef: '——『イザヤ書』第27章第1節'
       },
       pride: {
-        key: 'pride', name: '傲慢', jaName: '傲慢', en: 'Pride', weight: 7, ladderRank: 7,
-        catZh: '七罪（最重，諸罪之根）', catJa: '七つの大罪（最重・諸悪の根源）',
+        key: 'pride', name: '傲慢', jaName: '傲慢', txgName: '𗼇𗙫 (傲慢)', en: 'Pride', weight: 7, ladderRank: 7,
+        catZh: '七罪（最重，諸罪之根）', catJa: '七つの大罪（最重・諸悪の根源）', catTxg: '𗏁𗡪 (最重)',
         tendencyDesc: '你擁有極強的自我意識、自尊心與精神潔癖。你高度看重自己的原則、才智與主體性，絕不輕易為了迎合他人而委曲求全；然而，當這份自持推到極致時，可能會變成一種居高臨下的審視，覺得世上鮮少有人真正配得上或能理解你的高度。',
         jaTendencyDesc: 'あなたは極めて強い自我、自尊心、そして精神的な潔癖さを持っています。自身の原則や知性、主体性を高く重んじ、他人に迎合して自分を曲げることを決して良しとしません。しかし、その矜持が極限に達すると、周囲を上から見下ろすような視点になり、「この世で自分の高さに釣り合う者、自分を真に理解できる者などほとんどいない」という孤独な優越感に陥ることがあります。',
         scriptureText: '「明亮之星，早晨之子啊，你何竟從天墜落？你這攻敗列國的何竟被砍倒在地上？你心裡曾說：我要升到天上；我要高舉我的寶座在神眾星以上；我要坐在聚會的山上，在北方的極處。我要升到高雲之上；我要與至上者同等。然而，你必墜落陰間，到坑中極深之處。」',
@@ -1021,12 +1073,15 @@
 
     function getSinDisplayName(key) {
       if (!SIN_INFO[key]) return '';
-      return currentLang === 'ja' ? SIN_INFO[key].jaName : SIN_INFO[key].name;
+      if (currentLang === 'ja') return SIN_INFO[key].jaName;
+      if (currentLang === 'txg') return SIN_INFO[key].txgName;
+      return SIN_INFO[key].name;
     }
 
-    function toggleLanguage() {
-      currentLang = currentLang === 'zh' ? 'ja' : 'zh';
-      document.documentElement.lang = currentLang === 'ja' ? 'ja' : 'zh-Hant';
+    function changeLanguage(langCode) {
+      currentLang = langCode;
+      document.documentElement.lang = langCode === 'ja' ? 'ja' : 'zh-Hant';
+      document.getElementById('tangutBetaBadge').classList.toggle('hidden', langCode !== 'txg');
       applyLanguageUI();
     }
 
@@ -1037,7 +1092,6 @@
       document.getElementById('navBrandTitle').textContent = t.brandTitle;
       document.getElementById('mainTitle').textContent = t.brandTitle;
       document.getElementById('mainSubtitle').textContent = t.subtitle;
-      document.getElementById('langToggleBtn').textContent = t.langBtn;
       document.getElementById('themeToggleBtn').textContent = isLight ? t.themeDark : t.themeLight;
 
       document.getElementById('storyIntroBox').innerHTML = t.storyHtml;
@@ -1045,13 +1099,12 @@
       document.getElementById('predictionBoxDesc').textContent = t.predDesc;
       document.getElementById('predictionSelectLabel').textContent = t.predLabel;
 
-      // 更新下拉選單文字並保留當前選擇值
       const sel = document.getElementById('userPredictionSelect');
       const currentVal = sel.value;
       sel.options[0].textContent = t.pleaseSelect;
       SIN_KEYS.forEach((k, idx) => {
         const info = SIN_INFO[k];
-        const disp = currentLang === 'ja' ? info.jaName : info.name;
+        const disp = getSinDisplayName(k);
         sel.options[idx + 1].textContent = `${disp} (${info.en})`;
       });
       sel.value = currentVal;
@@ -1074,12 +1127,6 @@
       document.getElementById('ladderSectionTitle').textContent = t.ladderTitle;
       document.getElementById('ladderSectionSubtitle').textContent = t.ladderSubtitle;
       document.getElementById('ladderLegendTop').textContent = t.ladderLegend;
-
-      document.getElementById('shareSectionTitle').textContent = t.shareTitle;
-      document.getElementById('downloadCardBtn').textContent = t.downloadCardBtn;
-      document.getElementById('copyTextBtn').textContent = t.copyTextBtn;
-      document.getElementById('shareCardPreviewHint').textContent = t.shareCardHint;
-      document.getElementById('shareTextPreviewHint').textContent = t.shareTextHint;
 
       document.getElementById('epilogueBox').innerHTML = t.epilogueHtml;
       document.getElementById('restartQuizBtn').textContent = t.restartBtn;
@@ -1335,6 +1382,8 @@
         document.getElementById('questionGroupBadge').textContent = showDebug
           ? `第 ${currentIndex + 1} / ${total} 問（元番号：${q.group}-${q.qNum}）`
           : `第 ${currentIndex + 1} / ${total} 問`;
+      } else if (currentLang === 'txg') {
+        document.getElementById('questionGroupBadge').textContent = `𗏁 ${currentIndex + 1} / ${total}`;
       } else {
         document.getElementById('questionGroupBadge').textContent = showDebug
           ? `第 ${currentIndex + 1} / ${total} 題（原題號：${q.group}-${q.qNum}）`
@@ -1342,7 +1391,11 @@
       }
 
       document.getElementById('progressBar').style.width = `${((currentIndex + 1) / total) * 100}%`;
-      document.getElementById('questionText').textContent = (currentLang === 'ja' && q.jaQuestion) ? q.jaQuestion : q.question;
+
+      let qTitle = q.question;
+      if (currentLang === 'ja' && q.jaQuestion) qTitle = q.jaQuestion;
+      if (currentLang === 'txg') qTitle = toTangutBeta(q.question);
+      document.getElementById('questionText').textContent = qTitle;
 
       const container = document.getElementById('optionsContainer');
       container.innerHTML = '';
@@ -1361,7 +1414,9 @@
           scoreTagsHtml = `<div class="flex flex-wrap gap-1.5 pt-1 border-t border-gray-800 text-xs text-gray-400"><span class="text-gray-500">[${opt.code}]：</span>${tags}</div>`;
         }
 
-        const optText = (currentLang === 'ja' && opt.jaText) ? opt.jaText : opt.text;
+        let optText = opt.text;
+        if (currentLang === 'ja' && opt.jaText) optText = opt.jaText;
+        if (currentLang === 'txg') optText = toTangutBeta(opt.text);
 
         btn.innerHTML = `
           <div class="flex items-start gap-3.5">
@@ -1465,9 +1520,18 @@
       descContainer.innerHTML = topSins.map(k => {
         const info = SIN_INFO[k];
         const sName = getSinDisplayName(k);
-        const sDesc = currentLang === 'ja' ? info.jaTendencyDesc : info.tendencyDesc;
-        const sText = currentLang === 'ja' ? info.jaScriptureText : info.scriptureText;
-        const sRef = currentLang === 'ja' ? info.jaScriptureRef : info.scriptureRef;
+        let sDesc = info.tendencyDesc;
+        let sText = info.scriptureText;
+        let sRef = info.scriptureRef;
+        if (currentLang === 'ja') {
+          sDesc = info.jaTendencyDesc;
+          sText = info.jaScriptureText;
+          sRef = info.jaScriptureRef;
+        } else if (currentLang === 'txg') {
+          sDesc = toTangutBeta(info.tendencyDesc);
+          sText = toTangutBeta(info.scriptureText);
+          sRef = toTangutBeta(info.scriptureRef);
+        }
         return `
           <div class="bg-gray-950/60 border border-red-900/40 rounded-xl p-4">
             <div class="font-bold text-red-300 mb-1 text-lg">${t.aboutSinPrefix}${sName}${t.aboutSinSuffix}</div>
@@ -1485,7 +1549,6 @@
 
       renderLadderProfile(totals, topSins, maxScore);
       renderAnswerReview();
-      renderShareCardAndText();
 
       if (shouldRecordLog) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1504,7 +1567,7 @@
         const isTop = topSins.includes(sinKey);
         const widthPct = Math.round((score / scaleMax) * 100);
         const sName = getSinDisplayName(sinKey);
-        const sCat = currentLang === 'ja' ? info.catJa : info.catZh;
+        const sCat = currentLang === 'ja' ? info.catJa : (currentLang === 'txg' ? info.catTxg : info.catZh);
 
         const row = document.createElement('div');
         row.className = `p-3 rounded-xl border transition ${isTop ? 'bg-red-950/50 border-red-500/70 shadow-md shadow-red-950/30' : 'bg-gray-900/80 border-gray-800'}`;
@@ -1531,8 +1594,15 @@
       container.innerHTML = activeQuestions.map((q, idx) => {
         const chosen = q.options[userAnswers[idx]];
         const scoreText = SIN_KEYS.filter(k => chosen.scores[k] > 0).map(k => `${getSinDisplayName(k)} +${chosen.scores[k]}`).join('、');
-        const qText = (currentLang === 'ja' && q.jaQuestion) ? q.jaQuestion : q.question;
-        const oText = (currentLang === 'ja' && chosen.jaText) ? chosen.jaText : chosen.text;
+        let qText = q.question;
+        let oText = chosen.text;
+        if (currentLang === 'ja') {
+          qText = q.jaQuestion || q.question;
+          oText = chosen.jaText || chosen.text;
+        } else if (currentLang === 'txg') {
+          qText = toTangutBeta(q.question);
+          oText = toTangutBeta(chosen.text);
+        }
         return `
           <div class="p-3 rounded-lg bg-gray-950/60 border border-gray-800/80">
             <div class="font-bold text-amber-400 mb-1">Q${idx + 1}（${q.group}-${q.qNum}）：${qText}</div>
@@ -1541,238 +1611,6 @@
           </div>
         `;
       }).join('');
-    }
-
-    // ==========================================
-    // 🖼️ 零延遲直出分享圖卡與戰報引擎 (支援中日雙語)
-    // ==========================================
-    function drawRoundRect(ctx, x, y, w, h, r) {
-      ctx.beginPath();
-      ctx.moveTo(x + r, y);
-      ctx.lineTo(x + w - r, y);
-      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-      ctx.lineTo(x + w, y + h - r);
-      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-      ctx.lineTo(x + r, y + h);
-      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-      ctx.lineTo(x, y + r);
-      ctx.quadraticCurveTo(x, y, x + r, y);
-      ctx.closePath();
-    }
-
-    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-      const chars = text.split('');
-      let line = '';
-      for (let n = 0; n < chars.length; n++) {
-        const testLine = line + chars[n];
-        if (ctx.measureText(testLine).width > maxWidth && n > 0) {
-          ctx.fillText(line, x, y);
-          line = chars[n];
-          y += lineHeight;
-        } else {
-          line = testLine;
-        }
-      }
-      ctx.fillText(line, x, y);
-    }
-
-    function renderShareCardAndText() {
-      if (!lastComputedOutcome) return;
-      const outcome = lastComputedOutcome;
-      const t = UI_TEXT[currentLang];
-      const predName = getSinDisplayName(userPrediction) || (currentLang === 'ja' ? '未選択' : '未選擇');
-      const mainKey = outcome.topSins[0];
-      const info = SIN_INFO[mainKey];
-      const isWin = outcome.isPredictionCorrect;
-      const depIndex = outcome.departureIndex;
-
-      const canvas = document.getElementById('shareCanvas');
-      const ctx = canvas.getContext('2d');
-
-      const bgGrad = ctx.createRadialGradient(400, 180, 40, 400, 560, 750);
-      bgGrad.addColorStop(0, '#3b0764');
-      bgGrad.addColorStop(0.55, '#111827');
-      bgGrad.addColorStop(1, '#030712');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, 800, 1120);
-
-      ctx.strokeStyle = '#d97706';
-      ctx.lineWidth = 5;
-      ctx.strokeRect(28, 28, 744, 1064);
-      ctx.strokeStyle = 'rgba(251, 191, 36, 0.3)';
-      ctx.lineWidth = 1.5;
-      ctx.strokeRect(40, 40, 720, 1040);
-
-      ctx.fillStyle = '#fbbf24';
-      ctx.font = 'bold 20px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('LAMBS BENEATH THE KNEES OF GOD', 400, 95);
-
-      ctx.fillStyle = '#9ca3af';
-      ctx.font = '22px "LXGW WenKai TC", serif';
-      ctx.fillText(t.cardContractTitle, 400, 135);
-
-      ctx.fillStyle = isWin ? 'rgba(6, 78, 59, 0.9)' : 'rgba(127, 29, 29, 0.9)';
-      ctx.strokeStyle = isWin ? '#34d399' : '#f87171';
-      ctx.lineWidth = 2;
-      drawRoundRect(ctx, 110, 165, 580, 52, 26);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = isWin ? '#6ee7b7' : '#fca5a5';
-      ctx.font = 'bold 21px "LXGW WenKai TC", serif';
-      ctx.fillText(isWin ? t.cardWinPill(predName) : t.cardLosePill(predName), 400, 199);
-
-      ctx.fillStyle = '#9ca3af';
-      ctx.font = '20px "LXGW WenKai TC", serif';
-      ctx.fillText(t.cardSinHeader, 400, 275);
-
-      const topSinTitleStr = outcome.topSins.map(k => `【${getSinDisplayName(k)} ${SIN_INFO[k].en}】`).join(' ＆ ');
-      ctx.fillStyle = '#f87171';
-      ctx.font = 'bold 46px "LXGW WenKai TC", serif';
-      ctx.fillText(topSinTitleStr, 400, 345);
-
-      ctx.fillStyle = 'rgba(3, 7, 18, 0.85)';
-      ctx.strokeStyle = '#374151';
-      ctx.lineWidth = 2;
-      drawRoundRect(ctx, 80, 395, 640, 115, 18);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.fillStyle = '#d1d5db';
-      ctx.font = '22px "LXGW WenKai TC", serif';
-      ctx.textAlign = 'left';
-      ctx.fillText(t.cardDepLabel, 110, 440);
-
-      ctx.fillStyle = '#fbbf24';
-      ctx.font = 'bold 32px sans-serif';
-      ctx.textAlign = 'right';
-      ctx.fillText(`${depIndex.toFixed(1)} / 100`, 690, 442);
-
-      ctx.fillStyle = '#1f2937';
-      drawRoundRect(ctx, 110, 465, 580, 16, 8);
-      ctx.fill();
-
-      const barW = Math.max(24, (depIndex / 100) * 580);
-      const barGrad = ctx.createLinearGradient(110, 0, 690, 0);
-      barGrad.addColorStop(0, '#34d399');
-      barGrad.addColorStop(0.5, '#fbbf24');
-      barGrad.addColorStop(1, '#dc2626');
-      ctx.fillStyle = barGrad;
-      drawRoundRect(ctx, 110, 465, barW, 16, 8);
-      ctx.fill();
-
-      ctx.fillStyle = 'rgba(3, 7, 18, 0.92)';
-      ctx.strokeStyle = 'rgba(245, 158, 11, 0.5)';
-      ctx.lineWidth = 2;
-      drawRoundRect(ctx, 80, 540, 640, 220, 18);
-      ctx.fill();
-      ctx.stroke();
-
-      const sText = currentLang === 'ja' ? info.jaScriptureText : info.scriptureText;
-      const sRef = currentLang === 'ja' ? info.jaScriptureRef : info.scriptureRef;
-
-      ctx.fillStyle = '#fde68a';
-      ctx.font = '20px "LXGW WenKai TC", serif';
-      ctx.textAlign = 'left';
-      wrapText(ctx, sText, 110, 585, 580, 32);
-
-      ctx.fillStyle = '#fbbf24';
-      ctx.font = 'bold 20px "LXGW WenKai TC", serif';
-      ctx.textAlign = 'right';
-      ctx.fillText(sRef, 690, 735);
-
-      ctx.fillStyle = 'rgba(30, 41, 59, 0.55)';
-      drawRoundRect(ctx, 80, 790, 640, 120, 14);
-      ctx.fill();
-      ctx.fillStyle = '#fca5a5';
-      ctx.font = '18px "LXGW WenKai TC", serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(t.cardEpilogue1, 400, 835);
-      ctx.fillStyle = '#cbd5e1';
-      ctx.fillText(t.cardEpilogue2, 400, 875);
-
-      ctx.strokeStyle = 'rgba(251, 191, 36, 0.4)';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.arc(400, 995, 36, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.fillStyle = '#fbbf24';
-      ctx.font = 'bold 16px sans-serif';
-      ctx.fillText('MEPHISTO', 400, 1000);
-
-      ctx.fillStyle = '#9ca3af';
-      ctx.font = '18px "LXGW WenKai TC", serif';
-      ctx.fillText(t.cardFooter, 400, 1060);
-
-      document.getElementById('renderedCardImg').src = canvas.toDataURL('image/png');
-
-      let shareText = '';
-      if (currentLang === 'ja') {
-        const outLine = isWin
-          ? '✨ 予言的中！メフィストの賭けに勝ち、地獄から生還してA5和牛焼肉食べ放題へ！'
-          : '🔥 予言失敗！メフィストに地獄へ引きずり込まれ、死神のProMax 2TB大鎌に貫かれかけた……';
-        shareText =
-          `🩸【彼らは皆、神の膝元の仔羊】七つの大罪心理テスト\n` +
-          `🔮 私が予言した罪：${predName}\n` +
-          `⚖️ 実際の審判結果：${topSinTitleStr}（背離指数：${depIndex.toFixed(1)}）\n` +
-          `${outLine}\n` +
-          `📜 ${sText}${sRef}\n` +
-          `👉 あなたも地獄から脱出できるか挑戦する：${window.location.href}`;
-      } else {
-        const outLine = isWin
-          ? '✨ 預測命中！我成功從梅菲斯特手中逃離地獄，回去放中秋連假吃 A5 和牛了！'
-          : '🔥 預測失準！我被梅菲斯特拖入地獄，差點死在死神 のProMax 2TB 大鐮刀下……';
-        shareText =
-          `🩸【他們都是神膝下的羔羊】七大罪心理測驗\n` +
-          `🔮 我預言的罪行：${predName}\n` +
-          `⚖️ 實際審判結果：${topSinTitleStr}（背離指數：${depIndex.toFixed(1)}）\n` +
-          `${outLine}\n` +
-          `📜 ${sText}${sRef}\n` +
-          `👉 立即測驗你能逃離地獄嗎：${window.location.href}`;
-      }
-      document.getElementById('shareTextArea').value = shareText;
-    }
-
-    function downloadCardNow() {
-      const canvas = document.getElementById('shareCanvas');
-      const link = document.createElement('a');
-      link.download = currentLang === 'ja' ? '彼らは皆神の膝元の仔羊_審判カード.png' : '他們都是神膝下的羔羊_審判圖卡.png';
-      link.href = canvas.toDataURL('image/png');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      const toast = document.getElementById('shareToast');
-      toast.textContent = currentLang === 'ja'
-        ? '✓ 画像のダウンロードを開始しました！（保存できない場合は下の画像を長押ししてください）'
-        : '✓ 已觸發圖卡下載！（若瀏覽器阻擋，可直接長按或右鍵儲存下方圖片）';
-      toast.classList.remove('hidden');
-    }
-
-    function copyShareText() {
-      const textarea = document.getElementById('shareTextArea');
-      textarea.select();
-      textarea.setSelectionRange(0, 99999);
-      const toast = document.getElementById('shareToast');
-      const msg = currentLang === 'ja'
-        ? '✓ テキストをクリップボードにコピーしました！LINEやThreadsに貼り付けられます。'
-        : '✓ 已複製中二戰報文字到剪貼簿！可直接貼到 LINE、IG 或 Threads。';
-
-      try {
-        navigator.clipboard.writeText(textarea.value).then(() => {
-          toast.textContent = msg;
-          toast.classList.remove('hidden');
-        }).catch(() => {
-          document.execCommand('copy');
-          toast.textContent = msg;
-          toast.classList.remove('hidden');
-        });
-      } catch (e) {
-        document.execCommand('copy');
-        toast.textContent = msg;
-        toast.classList.remove('hidden');
-      }
     }
 
     // ==========================================
